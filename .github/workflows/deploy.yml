@@ -1,0 +1,53 @@
+name: Deploy to Pi
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          oauth-client-id: ${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TAILSCALE_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: Wait for Pi reachability
+        run: |
+          for i in $(seq 1 12); do
+            tailscale ping --timeout=5s 100.103.86.47 && break
+            echo "Attempt $i failed, retrying..."
+            sleep 5
+            [ $i -eq 12 ] && { echo "Pi not reachable after 12 attempts"; exit 1; }
+          done
+
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.PI_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          timeout 30 ssh-keyscan -H 100.103.86.47 >> ~/.ssh/known_hosts 2>/dev/null || true
+
+      - name: Deploy to Pi
+        run: |
+          ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 dave@100.103.86.47 << 'EOF'
+            cd ~/apps/mhs3-wiki
+            git pull origin main
+            DOCKER_API_VERSION=1.41 docker compose up -d --build
+            echo "Deploy completed at $(date)"
+          EOF
+
+      - name: Health Check
+        run: |
+          sleep 15
+          curl -f https://mhs3.meluciolabs.de/api/health || echo "Health check pending..."

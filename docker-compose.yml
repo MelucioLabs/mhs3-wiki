@@ -29,8 +29,8 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./src/database/init.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - "5432:5432"
+    # Port not exposed on host - app connects via docker network
+    # Avoids conflict with other postgres instances (e.g. KHAI)
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-mhs3_user} -d ${DB_NAME:-mhs3_wiki}"]
       interval: 5s
