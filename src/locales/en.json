@@ -1,0 +1,124 @@
+{
+  "site_title": "MHS3 Wiki - Monster Hunter Stories 3",
+  "nav": {
+    "home": "Home",
+    "monsties": "Monsties",
+    "bestiary": "Bestiary",
+    "equipment": "Equipment",
+    "gene_calc": "Gene Calculator",
+    "search": "Search"
+  },
+  "home": {
+    "welcome": "Welcome to MHS3 Wiki",
+    "subtitle": "Your encyclopedia for Monster Hunter Stories 3: Twisted Reflection",
+    "card_monsties": "Monstie Database",
+    "card_monsties_desc": "All Monsties with elements, attack types, and ride actions",
+    "card_bestiary": "Bestiary",
+    "card_bestiary_desc": "All monsters with weaknesses, habitats, and descriptions",
+    "card_equipment": "Equipment",
+    "card_equipment_desc": "Weapons and armor with stats and required materials",
+    "card_genes": "Gene Calculator",
+    "card_genes_desc": "Plan your Rite of Channeling with the 3x3 grid calculator"
+  },
+  "monsties": {
+    "title": "Monstie Database",
+    "filter_element": "Element",
+    "filter_attack": "Attack Type",
+    "filter_ride": "Ride Action",
+    "filter_all": "All",
+    "element": "Element",
+    "attack_type": "Attack Type",
+    "ride_action": "Ride Action",
+    "habitat": "Habitat",
+    "no_results": "No Monsties found."
+  },
+  "bestiary": {
+    "title": "Bestiary",
+    "filter_weakness": "Weakness",
+    "filter_habitat": "Habitat",
+    "filter_species": "Species",
+    "filter_all": "All",
+    "weakness": "Weakness",
+    "habitat": "Habitat",
+    "species": "Species",
+    "no_results": "No monsters found."
+  },
+  "equipment": {
+    "title": "Equipment",
+    "filter_type": "Type",
+    "filter_rarity": "Rarity",
+    "filter_all": "All",
+    "type_weapon": "Weapon",
+    "type_armor": "Armor",
+    "stats": "Stats",
+    "materials": "Materials",
+    "no_results": "No equipment found."
+  },
+  "gene_calc": {
+    "title": "Gene Calculator",
+    "subtitle": "Rite of Channeling Planner",
+    "select_gene": "Select Gene",
+    "clear_grid": "Clear Grid",
+    "bingo_bonus": "Bingo Bonus",
+    "row": "Row",
+    "column": "Column",
+    "diagonal": "Diagonal",
+    "no_bonus": "No Bonus",
+    "type_match": "Type Bonus",
+    "element_match": "Element Bonus",
+    "both_match": "Double Bonus",
+    "instructions": "Click a cell and select a gene from the list. Matching types or elements in a row grant bonuses."
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search monsters, monsties, or equipment...",
+    "no_results": "No results found.",
+    "results_for": "results for",
+    "category_monstie": "Monstie",
+    "category_monster": "Monster",
+    "category_equipment": "Equipment"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred.",
+    "back": "Back",
+    "details": "Details"
+  },
+  "enums": {
+    "elements": {
+      "fire": "Fire",
+      "water": "Water",
+      "thunder": "Thunder",
+      "ice": "Ice",
+      "dragon": "Dragon",
+      "none": "None"
+    },
+    "attack_types": {
+      "power": "Power",
+      "technical": "Technical",
+      "speed": "Speed"
+    },
+    "ride_actions": {
+      "fly": "Fly",
+      "swim": "Swim",
+      "jump": "Jump",
+      "climb": "Climb"
+    },
+    "species": {
+      "flying_wyvern": "Flying Wyvern",
+      "brute_wyvern": "Brute Wyvern",
+      "elder_dragon": "Elder Dragon",
+      "leviathan": "Leviathan",
+      "fanged_wyvern": "Fanged Wyvern",
+      "fanged_beast": "Fanged Beast",
+      "bird_wyvern": "Bird Wyvern",
+      "temnoceran": "Temnoceran",
+      "carapaceon": "Carapaceon",
+      "amphibian": "Amphibian"
+    },
+    "equip_types": {
+      "weapon": "Weapon",
+      "armor": "Armor"
+    }
+  }
+}

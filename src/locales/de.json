@@ -1,0 +1,124 @@
+{
+  "site_title": "MHS3 Wiki - Monster Hunter Stories 3",
+  "nav": {
+    "home": "Startseite",
+    "monsties": "Monsties",
+    "bestiary": "Bestiarum",
+    "equipment": "Ausrüstung",
+    "gene_calc": "Gene-Rechner",
+    "search": "Suche"
+  },
+  "home": {
+    "welcome": "Willkommen zum MHS3 Wiki",
+    "subtitle": "Dein Nachschlagewerk für Monster Hunter Stories 3: Twisted Reflection",
+    "card_monsties": "Monstie-Datenbank",
+    "card_monsties_desc": "Alle Monsties mit Elementen, Angriffstypen und Ride-Actions",
+    "card_bestiary": "Bestiarum",
+    "card_bestiary_desc": "Alle Monster mit Schwächen, Habitaten und Beschreibungen",
+    "card_equipment": "Ausrüstung",
+    "card_equipment_desc": "Waffen und Rüstungen mit Stats und Materialien",
+    "card_genes": "Gene-Rechner",
+    "card_genes_desc": "Plane dein Rite of Channeling mit dem 3x3 Grid-Rechner"
+  },
+  "monsties": {
+    "title": "Monstie-Datenbank",
+    "filter_element": "Element",
+    "filter_attack": "Angriffstyp",
+    "filter_ride": "Ride-Action",
+    "filter_all": "Alle",
+    "element": "Element",
+    "attack_type": "Angriffstyp",
+    "ride_action": "Ride-Action",
+    "habitat": "Habitat",
+    "no_results": "Keine Monsties gefunden."
+  },
+  "bestiary": {
+    "title": "Bestiarum",
+    "filter_weakness": "Schwäche",
+    "filter_habitat": "Habitat",
+    "filter_species": "Spezies",
+    "filter_all": "Alle",
+    "weakness": "Schwäche",
+    "habitat": "Habitat",
+    "species": "Spezies",
+    "no_results": "Keine Monster gefunden."
+  },
+  "equipment": {
+    "title": "Ausrüstung",
+    "filter_type": "Typ",
+    "filter_rarity": "Seltenheit",
+    "filter_all": "Alle",
+    "type_weapon": "Waffe",
+    "type_armor": "Rüstung",
+    "stats": "Werte",
+    "materials": "Materialien",
+    "no_results": "Keine Ausrüstung gefunden."
+  },
+  "gene_calc": {
+    "title": "Gene-Rechner",
+    "subtitle": "Rite of Channeling Planer",
+    "select_gene": "Gen auswählen",
+    "clear_grid": "Grid leeren",
+    "bingo_bonus": "Bingo-Bonus",
+    "row": "Reihe",
+    "column": "Spalte",
+    "diagonal": "Diagonale",
+    "no_bonus": "Kein Bonus",
+    "type_match": "Typ-Bonus",
+    "element_match": "Element-Bonus",
+    "both_match": "Doppel-Bonus",
+    "instructions": "Klicke auf ein Feld und wähle ein Gen aus der Liste. Gleiche Typen oder Elemente in einer Reihe ergeben Boni."
+  },
+  "search": {
+    "title": "Suche",
+    "placeholder": "Monster, Monstie oder Ausrüstung suchen...",
+    "no_results": "Keine Ergebnisse gefunden.",
+    "results_for": "Ergebnisse für",
+    "category_monstie": "Monstie",
+    "category_monster": "Monster",
+    "category_equipment": "Ausrüstung"
+  },
+  "common": {
+    "loading": "Lädt...",
+    "error": "Ein Fehler ist aufgetreten.",
+    "back": "Zurück",
+    "details": "Details"
+  },
+  "enums": {
+    "elements": {
+      "fire": "Feuer",
+      "water": "Wasser",
+      "thunder": "Blitz",
+      "ice": "Eis",
+      "dragon": "Drache",
+      "none": "Kein Element"
+    },
+    "attack_types": {
+      "power": "Kraft",
+      "technical": "Technik",
+      "speed": "Geschwindigkeit"
+    },
+    "ride_actions": {
+      "fly": "Fliegen",
+      "swim": "Schwimmen",
+      "jump": "Springen",
+      "climb": "Klettern"
+    },
+    "species": {
+      "flying_wyvern": "Flugwyvern",
+      "brute_wyvern": "Schreckenswyvern",
+      "elder_dragon": "Älterer Drache",
+      "leviathan": "Leviathan",
+      "fanged_wyvern": "Reißzahnwyvern",
+      "fanged_beast": "Reißzahn-Ungeheuer",
+      "bird_wyvern": "Vogelwyvern",
+      "temnoceran": "Temnoceran",
+      "carapaceon": "Krebstier",
+      "amphibian": "Amphibium"
+    },
+    "equip_types": {
+      "weapon": "Waffe",
+      "armor": "Rüstung"
+    }
+  }
+}

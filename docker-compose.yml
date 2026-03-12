@@ -1,0 +1,66 @@
+services:
+  app:
+    build: .
+    container_name: mhs3-app
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    environment:
+      - DB_HOST=${DB_HOST:-postgres}
+      - DB_PORT=${DB_PORT:-5432}
+      - DB_USER=${DB_USER:-mhs3_user}
+      - DB_PASSWORD=${DB_PASSWORD:-changeme123}
+      - DB_NAME=${DB_NAME:-mhs3_wiki}
+      - NODE_ENV=${NODE_ENV:-production}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - mhs3-network
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: mhs3-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-mhs3_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme123}
+      POSTGRES_DB: ${DB_NAME:-mhs3_wiki}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./src/database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-mhs3_user} -d ${DB_NAME:-mhs3_wiki}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - mhs3-network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: mhs3-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@mhs3wiki.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-pgadmin_changeme}
+      PGADMIN_LISTEN_PORT: 5050
+    ports:
+      - "5050:5050"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - mhs3-network
+
+networks:
+  mhs3-network:
+    driver: bridge
+
+volumes:
+  pgdata:
+  pgadmin-data:
