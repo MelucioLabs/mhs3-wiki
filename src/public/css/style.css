@@ -498,6 +498,38 @@ body {
 
 .rarity-stars { color: var(--accent); letter-spacing: 1px; }
 
+/* Logo icon */
+.logo-icon { margin-right: 0.25rem; }
+
+/* Map placeholder */
+.map-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  background: var(--bg-card);
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  margin-top: 1rem;
+}
+.map-coming-soon {
+  text-align: center;
+  padding: 2rem;
+}
+.map-coming-soon .map-icon {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+.map-coming-soon h2 {
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+.map-coming-soon p {
+  color: var(--text-muted);
+  max-width: 400px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .nav { display: none; }

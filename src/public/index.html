@@ -3,38 +3,168 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MHS3 Wiki - Monster Hunter Stories 3</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐲</text></svg>">
+
+  <!-- Primary SEO -->
+  <title>MHS3 Wiki - Monster Hunter Stories 3: Twisted Reflection Wiki & Interaktive Karte</title>
+  <meta name="description" content="Das umfassende Fan-Wiki zu Monster Hunter Stories 3: Twisted Reflection. Monstie-Datenbank, Bestiarum, Gene-Rechner, interaktive Karte und mehr. Zweisprachig DE/EN.">
+  <meta name="keywords" content="Monster Hunter Stories 3, MHS3, Twisted Reflection, Wiki, Monstie, Gene, Bestiary, Bestiarum, interaktive Karte, interactive map, Gene Calculator, Gene-Rechner, Capcom, JRPG, Monster Rider, Rite of Channeling">
+  <meta name="author" content="MelucioLabs">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://mhs3.meluciolabs.de/">
+
+  <!-- hreflang for bilingual content -->
+  <link rel="alternate" hreflang="de" href="https://mhs3.meluciolabs.de/?lang=de">
+  <link rel="alternate" hreflang="en" href="https://mhs3.meluciolabs.de/?lang=en">
+  <link rel="alternate" hreflang="x-default" href="https://mhs3.meluciolabs.de/">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mhs3.meluciolabs.de/">
+  <meta property="og:title" content="MHS3 Wiki - Monster Hunter Stories 3: Twisted Reflection">
+  <meta property="og:description" content="Das umfassende Fan-Wiki zu MHS3. Monstie-Datenbank, Bestiarum, Gene-Rechner, interaktive Karte und mehr.">
+  <meta property="og:image" content="https://mhs3.meluciolabs.de/images/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="de_DE">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:site_name" content="MHS3 Wiki">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MHS3 Wiki - Monster Hunter Stories 3: Twisted Reflection">
+  <meta name="twitter:description" content="Fan-Wiki mit Monstie-Datenbank, Gene-Rechner, interaktiver Karte und mehr.">
+  <meta name="twitter:image" content="https://mhs3.meluciolabs.de/images/og-image.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#0f1117">
+  <meta name="msapplication-TileColor" content="#0f1117">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "MHS3 Wiki",
+    "alternateName": "Monster Hunter Stories 3 Wiki",
+    "url": "https://mhs3.meluciolabs.de/",
+    "description": "Fan-Wiki zu Monster Hunter Stories 3: Twisted Reflection mit Monstie-Datenbank, Bestiarum, Gene-Rechner und interaktiver Karte.",
+    "inLanguage": ["de", "en"],
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://mhs3.meluciolabs.de/?q={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Monster Hunter Stories 3: Twisted Reflection",
+    "alternateName": ["MHS3", "MHST3", "Monster Hunter Stories 3"],
+    "genre": ["JRPG", "Monster Taming", "Turn-based RPG"],
+    "gamePlatform": ["PC", "Nintendo Switch", "PlayStation 5"],
+    "publisher": {
+      "@type": "Organization",
+      "name": "Capcom Co., Ltd.",
+      "url": "https://www.capcom.com/"
+    },
+    "applicationCategory": "Game"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Was ist MHS3 Wiki?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "MHS3 Wiki ist ein umfassendes, inoffizielles Fan-Wiki zu Monster Hunter Stories 3: Twisted Reflection. Es bietet eine Monstie-Datenbank, Bestiarum, Gene-Rechner mit Bingo-Bonus-System und eine interaktive Weltkarte."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the MHS3 Gene Calculator?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The MHS3 Gene Calculator is a tool to plan your Rite of Channeling with a 3x3 gene grid. Match element types or gene types in rows, columns, or diagonals to unlock Bingo Bonuses."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://mhs3.meluciolabs.de">
+  <link rel="dns-prefetch" href="https://mhs3.meluciolabs.de">
+
+  <!-- Leaflet.js for interactive map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <header class="header">
     <div class="header-inner">
-      <a href="#" class="logo" data-nav="home">MHS3 Wiki</a>
-      <nav class="nav">
+      <a href="#" class="logo" data-nav="home">
+        <span class="logo-icon" aria-hidden="true">&#x1F409;</span> MHS3 Wiki
+      </a>
+      <nav class="nav" aria-label="Main navigation">
         <a href="#" data-nav="monsties" data-i18n="nav.monsties">Monsties</a>
         <a href="#" data-nav="bestiary" data-i18n="nav.bestiary">Bestiarum</a>
         <a href="#" data-nav="equipment" data-i18n="nav.equipment">Ausrüstung</a>
         <a href="#" data-nav="gene-calc" data-i18n="nav.gene_calc">Gene-Rechner</a>
+        <a href="#" data-nav="map" data-i18n="nav.map">Karte</a>
       </nav>
       <div class="header-actions">
         <div class="search-bar">
-          <input type="text" id="global-search" data-i18n-placeholder="search.placeholder" placeholder="Suche...">
+          <input type="text" id="global-search" data-i18n-placeholder="search.placeholder" placeholder="Suche..." aria-label="Suche">
         </div>
-        <button id="lang-toggle" class="lang-btn">EN</button>
-        <button id="mobile-menu-btn" class="mobile-menu-btn">&#9776;</button>
+        <button id="lang-toggle" class="lang-btn" aria-label="Sprache wechseln">EN</button>
+        <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Menu">&#9776;</button>
       </div>
     </div>
   </header>
 
-  <main id="app" class="main">
-    <!-- Content injected by JS -->
+  <main id="app" class="main" role="main">
+    <!-- SPA content injected by JS -->
+    <!-- SEO: Noscript fallback for crawlers -->
+    <noscript>
+      <div class="home-page">
+        <h1>MHS3 Wiki - Monster Hunter Stories 3: Twisted Reflection</h1>
+        <p>Das umfassende Fan-Wiki zu Monster Hunter Stories 3: Twisted Reflection.</p>
+        <h2>Monstie-Datenbank</h2>
+        <p>Alle Monsties mit Elementen, Angriffstypen, Ride-Actions und Habitaten. Finde dein perfektes Team!</p>
+        <h2>Bestiarum</h2>
+        <p>Alle Monster mit Schwächen, Spezies und Fundorten. Von Flugwyvern bis Ältere Drachen.</p>
+        <h2>Gene-Rechner</h2>
+        <p>Plane dein Rite of Channeling mit dem 3x3 Grid-Rechner. Optimiere deine Bingo-Boni!</p>
+        <h2>Interaktive Karte</h2>
+        <p>Erkunde die Welt von MHS3 mit unserer interaktiven Karte. Finde alle Monsties und markiere deinen Fortschritt.</p>
+        <h2>Ausrüstung</h2>
+        <p>Waffen und Rüstungen mit Stats, Skills und Materialien. Finde die beste Ausrüstung für dein Abenteuer.</p>
+      </div>
+    </noscript>
   </main>
 
   <footer class="footer">
-    <p>MHS3 Wiki &mdash; Ein inoffizielles Fan-Projekt. Nicht affiliiert mit Capcom Co., Ltd.</p>
+    <p>MHS3 Wiki &mdash; Ein inoffizielles Fan-Projekt von <a href="https://meluciolabs.de" rel="noopener">MelucioLabs</a>. Nicht affiliiert mit Capcom Co., Ltd.</p>
     <p>Monster Hunter Stories 3: Twisted Reflection ist eine Marke von <a href="https://www.monsterhunter.com/stories3/" target="_blank" rel="noopener noreferrer">Capcom</a>.</p>
   </footer>
+
+  <!-- Leaflet.js -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
   <script src="/js/main.js"></script>
   <script src="/js/gene-calculator.js"></script>
