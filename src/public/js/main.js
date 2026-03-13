@@ -133,6 +133,9 @@ const App = {
   },
 
   navigate(page, params = {}) {
+    // Cleanup map when navigating away
+    if (this.currentPage === 'map' && page !== 'map') this._destroyMap();
+
     this.currentPage = page;
     this._lastParams = params;
     document.querySelectorAll('.nav a').forEach((a) =>
@@ -615,23 +618,209 @@ const App = {
     }
   },
 
-  // --- MAP (placeholder) ---
+  // --- MAP (Leaflet.js interactive map) ---
+
+  _mapInstance: null,
+  _mapMarkers: [],
+  _activeRegionFilter: null,
+
+  // Region center coordinates (on the 1200x900 SVG, mapped to Leaflet CRS.Simple)
+  // Leaflet CRS.Simple uses [y, x] where y increases upward, so we invert Y
+  _regionCoords: {
+    'Azuria':             { center: [230, 530], radius: 90 },
+    'Canalta Timberland': { center: [500, 350], radius: 80 },
+    'Canalta-Waldland':   { center: [500, 350], radius: 80 },
+    'Tarkuan':            { center: [480, 790], radius: 85 },
+    'Serathis':           { center: [730, 610], radius: 75 },
+    'Various':            { center: [450, 600], radius: 120 },
+    'Verschiedene':       { center: [450, 600], radius: 120 },
+  },
+
+  _regionColors: {
+    'Azuria':             '#4ade80',
+    'Canalta Timberland': '#22c55e',
+    'Canalta-Waldland':   '#22c55e',
+    'Tarkuan':            '#f59e0b',
+    'Serathis':           '#67e8f9',
+    'Various':            '#a855f7',
+    'Verschiedene':       '#a855f7',
+  },
+
+  _elementColors: {
+    fire: '#ef4444', water: '#3b82f6', thunder: '#facc15',
+    ice: '#67e8f9', dragon: '#a855f7', none: '#9ca3af',
+  },
 
   renderMap() {
-    document.getElementById('app').innerHTML = `
-      <h1 class="page-title">${this.lang === 'de' ? 'Interaktive Karte' : 'Interactive Map'}</h1>
-      <p class="page-subtitle">${this.lang === 'de'
-        ? 'Die interaktive Weltkarte wird bald verfügbar sein! Hier kannst du alle Monsties und Fundorte erkunden.'
-        : 'The interactive world map is coming soon! Explore all monsties and their locations here.'}</p>
-      <div class="map-placeholder">
-        <div class="map-coming-soon">
-          <span class="map-icon">&#x1F5FA;</span>
-          <h2>${this.lang === 'de' ? 'Karte in Arbeit' : 'Map in Progress'}</h2>
-          <p>${this.lang === 'de'
-            ? 'Wir arbeiten an einer interaktiven Karte mit allen Habitaten, Monstie-Fundorten und mehr.'
-            : 'We are building an interactive map with all habitats, monstie locations and more.'}</p>
+    // Cleanup previous map instance
+    this._destroyMap();
+
+    const app = document.getElementById('app');
+    app.innerHTML = `
+      <div class="map-wrapper">
+        <div class="map-header">
+          <h1 class="page-title map-title">${this.lang === 'de' ? 'Interaktive Weltkarte' : 'Interactive World Map'}</h1>
+          <p class="map-subtitle">${this.lang === 'de'
+            ? 'Klicke auf einen Marker um Monstie-Details zu sehen'
+            : 'Click a marker to see Monstie details'}</p>
         </div>
+        <div id="mhs3-map" class="map-container"></div>
+        <div class="map-legend" id="map-legend"></div>
       </div>`;
+
+    this._initMap();
+  },
+
+  async _initMap() {
+    if (typeof L === 'undefined') {
+      document.getElementById('mhs3-map').innerHTML =
+        '<div class="empty-state">Leaflet.js konnte nicht geladen werden.</div>';
+      return;
+    }
+
+    const mapH = 900, mapW = 1200;
+    const bounds = [[0, 0], [mapH, mapW]];
+
+    const map = L.map('mhs3-map', {
+      crs: L.CRS.Simple,
+      minZoom: -1,
+      maxZoom: 3,
+      zoomSnap: 0.25,
+      zoomDelta: 0.5,
+      maxBounds: [[-100, -100], [mapH + 100, mapW + 100]],
+      maxBoundsViscosity: 0.8,
+      attributionControl: false,
+    });
+
+    L.imageOverlay('/images/world-map.svg', bounds).addTo(map);
+    map.fitBounds(bounds);
+
+    // Attribution
+    L.control.attribution({ prefix: false, position: 'bottomright' })
+      .addAttribution('MHS3 Wiki')
+      .addTo(map);
+
+    this._mapInstance = map;
+
+    // Load monsties and add markers
+    try {
+      const data = await this.api('/api/monsties');
+      const monsties = data.data || data;
+      this._addMonstieMarkers(map, monsties);
+      this._buildLegend(monsties);
+    } catch (e) {
+      console.error('Map: Failed to load monsties', e);
+    }
+  },
+
+  _addMonstieMarkers(map, monsties) {
+    this._mapMarkers = [];
+    const placed = {}; // track positions per region to scatter
+
+    monsties.forEach((m, idx) => {
+      const habitatKey = m.habitat_en || m.habitat_de || 'Various';
+      const region = this._regionCoords[habitatKey] || this._regionCoords['Various'];
+      const color = this._elementColors[m.element] || this._elementColors.none;
+
+      // Scatter monsties within the region so they don't overlap
+      if (!placed[habitatKey]) placed[habitatKey] = 0;
+      const count = placed[habitatKey]++;
+      const angle = (count * 137.508) * (Math.PI / 180); // golden angle
+      const dist = 15 + (count * 3.5) % region.radius * 0.6;
+      const offsetY = Math.cos(angle) * dist;
+      const offsetX = Math.sin(angle) * dist;
+      const lat = region.center[0] + offsetY;
+      const lng = region.center[1] + offsetX;
+
+      // Custom circle marker with element color
+      const marker = L.circleMarker([lat, lng], {
+        radius: 7,
+        fillColor: color,
+        color: '#1a1a2e',
+        weight: 1.5,
+        fillOpacity: 0.85,
+        className: `map-marker el-marker-${m.element || 'none'}`,
+      }).addTo(map);
+
+      // Tooltip with name
+      const name = this.lang === 'de' ? m.name_de : m.name_en;
+      marker.bindTooltip(name, {
+        className: 'map-tooltip',
+        direction: 'top',
+        offset: [0, -8],
+      });
+
+      // Click → open monstie modal
+      marker.on('click', () => this.showMonstieModal(m.id));
+
+      marker._monstieData = m;
+      marker._region = habitatKey;
+      this._mapMarkers.push(marker);
+    });
+  },
+
+  _buildLegend(monsties) {
+    const legendEl = document.getElementById('map-legend');
+    if (!legendEl) return;
+
+    // Count per region
+    const regionCounts = {};
+    monsties.forEach((m) => {
+      const key = (this.lang === 'de' ? m.habitat_de : m.habitat_en) || 'Various';
+      const keyEn = m.habitat_en || 'Various';
+      if (!regionCounts[key]) regionCounts[key] = { count: 0, keyEn };
+      regionCounts[key].count++;
+    });
+
+    const allLabel = this.lang === 'de' ? 'Alle' : 'All';
+    let html = `<button class="legend-btn active" data-region="all">
+      <span class="legend-dot" style="background:#f59e0b"></span>${allLabel} (${monsties.length})
+    </button>`;
+
+    Object.entries(regionCounts).forEach(([name, { count, keyEn }]) => {
+      const color = this._regionColors[keyEn] || this._regionColors[name] || '#9ca3af';
+      html += `<button class="legend-btn" data-region="${keyEn}">
+        <span class="legend-dot" style="background:${color}"></span>${name} (${count})
+      </button>`;
+    });
+
+    legendEl.innerHTML = html;
+
+    // Bind filter
+    legendEl.querySelectorAll('.legend-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        legendEl.querySelectorAll('.legend-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const region = btn.dataset.region;
+        this._filterByRegion(region === 'all' ? null : region);
+      });
+    });
+  },
+
+  _filterByRegion(region) {
+    this._activeRegionFilter = region;
+    this._mapMarkers.forEach((marker) => {
+      const show = !region || marker._region === region;
+      marker.setStyle({ fillOpacity: show ? 0.85 : 0.08, opacity: show ? 1 : 0.1 });
+      if (show) marker.setRadius(7); else marker.setRadius(4);
+    });
+
+    // Zoom to region if selected
+    if (region && this._regionCoords[region]) {
+      const rc = this._regionCoords[region];
+      this._mapInstance.flyTo(rc.center, 1, { duration: 0.5 });
+    } else if (this._mapInstance) {
+      this._mapInstance.flyTo([450, 600], 0, { duration: 0.5 });
+    }
+  },
+
+  _destroyMap() {
+    if (this._mapInstance) {
+      this._mapInstance.remove();
+      this._mapInstance = null;
+    }
+    this._mapMarkers = [];
+    this._activeRegionFilter = null;
   },
 
   // --- SEARCH ---

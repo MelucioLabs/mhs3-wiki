@@ -5,3 +5,5 @@ pgdata/
 pgadmin-data/
 .DS_Store
 Thumbs.db
+tools/
+monstie_data_extracted.json
