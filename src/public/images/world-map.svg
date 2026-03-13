@@ -1,0 +1,169 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+  <defs>
+    <!-- Region gradients -->
+    <radialGradient id="azuriaGrad" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" style="stop-color:#2d5a3d;stop-opacity:1"/>
+      <stop offset="70%" style="stop-color:#1a3a28;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#142920;stop-opacity:1"/>
+    </radialGradient>
+    <radialGradient id="canaltaGrad" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" style="stop-color:#1e4a2a;stop-opacity:1"/>
+      <stop offset="70%" style="stop-color:#15381f;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0f2816;stop-opacity:1"/>
+    </radialGradient>
+    <radialGradient id="tarkuanGrad" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" style="stop-color:#5a3a1a;stop-opacity:1"/>
+      <stop offset="70%" style="stop-color:#3d2810;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#2a1c0c;stop-opacity:1"/>
+    </radialGradient>
+    <radialGradient id="serathisGrad" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" style="stop-color:#2a4a5a;stop-opacity:1"/>
+      <stop offset="70%" style="stop-color:#1a3040;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#122430;stop-opacity:1"/>
+    </radialGradient>
+    <!-- Glow filter for labels -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <!-- Water pattern -->
+    <pattern id="waterPattern" width="20" height="20" patternUnits="userSpaceOnUse">
+      <rect width="20" height="20" fill="#1a2a3a"/>
+      <path d="M0 10 Q5 7 10 10 Q15 13 20 10" stroke="#2a4a6a" stroke-width="0.5" fill="none" opacity="0.3"/>
+    </pattern>
+    <!-- Mountain pattern -->
+    <pattern id="mountainPattern" width="30" height="20" patternUnits="userSpaceOnUse">
+      <polygon points="0,20 15,5 30,20" fill="none" stroke="#4a6a7a" stroke-width="0.3" opacity="0.2"/>
+    </pattern>
+    <!-- Tree pattern -->
+    <pattern id="treePattern" width="16" height="16" patternUnits="userSpaceOnUse">
+      <circle cx="8" cy="8" r="3" fill="#1a4a25" opacity="0.3"/>
+    </pattern>
+    <!-- Sand pattern -->
+    <pattern id="sandPattern" width="8" height="8" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="0.5" fill="#6a5530" opacity="0.2"/>
+      <circle cx="6" cy="6" r="0.5" fill="#6a5530" opacity="0.15"/>
+    </pattern>
+  </defs>
+
+  <!-- Background (ocean/void) -->
+  <rect width="1200" height="900" fill="#0a0e14"/>
+
+  <!-- Ocean water areas -->
+  <ellipse cx="600" cy="450" rx="560" ry="420" fill="url(#waterPattern)" opacity="0.4"/>
+
+  <!-- Main landmass outline -->
+  <path d="M180 450 Q200 300 350 220 Q450 170 550 150 Q650 130 750 150 Q880 180 950 280 Q1020 380 1030 450 Q1040 550 980 650 Q900 740 780 770 Q650 800 500 790 Q350 780 250 700 Q180 620 170 520 Z"
+        fill="#121a14" stroke="#2a3a2e" stroke-width="1.5" opacity="0.8"/>
+
+  <!-- ====== SERATHIS (North - Ice/Mountains) ====== -->
+  <path d="M350 150 Q400 120 500 110 Q600 100 700 110 Q800 130 870 180 Q900 230 920 300 Q880 260 820 230 Q750 200 680 210 Q600 220 530 230 Q460 220 400 240 Q350 220 340 190 Z"
+        fill="url(#serathisGrad)" stroke="#3a6a8a" stroke-width="1" opacity="0.9" class="region" data-region="Serathis"/>
+  <!-- Mountain details -->
+  <polygon points="480,160 510,120 540,160" fill="#2a4a5a" stroke="#4a7a9a" stroke-width="0.5" opacity="0.6"/>
+  <polygon points="560,150 600,100 640,150" fill="#2a5060" stroke="#5a8aa0" stroke-width="0.5" opacity="0.7"/>
+  <polygon points="650,160 680,125 710,160" fill="#2a4a5a" stroke="#4a7a9a" stroke-width="0.5" opacity="0.6"/>
+  <polygon points="750,180 780,140 810,180" fill="#254050" stroke="#4a7090" stroke-width="0.5" opacity="0.5"/>
+  <!-- Snow caps -->
+  <polygon points="555,150 600,100 645,150" fill="#5a8aa0" opacity="0.2"/>
+  <polygon points="595,130 600,100 605,130" fill="#8ab0c8" opacity="0.3"/>
+  <!-- Ice crystals -->
+  <circle cx="420" cy="170" r="4" fill="#67e8f9" opacity="0.15"/>
+  <circle cx="700" cy="150" r="3" fill="#67e8f9" opacity="0.12"/>
+  <circle cx="830" cy="210" r="3.5" fill="#67e8f9" opacity="0.1"/>
+  <!-- Serathis label -->
+  <text x="610" y="175" text-anchor="middle" fill="#67e8f9" font-family="Georgia, serif" font-size="22" font-weight="bold" filter="url(#glow)" opacity="0.9">Serathis</text>
+  <text x="610" y="195" text-anchor="middle" fill="#8ab0c8" font-family="Arial, sans-serif" font-size="11" opacity="0.6">Eisige Gipfel · Glacial Caps</text>
+
+  <!-- ====== CANALTA TIMBERLAND (West - Forest) ====== -->
+  <path d="M180 380 Q200 300 300 250 Q370 230 420 240 Q480 250 500 300 Q510 360 490 420 Q470 480 440 520 Q400 570 350 580 Q280 580 230 530 Q190 480 180 430 Z"
+        fill="url(#canaltaGrad)" stroke="#2a5a35" stroke-width="1" opacity="0.9" class="region" data-region="Canalta Timberland"/>
+  <!-- Tree details -->
+  <circle cx="280" cy="320" r="12" fill="#1a4a25" opacity="0.4"/>
+  <circle cx="320" cy="350" r="15" fill="#164520" opacity="0.35"/>
+  <circle cx="360" cy="310" r="10" fill="#1e5a2e" opacity="0.4"/>
+  <circle cx="400" cy="370" r="14" fill="#164520" opacity="0.3"/>
+  <circle cx="340" cy="420" r="12" fill="#1a4a25" opacity="0.35"/>
+  <circle cx="420" cy="300" r="11" fill="#1e5a2e" opacity="0.3"/>
+  <circle cx="260" cy="400" r="13" fill="#164520" opacity="0.3"/>
+  <circle cx="380" cy="460" r="10" fill="#1a4a25" opacity="0.3"/>
+  <circle cx="450" cy="400" r="9" fill="#1e5a2e" opacity="0.25"/>
+  <circle cx="300" cy="480" r="11" fill="#164520" opacity="0.3"/>
+  <!-- Forest floor texture -->
+  <rect x="220" y="290" width="250" height="260" fill="url(#treePattern)" opacity="0.5"/>
+  <!-- Canalta label -->
+  <text x="350" y="400" text-anchor="middle" fill="#4ade80" font-family="Georgia, serif" font-size="20" font-weight="bold" filter="url(#glow)" opacity="0.9">Canalta</text>
+  <text x="350" y="418" text-anchor="middle" fill="#4ade80" font-family="Georgia, serif" font-size="16" font-weight="bold" filter="url(#glow)" opacity="0.7">Waldland</text>
+  <text x="350" y="438" text-anchor="middle" fill="#6aaa80" font-family="Arial, sans-serif" font-size="10" opacity="0.5">Howlinyowl Forest · Mt. Canalta</text>
+
+  <!-- ====== TARKUAN (East - Desert/Ruins) ====== -->
+  <path d="M680 280 Q720 250 780 260 Q850 270 910 320 Q960 380 970 440 Q975 500 950 560 Q920 610 870 630 Q800 650 730 640 Q660 620 630 560 Q610 500 620 430 Q640 340 670 300 Z"
+        fill="url(#tarkuanGrad)" stroke="#6a4a20" stroke-width="1" opacity="0.9" class="region" data-region="Tarkuan"/>
+  <!-- Sand texture -->
+  <rect x="640" y="280" width="320" height="350" fill="url(#sandPattern)" opacity="0.6"/>
+  <!-- Dunes -->
+  <path d="M700 420 Q750 400 800 420 Q850 440 900 420" stroke="#5a4020" stroke-width="1.5" fill="none" opacity="0.3"/>
+  <path d="M720 480 Q770 460 830 480 Q880 500 920 480" stroke="#5a4020" stroke-width="1" fill="none" opacity="0.25"/>
+  <!-- Ruins/bones -->
+  <path d="M800 350 L810 330 L820 350" stroke="#7a6a50" stroke-width="1.5" fill="none" opacity="0.3"/>
+  <path d="M830 340 L835 325 L840 340" stroke="#7a6a50" stroke-width="1" fill="none" opacity="0.25"/>
+  <circle cx="815" cy="360" r="5" fill="none" stroke="#6a5a40" stroke-width="0.5" opacity="0.2"/>
+  <!-- Colossal Dragon Remains hint -->
+  <path d="M850 500 Q860 480 870 500 Q880 520 890 500" stroke="#6a5a40" stroke-width="2" fill="none" opacity="0.2"/>
+  <path d="M840 510 L850 490 L860 510" stroke="#6a5a40" stroke-width="1" fill="none" opacity="0.15"/>
+  <!-- Tarkuan label -->
+  <text x="790" y="440" text-anchor="middle" fill="#f59e0b" font-family="Georgia, serif" font-size="22" font-weight="bold" filter="url(#glow)" opacity="0.9">Tarkuan</text>
+  <text x="790" y="460" text-anchor="middle" fill="#b08030" font-family="Arial, sans-serif" font-size="11" opacity="0.5">Colossal Dragon's Remains · Bountiful Dunes</text>
+
+  <!-- ====== AZURIA (South - Plains/Start) ====== -->
+  <path d="M300 580 Q350 550 420 540 Q500 530 580 540 Q660 550 720 580 Q770 620 780 680 Q770 740 720 770 Q650 790 550 790 Q440 785 370 760 Q300 730 270 680 Q260 630 280 590 Z"
+        fill="url(#azuriaGrad)" stroke="#3a6a4a" stroke-width="1" opacity="0.9" class="region" data-region="Azuria"/>
+  <!-- Flower plains -->
+  <circle cx="420" cy="620" r="2" fill="#f472b6" opacity="0.3"/>
+  <circle cx="480" cy="640" r="2.5" fill="#fb923c" opacity="0.25"/>
+  <circle cx="540" cy="610" r="2" fill="#f472b6" opacity="0.3"/>
+  <circle cx="600" cy="650" r="2" fill="#a78bfa" opacity="0.25"/>
+  <circle cx="440" cy="680" r="2.5" fill="#fb923c" opacity="0.2"/>
+  <circle cx="520" cy="700" r="2" fill="#f472b6" opacity="0.25"/>
+  <circle cx="580" cy="680" r="2" fill="#a78bfa" opacity="0.2"/>
+  <circle cx="650" cy="630" r="2" fill="#f472b6" opacity="0.25"/>
+  <circle cx="370" cy="650" r="2" fill="#fb923c" opacity="0.2"/>
+  <!-- Lake (Mirror Lake) -->
+  <ellipse cx="500" cy="670" rx="40" ry="25" fill="#1a3a5a" stroke="#2a5a8a" stroke-width="0.5" opacity="0.5"/>
+  <ellipse cx="500" cy="668" rx="30" ry="15" fill="#2a4a6a" opacity="0.3"/>
+  <!-- Castle hint -->
+  <rect x="540" cy="590" width="8" height="12" fill="#4a5a6a" opacity="0.3" y="588"/>
+  <rect x="552" cy="592" width="6" height="10" fill="#4a5a6a" opacity="0.25" y="590"/>
+  <rect x="546" cy="585" width="3" height="5" fill="#5a6a7a" opacity="0.2" y="583"/>
+  <!-- Azuria label -->
+  <text x="530" y="640" text-anchor="middle" fill="#4ade80" font-family="Georgia, serif" font-size="24" font-weight="bold" filter="url(#glow)" opacity="0.9">Azuria</text>
+  <text x="530" y="662" text-anchor="middle" fill="#6aaa80" font-family="Arial, sans-serif" font-size="11" opacity="0.5">Sunpetal Plains · Broadleaf Basin · Mirror Lake</text>
+
+  <!-- ====== PATHS BETWEEN REGIONS ====== -->
+  <!-- Azuria → Canalta -->
+  <path d="M380 580 Q340 560 330 530" stroke="#3a5a3a" stroke-width="2" fill="none" opacity="0.3" stroke-dasharray="6,4"/>
+  <!-- Azuria → Tarkuan -->
+  <path d="M680 590 Q700 570 710 540" stroke="#5a4a30" stroke-width="2" fill="none" opacity="0.3" stroke-dasharray="6,4"/>
+  <!-- Canalta → Serathis -->
+  <path d="M420 260 Q440 240 470 230" stroke="#2a5a4a" stroke-width="2" fill="none" opacity="0.3" stroke-dasharray="6,4"/>
+  <!-- Tarkuan → Serathis -->
+  <path d="M770 280 Q790 260 810 240" stroke="#4a4a3a" stroke-width="2" fill="none" opacity="0.3" stroke-dasharray="6,4"/>
+
+  <!-- ====== COMPASS ROSE ====== -->
+  <g transform="translate(100, 120)" opacity="0.4">
+    <circle cx="0" cy="0" r="25" fill="none" stroke="#6a7a8a" stroke-width="0.5"/>
+    <line x1="0" y1="-22" x2="0" y2="22" stroke="#6a7a8a" stroke-width="0.5"/>
+    <line x1="-22" y1="0" x2="22" y2="0" stroke="#6a7a8a" stroke-width="0.5"/>
+    <polygon points="0,-20 -4,-8 4,-8" fill="#8aa0b0"/>
+    <text x="0" y="-27" text-anchor="middle" fill="#8aa0b0" font-family="Georgia, serif" font-size="10">N</text>
+    <text x="0" y="37" text-anchor="middle" fill="#6a7a8a" font-family="Georgia, serif" font-size="9">S</text>
+    <text x="-32" y="4" text-anchor="middle" fill="#6a7a8a" font-family="Georgia, serif" font-size="9">W</text>
+    <text x="32" y="4" text-anchor="middle" fill="#6a7a8a" font-family="Georgia, serif" font-size="9">E</text>
+  </g>
+
+  <!-- ====== TITLE ====== -->
+  <text x="1100" y="850" text-anchor="end" fill="#4a5a6a" font-family="Georgia, serif" font-size="14" opacity="0.4">MHS3 Wiki · World Map</text>
+</svg>
