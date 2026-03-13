@@ -1,0 +1,9 @@
+# MHS3 Wiki - Monster Hunter Stories 3 Fan Wiki
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://mhs3.meluciolabs.de/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 2

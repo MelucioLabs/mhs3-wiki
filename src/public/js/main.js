@@ -13,7 +13,23 @@ const App = {
     this.bindSearch();
     this.bindLangToggle();
     this.bindMobileMenu();
-    this.navigate('home');
+    this.bindHashRouting();
+
+    // Navigate based on URL hash or default to home
+    const hash = window.location.hash.replace('#', '') || 'home';
+    const validPages = ['home', 'monsties', 'bestiary', 'equipment', 'gene-calc', 'map'];
+    this.navigate(validPages.includes(hash) ? hash : 'home');
+  },
+
+  // Hash-based routing for SEO and deep linking
+  bindHashRouting() {
+    window.addEventListener('hashchange', () => {
+      const hash = window.location.hash.replace('#', '') || 'home';
+      const validPages = ['home', 'monsties', 'bestiary', 'equipment', 'gene-calc', 'map'];
+      if (validPages.includes(hash) && hash !== this.currentPage) {
+        this.navigate(hash);
+      }
+    });
   },
 
   // --- i18n ---
@@ -47,6 +63,56 @@ const App = {
       el.placeholder = this.t(el.dataset.i18nPlaceholder);
     });
     document.title = this.t('site_title');
+    // Update html lang attribute
+    document.documentElement.lang = this.lang;
+  },
+
+  // SEO: Update page title and meta description dynamically
+  updateSEO(page, detail) {
+    const base = 'MHS3 Wiki';
+    const titles = {
+      home: `${base} - Monster Hunter Stories 3: Twisted Reflection Wiki`,
+      monsties: `Monstie-Datenbank | ${base}`,
+      bestiary: `Bestiarum | ${base}`,
+      equipment: this.lang === 'de' ? `Ausrüstung | ${base}` : `Equipment | ${base}`,
+      'gene-calc': `Gene-Rechner | ${base}`,
+      map: this.lang === 'de' ? `Interaktive Karte | ${base}` : `Interactive Map | ${base}`,
+      'search-results': `${this.t('search.title')} | ${base}`,
+    };
+    document.title = detail || titles[page] || titles.home;
+
+    // Update canonical URL
+    const canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) {
+      const hash = page === 'home' ? '' : `#${page}`;
+      canonical.href = `https://mhs3.meluciolabs.de/${hash}`;
+    }
+
+    // Update meta description
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      const descs = {
+        home: this.lang === 'de'
+          ? 'Das umfassende Fan-Wiki zu Monster Hunter Stories 3: Twisted Reflection. Monstie-Datenbank, Bestiarum, Gene-Rechner, interaktive Karte und mehr.'
+          : 'The comprehensive fan wiki for Monster Hunter Stories 3: Twisted Reflection. Monstie database, bestiary, gene calculator, interactive map and more.',
+        monsties: this.lang === 'de'
+          ? 'Alle Monsties in MHS3 mit Elementen, Angriffstypen, Ride-Actions und Habitaten. Finde dein perfektes Team!'
+          : 'All Monsties in MHS3 with elements, attack types, ride actions and habitats. Find your perfect team!',
+        bestiary: this.lang === 'de'
+          ? 'Komplettes Bestiarum von MHS3. Alle Monster mit Schwächen, Spezies und Fundorten.'
+          : 'Complete MHS3 bestiary. All monsters with weaknesses, species and habitats.',
+        equipment: this.lang === 'de'
+          ? 'Alle Waffen und Rüstungen in MHS3 mit Stats, Skills und benötigten Materialien.'
+          : 'All weapons and armor in MHS3 with stats, skills and required materials.',
+        'gene-calc': this.lang === 'de'
+          ? 'MHS3 Gene-Rechner: Plane dein Rite of Channeling mit dem 3x3 Grid. Optimiere Bingo-Boni!'
+          : 'MHS3 Gene Calculator: Plan your Rite of Channeling with the 3x3 grid. Optimize Bingo Bonuses!',
+        map: this.lang === 'de'
+          ? 'Interaktive Weltkarte von MHS3. Finde alle Monsties, markiere deinen Fortschritt und teile deine Entdeckungen.'
+          : 'Interactive MHS3 world map. Find all monsties, track your progress and share your discoveries.',
+      };
+      metaDesc.content = descs[page] || descs.home;
+    }
   },
 
   // --- Navigation ---
@@ -74,6 +140,15 @@ const App = {
     );
     document.querySelector('.nav').classList.remove('open');
 
+    // Update URL hash (without triggering hashchange loop)
+    const newHash = page === 'home' ? '' : page;
+    if (window.location.hash.replace('#', '') !== newHash) {
+      history.replaceState(null, '', newHash ? `#${newHash}` : window.location.pathname);
+    }
+
+    // Update SEO metadata
+    this.updateSEO(page);
+
     const app = document.getElementById('app');
     app.innerHTML = `<div class="empty-state">${this.t('common.loading')}</div>`;
 
@@ -83,6 +158,7 @@ const App = {
       case 'bestiary': this.renderBestiary(); break;
       case 'equipment': this.renderEquipment(); break;
       case 'gene-calc': this.renderGeneCalc(); break;
+      case 'map': this.renderMap(); break;
       case 'search-results': this.renderSearchResults(params.query); break;
     }
   },
@@ -214,6 +290,10 @@ const App = {
             <h3>${this.t('home.card_genes')}</h3>
             <p>${this.t('home.card_genes_desc')}</p>
           </div>
+          <div class="home-card" data-goto="map">
+            <h3>${this.t('home.card_map')}</h3>
+            <p>${this.t('home.card_map_desc')}</p>
+          </div>
         </div>
       </div>`;
     document.querySelectorAll('[data-goto]').forEach((el) => {
@@ -303,6 +383,7 @@ const App = {
   async showMonstieModal(id) {
     try {
       const m = await this.api(`/api/monsties/${id}`);
+      this.updateSEO('monsties', `${m.name} - Monstie | MHS3 Wiki`);
       this.openModal(
         `${this.elementIcon(m.element, 'lg')}<h2>${m.name}</h2>`,
         `<div class="detail-section">
@@ -398,6 +479,7 @@ const App = {
   async showMonsterModal(id) {
     try {
       const m = await this.api(`/api/bestiary/${id}`);
+      this.updateSEO('bestiary', `${m.name} - Bestiarum | MHS3 Wiki`);
       this.openModal(
         `${this.elementIcon(m.weakness, 'lg')}<h2>${m.name}</h2>`,
         `<div class="detail-section">
@@ -491,6 +573,7 @@ const App = {
   async showEquipModal(id) {
     try {
       const e = await this.api(`/api/equipment/${id}`);
+      this.updateSEO('equipment', `${e.name} - ${this.lang === 'de' ? 'Ausrüstung' : 'Equipment'} | MHS3 Wiki`);
       const stats = e.stats || {};
       const statEntries = Object.entries(stats)
         .filter(([k]) => k !== 'skills')
@@ -530,6 +613,25 @@ const App = {
     if (typeof GeneCalculator !== 'undefined') {
       GeneCalculator.init('gene-calc-root', this);
     }
+  },
+
+  // --- MAP (placeholder) ---
+
+  renderMap() {
+    document.getElementById('app').innerHTML = `
+      <h1 class="page-title">${this.lang === 'de' ? 'Interaktive Karte' : 'Interactive Map'}</h1>
+      <p class="page-subtitle">${this.lang === 'de'
+        ? 'Die interaktive Weltkarte wird bald verfügbar sein! Hier kannst du alle Monsties und Fundorte erkunden.'
+        : 'The interactive world map is coming soon! Explore all monsties and their locations here.'}</p>
+      <div class="map-placeholder">
+        <div class="map-coming-soon">
+          <span class="map-icon">&#x1F5FA;</span>
+          <h2>${this.lang === 'de' ? 'Karte in Arbeit' : 'Map in Progress'}</h2>
+          <p>${this.lang === 'de'
+            ? 'Wir arbeiten an einer interaktiven Karte mit allen Habitaten, Monstie-Fundorten und mehr.'
+            : 'We are building an interactive map with all habitats, monstie locations and more.'}</p>
+        </div>
+      </div>`;
   },
 
   // --- SEARCH ---

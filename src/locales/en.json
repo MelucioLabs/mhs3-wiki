@@ -6,6 +6,7 @@
     "bestiary": "Bestiary",
     "equipment": "Equipment",
     "gene_calc": "Gene Calculator",
+    "map": "Map",
     "search": "Search"
   },
   "home": {
@@ -18,7 +19,9 @@
     "card_equipment": "Equipment",
     "card_equipment_desc": "Weapons and armor with stats and required materials",
     "card_genes": "Gene Calculator",
-    "card_genes_desc": "Plan your Rite of Channeling with the 3x3 grid calculator"
+    "card_genes_desc": "Plan your Rite of Channeling with the 3x3 grid calculator",
+    "card_map": "Interactive Map",
+    "card_map_desc": "Explore the world of MHS3 and track your discovered monsties"
   },
   "monsties": {
     "title": "Monstie Database",

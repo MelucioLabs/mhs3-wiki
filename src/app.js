@@ -10,6 +10,7 @@ const bestiaryRouter = require('./modules/bestiary/router');
 const equipmentRouter = require('./modules/equipment/router');
 const i18nRouter = require('./modules/i18n/router');
 const searchRouter = require('./modules/search/router');
+const seoRouter = require('./modules/seo/routes');
 const { i18nMiddleware } = require('./modules/i18n/middleware');
 
 const app = express();
@@ -22,8 +23,14 @@ app.use(cors());
 app.use(express.json());
 app.use(i18nMiddleware);
 
-// Static files
-app.use(express.static(path.join(__dirname, 'public')));
+// Static files with caching headers
+app.use(express.static(path.join(__dirname, 'public'), {
+  maxAge: '1d',
+  etag: true,
+}));
+
+// SEO Routes (sitemap.xml is handled at root level)
+app.use('/', seoRouter);
 
 // API Routes
 app.use('/api/monsties', monstiesRouter);
