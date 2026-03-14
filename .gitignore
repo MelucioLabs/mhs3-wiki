@@ -6,4 +6,5 @@ pgadmin-data/
 .DS_Store
 Thumbs.db
 tools/
+maps/
 monstie_data_extracted.json

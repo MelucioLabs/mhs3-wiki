@@ -624,26 +624,48 @@ const App = {
   _mapMarkers: [],
   _activeRegionFilter: null,
 
-  // Region center coordinates (on the 1200x900 SVG, mapped to Leaflet CRS.Simple)
-  // Leaflet CRS.Simple uses [y, x] where y increases upward, so we invert Y
-  _regionCoords: {
-    'Azuria':             { center: [230, 530], radius: 90 },
-    'Canalta Timberland': { center: [500, 350], radius: 80 },
-    'Canalta-Waldland':   { center: [500, 350], radius: 80 },
-    'Tarkuan':            { center: [480, 790], radius: 85 },
-    'Serathis':           { center: [730, 610], radius: 75 },
-    'Various':            { center: [450, 600], radius: 120 },
-    'Verschiedene':       { center: [450, 600], radius: 120 },
-  },
-
-  _regionColors: {
-    'Azuria':             '#4ade80',
-    'Canalta Timberland': '#22c55e',
-    'Canalta-Waldland':   '#22c55e',
-    'Tarkuan':            '#f59e0b',
-    'Serathis':           '#67e8f9',
-    'Various':            '#a855f7',
-    'Verschiedene':       '#a855f7',
+  // Map configuration for each region/sub-area
+  _mapConfig: {
+    regions: [
+      {
+        id: 'azuria',
+        name_de: 'Azuria',
+        name_en: 'Azuria',
+        color: '#4ade80',
+        habitatKeys: ['Azuria'],  // same in DE/EN
+        subMaps: [
+          { id: 'azuria_main', name_de: 'Hauptgebiet', name_en: 'Main Area', file: 'azuria_main.png', w: 1065, h: 1039 },
+          { id: 'azuria_ashen_pass', name_de: 'Aschenpfad', name_en: 'Ashen Pass', file: 'azuria_ashen_pass.png', w: 959, h: 1014 },
+          { id: 'azuria_castle', name_de: 'Schloss Azuria', name_en: 'Azuria Castle', file: 'azuria_azuria_castle.png', w: 963, h: 965 },
+        ],
+      },
+      {
+        id: 'canalta',
+        name_de: 'Canalta-Waldland',
+        name_en: 'Canalta Timberland',
+        color: '#22c55e',
+        habitatKeys: ['Canalta Timberland', 'Canalta-Waldland'],  // EN / DE
+        subMaps: [
+          { id: 'canalta_main', name_de: 'Hauptgebiet', name_en: 'Main Area', file: 'canalta_timperland_main.png', w: 923, h: 913 },
+        ],
+      },
+      {
+        id: 'tarkuan',
+        name_de: 'Tarkuan',
+        name_en: 'Tarkuan',
+        color: '#f59e0b',
+        habitatKeys: ['Tarkuan'],
+        subMaps: [],
+      },
+      {
+        id: 'serathis',
+        name_de: 'Serathis',
+        name_en: 'Serathis',
+        color: '#67e8f9',
+        habitatKeys: ['Serathis'],
+        subMaps: [],
+      },
+    ],
   },
 
   _elementColors: {
@@ -652,166 +674,186 @@ const App = {
   },
 
   renderMap() {
-    // Cleanup previous map instance
     this._destroyMap();
 
     const app = document.getElementById('app');
+    const de = this.lang === 'de';
+    const regions = this._mapConfig.regions;
+
+    // Build region tabs
+    const regionTabs = regions.map((r, i) => {
+      const name = de ? r.name_de : r.name_en;
+      const hasMap = r.subMaps.length > 0;
+      return `<button class="map-region-tab ${i === 0 ? 'active' : ''}" data-region="${r.id}"
+        style="--region-color: ${r.color}">
+        ${name}
+        ${!hasMap ? '<span class="map-tab-soon">' + (de ? 'bald' : 'soon') + '</span>' : ''}
+      </button>`;
+    }).join('');
+
     app.innerHTML = `
       <div class="map-wrapper">
         <div class="map-header">
-          <h1 class="page-title map-title">${this.lang === 'de' ? 'Interaktive Weltkarte' : 'Interactive World Map'}</h1>
-          <p class="map-subtitle">${this.lang === 'de'
-            ? 'Klicke auf einen Marker um Monstie-Details zu sehen'
-            : 'Click a marker to see Monstie details'}</p>
+          <h1 class="page-title map-title">${de ? 'Interaktive Karten' : 'Interactive Maps'}</h1>
+          <p class="map-subtitle">${de
+            ? 'Wähle eine Region und erkunde die Karte'
+            : 'Select a region and explore the map'}</p>
         </div>
+        <div class="map-region-tabs">${regionTabs}</div>
+        <div class="map-sub-tabs" id="map-sub-tabs"></div>
         <div id="mhs3-map" class="map-container"></div>
-        <div class="map-legend" id="map-legend"></div>
+        <div class="map-monstie-list" id="map-monstie-list"></div>
       </div>`;
 
-    this._initMap();
+    // Bind region tabs
+    document.querySelectorAll('.map-region-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.map-region-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this._selectRegion(btn.dataset.region);
+      });
+    });
+
+    // Load monsties, then select first region
+    this._loadMapMonsties().then(() => this._selectRegion('azuria'));
   },
 
-  async _initMap() {
+  async _loadMapMonsties() {
+    try {
+      const data = await this.api('/api/monsties');
+      this._mapMonsties = data.data || data;
+    } catch (e) {
+      console.error('Map: Failed to load monsties', e);
+      this._mapMonsties = [];
+    }
+  },
+
+  _selectRegion(regionId) {
+    const region = this._mapConfig.regions.find(r => r.id === regionId);
+    if (!region) return;
+    this._activeMapRegion = region;
+
+    const de = this.lang === 'de';
+    const subTabsEl = document.getElementById('map-sub-tabs');
+
+    if (region.subMaps.length === 0) {
+      // No maps available yet
+      subTabsEl.innerHTML = '';
+      this._destroyMap();
+      document.getElementById('mhs3-map').innerHTML = `
+        <div class="empty-state map-placeholder">
+          <div class="map-placeholder-icon">🗺️</div>
+          <h3>${de ? 'Karte kommt bald' : 'Map coming soon'}</h3>
+          <p>${de
+            ? `Die Karte für ${region.name_de} wird bald hinzugefügt.`
+            : `The map for ${region.name_en} will be added soon.`}</p>
+        </div>`;
+      this._showRegionMonsties(region);
+      return;
+    }
+
+    // Build sub-map tabs
+    if (region.subMaps.length > 1) {
+      subTabsEl.innerHTML = region.subMaps.map((sm, i) => {
+        const name = de ? sm.name_de : sm.name_en;
+        return `<button class="map-sub-tab ${i === 0 ? 'active' : ''}" data-submap="${sm.id}">${name}</button>`;
+      }).join('');
+
+      subTabsEl.querySelectorAll('.map-sub-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+          subTabsEl.querySelectorAll('.map-sub-tab').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const sm = region.subMaps.find(s => s.id === btn.dataset.submap);
+          if (sm) this._loadSubMap(sm);
+        });
+      });
+    } else {
+      subTabsEl.innerHTML = '';
+    }
+
+    // Load first sub-map
+    this._loadSubMap(region.subMaps[0]);
+    this._showRegionMonsties(region);
+  },
+
+  _loadSubMap(subMap) {
+    this._destroyMap();
+
     if (typeof L === 'undefined') {
       document.getElementById('mhs3-map').innerHTML =
         '<div class="empty-state">Leaflet.js konnte nicht geladen werden.</div>';
       return;
     }
 
-    const mapH = 900, mapW = 1200;
-    const bounds = [[0, 0], [mapH, mapW]];
+    const { w, h, file } = subMap;
+    const bounds = [[0, 0], [h, w]];
 
     const map = L.map('mhs3-map', {
       crs: L.CRS.Simple,
       minZoom: -1,
-      maxZoom: 3,
+      maxZoom: 4,
       zoomSnap: 0.25,
       zoomDelta: 0.5,
-      maxBounds: [[-100, -100], [mapH + 100, mapW + 100]],
+      maxBounds: [[-50, -50], [h + 50, w + 50]],
       maxBoundsViscosity: 0.8,
       attributionControl: false,
     });
 
-    L.imageOverlay('/images/world-map.svg', bounds).addTo(map);
+    L.imageOverlay(`/maps/${file}`, bounds).addTo(map);
     map.fitBounds(bounds);
 
-    // Attribution
     L.control.attribution({ prefix: false, position: 'bottomright' })
       .addAttribution('MHS3 Wiki')
       .addTo(map);
 
     this._mapInstance = map;
+  },
 
-    // Load monsties and add markers
-    try {
-      const data = await this.api('/api/monsties');
-      const monsties = data.data || data;
-      this._addMonstieMarkers(map, monsties);
-      this._buildLegend(monsties);
-    } catch (e) {
-      console.error('Map: Failed to load monsties', e);
+  _showRegionMonsties(region) {
+    const listEl = document.getElementById('map-monstie-list');
+    if (!listEl || !this._mapMonsties) return;
+
+    const de = this.lang === 'de';
+    const regionMonsties = this._mapMonsties.filter(m => {
+      const habitat = m.habitat || '';
+      return region.habitatKeys.some(k => habitat === k);
+    });
+
+    if (regionMonsties.length === 0) {
+      listEl.innerHTML = `<div class="map-monstie-empty">${de
+        ? 'Keine Monsties in dieser Region'
+        : 'No Monsties in this region'}</div>`;
+      return;
     }
-  },
 
-  _addMonstieMarkers(map, monsties) {
-    this._mapMarkers = [];
-    const placed = {}; // track positions per region to scatter
+    const elementEmoji = { fire: '🔥', water: '💧', thunder: '⚡', ice: '❄️', dragon: '🐉', none: '⚪' };
+    const attackLabels = {
+      power: de ? 'Kraft' : 'Power',
+      speed: de ? 'Geschwindigkeit' : 'Speed',
+      technical: de ? 'Technik' : 'Technical',
+    };
 
-    monsties.forEach((m, idx) => {
-      const habitatKey = m.habitat_en || m.habitat_de || 'Various';
-      const region = this._regionCoords[habitatKey] || this._regionCoords['Various'];
-      const color = this._elementColors[m.element] || this._elementColors.none;
+    const header = `<div class="map-monstie-header">
+      <h3>${de ? 'Monsties in dieser Region' : 'Monsties in this Region'} (${regionMonsties.length})</h3>
+    </div>`;
 
-      // Scatter monsties within the region so they don't overlap
-      if (!placed[habitatKey]) placed[habitatKey] = 0;
-      const count = placed[habitatKey]++;
-      const angle = (count * 137.508) * (Math.PI / 180); // golden angle
-      const dist = 15 + (count * 3.5) % region.radius * 0.6;
-      const offsetY = Math.cos(angle) * dist;
-      const offsetX = Math.sin(angle) * dist;
-      const lat = region.center[0] + offsetY;
-      const lng = region.center[1] + offsetX;
+    const cards = regionMonsties.map(m => {
+      const name = m.name || m.name_de || m.name_en;
+      const elem = m.element || 'none';
+      const color = this._elementColors[elem] || this._elementColors.none;
+      return `<div class="map-monstie-card" data-id="${m.id}" style="--el-color: ${color}">
+        <span class="map-monstie-elem">${elementEmoji[elem] || '⚪'}</span>
+        <span class="map-monstie-name">${name}</span>
+        <span class="map-monstie-attack">${attackLabels[m.attack_type] || ''}</span>
+      </div>`;
+    }).join('');
 
-      // Custom circle marker with element color
-      const marker = L.circleMarker([lat, lng], {
-        radius: 7,
-        fillColor: color,
-        color: '#1a1a2e',
-        weight: 1.5,
-        fillOpacity: 0.85,
-        className: `map-marker el-marker-${m.element || 'none'}`,
-      }).addTo(map);
+    listEl.innerHTML = header + `<div class="map-monstie-grid">${cards}</div>`;
 
-      // Tooltip with name
-      const name = this.lang === 'de' ? m.name_de : m.name_en;
-      marker.bindTooltip(name, {
-        className: 'map-tooltip',
-        direction: 'top',
-        offset: [0, -8],
-      });
-
-      // Click → open monstie modal
-      marker.on('click', () => this.showMonstieModal(m.id));
-
-      marker._monstieData = m;
-      marker._region = habitatKey;
-      this._mapMarkers.push(marker);
+    // Click to open modal
+    listEl.querySelectorAll('.map-monstie-card').forEach(el => {
+      el.addEventListener('click', () => this.showMonstieModal(el.dataset.id));
     });
-  },
-
-  _buildLegend(monsties) {
-    const legendEl = document.getElementById('map-legend');
-    if (!legendEl) return;
-
-    // Count per region
-    const regionCounts = {};
-    monsties.forEach((m) => {
-      const key = (this.lang === 'de' ? m.habitat_de : m.habitat_en) || 'Various';
-      const keyEn = m.habitat_en || 'Various';
-      if (!regionCounts[key]) regionCounts[key] = { count: 0, keyEn };
-      regionCounts[key].count++;
-    });
-
-    const allLabel = this.lang === 'de' ? 'Alle' : 'All';
-    let html = `<button class="legend-btn active" data-region="all">
-      <span class="legend-dot" style="background:#f59e0b"></span>${allLabel} (${monsties.length})
-    </button>`;
-
-    Object.entries(regionCounts).forEach(([name, { count, keyEn }]) => {
-      const color = this._regionColors[keyEn] || this._regionColors[name] || '#9ca3af';
-      html += `<button class="legend-btn" data-region="${keyEn}">
-        <span class="legend-dot" style="background:${color}"></span>${name} (${count})
-      </button>`;
-    });
-
-    legendEl.innerHTML = html;
-
-    // Bind filter
-    legendEl.querySelectorAll('.legend-btn').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        legendEl.querySelectorAll('.legend-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const region = btn.dataset.region;
-        this._filterByRegion(region === 'all' ? null : region);
-      });
-    });
-  },
-
-  _filterByRegion(region) {
-    this._activeRegionFilter = region;
-    this._mapMarkers.forEach((marker) => {
-      const show = !region || marker._region === region;
-      marker.setStyle({ fillOpacity: show ? 0.85 : 0.08, opacity: show ? 1 : 0.1 });
-      if (show) marker.setRadius(7); else marker.setRadius(4);
-    });
-
-    // Zoom to region if selected
-    if (region && this._regionCoords[region]) {
-      const rc = this._regionCoords[region];
-      this._mapInstance.flyTo(rc.center, 1, { duration: 0.5 });
-    } else if (this._mapInstance) {
-      this._mapInstance.flyTo([450, 600], 0, { duration: 0.5 });
-    }
   },
 
   _destroyMap() {

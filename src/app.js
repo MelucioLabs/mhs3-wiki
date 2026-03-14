@@ -29,6 +29,12 @@ app.use(express.static(path.join(__dirname, 'public'), {
   etag: true,
 }));
 
+// Map images (mounted volume, not in git)
+app.use('/maps', express.static(path.join(__dirname, '..', 'maps'), {
+  maxAge: '7d',
+  etag: true,
+}));
+
 // SEO Routes (sitemap.xml is handled at root level)
 app.use('/', seoRouter);
 
