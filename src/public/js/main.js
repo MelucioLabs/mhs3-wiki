@@ -673,6 +673,14 @@ const App = {
     ice: '#67e8f9', dragon: '#a855f7', none: '#9ca3af',
   },
 
+  // Named/story monsties to exclude from map region lists
+  _storyMonsties: new Set([
+    'Ratha V', 'Plessie', 'Gravy', 'Dee', 'Sereg', 'Gnocchi', 'Angie',
+    'Chirpy', 'Kagachi', 'Fawn', 'Lenox', 'Legia', 'Golma', 'Großpoogie', 'Great Poogie',
+  ]),
+
+  _mapSortMode: 'element', // 'element' or 'name'
+
   renderMap() {
     this._destroyMap();
 
@@ -814,21 +822,16 @@ const App = {
     if (!listEl || !this._mapMonsties) return;
 
     const de = this.lang === 'de';
+    // Filter: match region, exclude story monsties
     const regionMonsties = this._mapMonsties.filter(m => {
       const habitat = m.habitat || '';
+      const name = m.name || '';
+      if (this._storyMonsties.has(name)) return false;
       return region.habitatKeys.some(k => habitat === k);
     });
 
-    // Sort by element, then by name
-    const elemOrder = { fire: 0, water: 1, thunder: 2, ice: 3, dragon: 4, none: 5 };
-    regionMonsties.sort((a, b) => {
-      const eA = elemOrder[a.element] ?? 99;
-      const eB = elemOrder[b.element] ?? 99;
-      if (eA !== eB) return eA - eB;
-      const nA = (a.name || '').toLowerCase();
-      const nB = (b.name || '').toLowerCase();
-      return nA.localeCompare(nB);
-    });
+    // Sort based on current mode
+    this._sortMonsties(regionMonsties);
 
     if (regionMonsties.length === 0) {
       listEl.innerHTML = `<div class="map-monstie-empty">${de
@@ -844,8 +847,19 @@ const App = {
       technical: de ? 'Technik' : 'Technical',
     };
 
+    const sortLabel = this._mapSortMode === 'element'
+      ? (de ? 'Element' : 'Element')
+      : (de ? 'Name' : 'Name');
+    const nextSort = this._mapSortMode === 'element' ? 'name' : 'element';
+    const nextLabel = nextSort === 'element'
+      ? (de ? 'Element' : 'Element')
+      : (de ? 'Name' : 'Name');
+
     const header = `<div class="map-monstie-header">
       <h3>${de ? 'Monsties in dieser Region' : 'Monsties in this Region'} (${regionMonsties.length})</h3>
+      <button class="map-sort-btn" id="map-sort-toggle" title="${de ? 'Sortierung ändern' : 'Change sorting'}">
+        <span class="map-sort-icon">⇅</span> ${sortLabel}
+      </button>
     </div>`;
 
     const cards = regionMonsties.map(m => {
@@ -861,10 +875,30 @@ const App = {
 
     listEl.innerHTML = header + `<div class="map-monstie-grid">${cards}</div>`;
 
+    // Sort toggle
+    document.getElementById('map-sort-toggle')?.addEventListener('click', () => {
+      this._mapSortMode = this._mapSortMode === 'element' ? 'name' : 'element';
+      this._showRegionMonsties(region);
+    });
+
     // Click to open modal
     listEl.querySelectorAll('.map-monstie-card').forEach(el => {
       el.addEventListener('click', () => this.showMonstieModal(el.dataset.id));
     });
+  },
+
+  _sortMonsties(monsties) {
+    const elemOrder = { fire: 0, water: 1, thunder: 2, ice: 3, dragon: 4, none: 5 };
+    if (this._mapSortMode === 'element') {
+      monsties.sort((a, b) => {
+        const eA = elemOrder[a.element] ?? 99;
+        const eB = elemOrder[b.element] ?? 99;
+        if (eA !== eB) return eA - eB;
+        return (a.name || '').localeCompare(b.name || '');
+      });
+    } else {
+      monsties.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+    }
   },
 
   _destroyMap() {
