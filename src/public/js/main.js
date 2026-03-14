@@ -819,6 +819,17 @@ const App = {
       return region.habitatKeys.some(k => habitat === k);
     });
 
+    // Sort by element, then by name
+    const elemOrder = { fire: 0, water: 1, thunder: 2, ice: 3, dragon: 4, none: 5 };
+    regionMonsties.sort((a, b) => {
+      const eA = elemOrder[a.element] ?? 99;
+      const eB = elemOrder[b.element] ?? 99;
+      if (eA !== eB) return eA - eB;
+      const nA = (a.name || '').toLowerCase();
+      const nB = (b.name || '').toLowerCase();
+      return nA.localeCompare(nB);
+    });
+
     if (regionMonsties.length === 0) {
       listEl.innerHTML = `<div class="map-monstie-empty">${de
         ? 'Keine Monsties in dieser Region'
