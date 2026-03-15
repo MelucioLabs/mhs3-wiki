@@ -19,12 +19,13 @@ Fan-Wiki web app for "Monster Hunter Stories 3: Twisted Reflection". Docker-depl
 - Prefers concise updates
 - Wants modal overlays instead of separate detail pages
 - German attack types: Kraft/Technik/Geschwindigkeit (not Power/Speed)
+- "Rite of Channeling" = "Ritus der Überlieferung" (DE)
 - Prefers datamining over web scraping for game data
 
-## Current State (15. März 2026, Abend)
+## Current State (15. März 2026, Nacht)
 - **97 monsties** (84 base + 13 story monsties) with official DE/EN names
 - **98 bestiary entries** with bilingual habitats
-- **115 genes** from game data (bilingual names/descriptions, **60 with type/element** from genedata binary)
+- **115 genes** from game data (bilingual names/descriptions, **alle 115 mit Element**, **73 mit gene_type** — 42 sind "rainbow"/NULL = korrekt)
 - **297 equipment** items (32 GS, 34 LS, 37 Hammer, 37 Horn, 37 Bow, 33 GL, 87 Armor)
   - Status effects translated (poison→Gift, sleep→Schlaf etc.)
   - Element filter + tags
@@ -79,14 +80,21 @@ Fan-Wiki web app for "Monster Hunter Stories 3: Twisted Reflection". Docker-depl
 - **Theme Toggle**: Sun/Moon icon button, dark mode default, persistent via localStorage
 - **Mobile Landing**: 2-column grid with icon+title only (no description), 3×2 even layout
 - **Footer**: Bilingual (data-i18n with innerHTML for &mdash;)
-- **Cache-Busting**: `?v=6` (manual bump), CI/CD uses Docker ARG BUILD_VERSION
+- **Cache-Busting**: `?v=6` lokal (Platzhalter), CI/CD ersetzt automatisch via Docker ARG BUILD_VERSION (Timestamp `YYYYMMDDHHmm`)
 - **All colors via CSS custom properties** — no hardcoded hex values in component styles
 
+## Scheduled Tasks
+- **mhs3-multilang**: Multi-Language Support (FR, ES, IT, JP) — manuell startbar über Claude Sidebar → "Scheduled". Details in `MULTILANG_PLAN.md`.
+
 ## Pending Tasks (Priority Order)
-1. **Gene Element/Type: Remaining 55 genes** — 60/115 genes have type/element from genedata binary. Remaining 55 need alternative source (web scraping or manual). THREE_WAY_TYPE_NONE maps to null type (20 genes).
+1. **Multi-Language Support**: FR, ES, IT, JP (Schedule erstellt, Plan in MULTILANG_PLAN.md)
 2. **Equipment Upgrade Pipeline**: Need weaponupgradedata/armorupgradedata from game files for per-level stats. User wants forge calculator showing stats per upgrade level (+ materials if available).
 3. **Texture Extraction**: Monster icons from pak files. Noesis installed for `.tex` → `.png`
 4. **Map-Bilder Tarkuan/Serathis**: Game-Dateien enthalten KEINE 2D-Karten (live-gerendert aus 3D-Daten). Braucht Game8-Screenshots oder eigene In-Game-Screenshots (wie bei Azuria/Canalta)
+
+## Erledigte Meilensteine
+- ✅ **Gene Element/Type VOLLSTÄNDIG** (15.03.2026): Alle 115 Gene haben Element, 73 haben gene_type (42 rainbow=NULL korrekt). Gelöst durch binäres Parsing von `genedata_v_09_00.user.3` — Einträge korrespondieren 1:1 mit GeneDef.ID sequential values. Hash-Mapping: `-1361419264`=speed, `-259062144`=power, `1478498560`=technical, `1008397120`=rainbow/null.
+- ✅ **Map-Bilder Azuria** transparent ersetzt (15.03.2026): Ingame-Screenshots mit transparentem Hintergrund statt Game8-Screenshots
 
 ## Legal Note
 Game data in GitHub repo — user should consider making repo private or excluding raw game data files from version control. See issues.md for details.

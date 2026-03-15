@@ -3,8 +3,16 @@
 ## Build/Deploy
 - Docker Compose: app (Node), postgres, pgadmin
 - Multi-arch: ARM64 (Raspberry Pi) + AMD64 (AWS EC2)
-- Live domain: mhs3.meluciolabs.de (SSH: pi-t)
+- Live domain: mhs3.meluciolabs.de (SSH: `pi-t`)
 - DB init: `src/database/init.sql` runs on container startup
+- CI/CD: GitHub Actions → SSH via Tailscale → `git pull` + Docker rebuild
+- Branch-Mapping: Lokal `master` → Remote `main` (`git push origin master:main`)
+
+## Pi-Struktur (ssh pi-t)
+- Projekt: `~/apps/mhs3-wiki/`
+- Maps (Docker-Volume): `~/apps/mhs3-wiki/maps/` (nicht in git, manuell per `scp ... pi-t:~/apps/mhs3-wiki/maps/` deployen)
+- Docker: `docker compose` im Projektordner
+- Andere Apps auf dem Pi: `~/apps/` (meluciolabs-auth, khai-react, nextcloud, pi-stats, lernkarten-api, quiz-app, meluciolabs-admin)
 
 ## Backend
 - Express.js with modular routing

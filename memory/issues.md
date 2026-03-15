@@ -122,6 +122,14 @@
 - **Problem**: Mobile Landing zeigte 1 Spalte mit vollen Karten → viel Scrollen
 - **Lösung**: `repeat(2, 1fr)` Grid, `display: none` auf `.home-card p`, 5. Karte zentriert via `grid-column: 1 / -1` + `max-width: calc(50% - 0.375rem)`
 
+## Session 2026-03-15: Deploy-Problem — Pi zieht nicht
+
+### Problem: CI/CD meldet "success" aber Änderungen sind nicht live
+- **Ursache**: Docker-Build `sed` Befehl (`RUN sed -i "s/?v=...`) änderte `index.html` im **Arbeitsverzeichnis** auf dem Pi (nicht nur im Container). Dadurch blockierte `git pull` bei jedem Deploy stillschweigend (dirty working tree).
+- **Symptom**: GitHub Actions Workflow meldete "completed/success", aber `git pull` schlug fehl. Pi blieb 5-6 Commits hinter `origin/main`.
+- **Fix**: `git restore src/public/index.html` auf dem Pi, dann `git pull origin main` + Docker rebuild
+- **Präventiv-Fix**: `git checkout -- .` vor `git pull` in `deploy.yml` eingefügt (Commit `f8d5b2d`) ✅
+
 ## Rechtliche Hinweise (Capcom / Datamining)
 
 ### Risiko-Einschätzung: GitHub + Spieldaten
