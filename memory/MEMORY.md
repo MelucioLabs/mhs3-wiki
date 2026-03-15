@@ -32,8 +32,9 @@ Fan-Wiki web app for "Monster Hunter Stories 3: Twisted Reflection". Docker-depl
   - Materials empty (recipe data not found yet)
 - Gene Calculator with 3x3 Bingo-Bonus + search filter
 - Full-text search (PostgreSQL GIN indexes, DE+EN)
-- **Landing Page**: Hero gradient, 3+2 card grid with icons, colored accents
-- **Nav-Tabs** with emoji icons (🐉📖⚔️🧬🗺️)
+- **Landing Page**: Hero gradient, 3+3 card grid (6 cards) with icons, colored accents
+- **Forge Planner**: Placeholder page ("Kommt bald!"), route `/forge`, nav link 🔨
+- **Nav-Tabs** with emoji icons (🐉📖⚔️🧬🔨🗺️)
 - **Interaktive Karten** (Leaflet.js CRS.Simple):
   - Azuria: 3 Sub-Maps, Canalta: 1 Map, Tarkuan/Serathis: Platzhalter
 - **Auto Cache-Busting**: Git SHA timestamp via Docker ARG BUILD_VERSION in CI/CD
@@ -76,7 +77,7 @@ Fan-Wiki web app for "Monster Hunter Stories 3: Twisted Reflection". Docker-depl
 - **KHAI Color Palette**: Dark (#1A1A2E bg, #5CB85C accent, #5BC0DE secondary, #7C6AF5 purple) + Light (#f5f5f5 bg, #4CAF50 accent, #2196F3 secondary, #6355D0 purple)
 - **Language Dropdown**: Globe icon button → dropdown with SVG flags (DE/EN), green highlight for active
 - **Theme Toggle**: Sun/Moon icon button, dark mode default, persistent via localStorage
-- **Mobile Landing**: 2-column grid with icon+title only (no description), 5th card centered
+- **Mobile Landing**: 2-column grid with icon+title only (no description), 3×2 even layout
 - **Footer**: Bilingual (data-i18n with innerHTML for &mdash;)
 - **Cache-Busting**: `?v=6` (manual bump), CI/CD uses Docker ARG BUILD_VERSION
 - **All colors via CSS custom properties** — no hardcoded hex values in component styles
