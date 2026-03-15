@@ -2,11 +2,11 @@
   "site_title": "MHS3 Wiki - Monster Hunter Stories 3",
   "nav": {
     "home": "Startseite",
-    "monsties": "Monsties",
-    "bestiary": "Bestiarum",
-    "equipment": "Ausrüstung",
-    "gene_calc": "Gene-Rechner",
-    "map": "Karte",
+    "monsties": "🐉 Monsties",
+    "bestiary": "📖 Bestiarum",
+    "equipment": "⚔️ Ausrüstung",
+    "gene_calc": "🧬 Gene-Rechner",
+    "map": "🗺️ Karte",
     "search": "Suche"
   },
   "home": {
@@ -21,7 +21,7 @@
     "card_genes": "Gene-Rechner",
     "card_genes_desc": "Plane dein Rite of Channeling mit dem 3x3 Grid-Rechner",
     "card_map": "Interaktive Karte",
-    "card_map_desc": "Erkunde die Welt von MHS3 und markiere deine gefundenen Monsties"
+    "card_map_desc": "Erkunde die Welt von MHS3 und markiere deine gefundenen Monsties (wird noch massiv erweitert — Feedback willkommen!)"
   },
   "monsties": {
     "title": "Monstie-Datenbank",

@@ -24,18 +24,19 @@ Fan-Wiki web app for "Monster Hunter Stories 3: Twisted Reflection". Docker-depl
 ## Current State (15. März 2026)
 - **97 monsties** (84 base + 13 story monsties) with official DE/EN names
 - **98 bestiary entries** with bilingual habitats
-- **25 genes** (placeholder data, needs MSG file parsing for real names)
+- **115 genes** from game data (bilingual names/descriptions, element/type NULL)
 - **297 equipment** items (32 GS, 34 LS, 37 Hammer, 37 Horn, 37 Bow, 33 GL, 87 Armor)
-  - All with official DE/EN names from parsed MSG files
-  - Element filter (fire/water/thunder/ice/dragon/non_elemental)
-  - Element tags on cards, translated to DE/EN
-  - Melody hash values hidden (need MSG resolution)
-  - Materials empty (recipe data not yet found in game files)
-- Gene Calculator with 3x3 Bingo-Bonus system
+  - Status effects translated (poison→Gift, sleep→Schlaf etc.)
+  - Element filter + tags, melody hashes hidden
+  - Materials empty (recipe data not found yet)
+- Gene Calculator with 3x3 Bingo-Bonus + search filter
 - Full-text search (PostgreSQL GIN indexes, DE+EN)
+- **Landing Page**: Hero gradient, 3+2 card grid with icons, colored accents
+- **Nav-Tabs** with emoji icons (🐉📖⚔️🧬🗺️)
 - **Interaktive Karten** (Leaflet.js CRS.Simple):
   - Azuria: 3 Sub-Maps, Canalta: 1 Map, Tarkuan/Serathis: Platzhalter
-- **Cache-Busting** via `?v=5` query parameter (Cloudflare CDN)
+- **Auto Cache-Busting**: Git SHA timestamp via Docker ARG BUILD_VERSION in CI/CD
+- **Auto-Migration**: `src/database/migrate.js` runs on startup, seeds genes/equipment if missing
 - Docker running on localhost:3000
 - **Live**: https://mhs3.meluciolabs.de
 - CI/CD: GitHub Actions → SSH Pi via Tailscale (push to main)
@@ -60,10 +61,11 @@ Fan-Wiki web app for "Monster Hunter Stories 3: Twisted Reflection". Docker-depl
 - **Items**: itemdata, itemmaterialdata
 
 ## Pending Tasks (Priority Order)
-1. **Gene Data Integration**: MSG files NOW PARSED — 354 passive + 278 active skill names available. Need to cross-reference with genelottery/genepreset hash IDs to build gene DB. gendata export failed in REasy but skill names are in MSG files.
-2. **Horn Melody Resolution**: melodydata.msg parsed — 27 melodies with DE/EN names. Need to map melody hash arrays in equipment JSONB to melody names.
-3. **Forge Calculator / Schmiederechner**: Materials/recipes needed. `_Recipe` field in weapons mostly 0. Recipe tables not found yet.
-4. **Texture Extraction**: Monster icons + HD maps from already-extracted pak files. Noesis installed for `.tex` → `.png`
+1. **SEO: Hash→History API Migration**: Hash-Routing (#/monsties) prevents Google indexing. Migrate to pushState routing (/monsties) with server-side fallback. CRITICAL for discoverability.
+2. **Equipment Upgrade Pipeline**: Need weaponupgradedata/armorupgradedata from game files for per-level stats. User wants forge calculator showing stats per upgrade level (+ materials if available).
+3. **Horn Melody Resolution**: melodydata.msg parsed — 27 melodies with DE/EN names. Map melody hash arrays in equipment JSONB to melody names.
+4. **Gene Element/Type Data**: gendata/genebingobonus REasy export empty. Need alternative source for gene element + type to enable bingo bonuses.
+5. **Texture Extraction**: Monster icons + HD maps from already-extracted pak files. Noesis installed for `.tex` → `.png`
 
 ## Legal Note
 Game data in GitHub repo — user should consider making repo private or excluding raw game data files from version control. See issues.md for details.

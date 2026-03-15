@@ -274,26 +274,33 @@ const App = {
   renderHome() {
     document.getElementById('app').innerHTML = `
       <div class="home-page">
-        <h1 class="page-title">${this.t('home.welcome')}</h1>
-        <p class="page-subtitle">${this.t('home.subtitle')}</p>
+        <div class="home-hero">
+          <h1 class="home-hero-title">${this.t('home.welcome')}</h1>
+          <p class="home-hero-sub">${this.t('home.subtitle')}</p>
+        </div>
         <div class="home-grid">
-          <div class="home-card" data-goto="monsties">
+          <div class="home-card home-card--monsties" data-goto="monsties">
+            <span class="home-card-icon">🐉</span>
             <h3>${this.t('home.card_monsties')}</h3>
             <p>${this.t('home.card_monsties_desc')}</p>
           </div>
-          <div class="home-card" data-goto="bestiary">
+          <div class="home-card home-card--bestiary" data-goto="bestiary">
+            <span class="home-card-icon">📖</span>
             <h3>${this.t('home.card_bestiary')}</h3>
             <p>${this.t('home.card_bestiary_desc')}</p>
           </div>
-          <div class="home-card" data-goto="equipment">
+          <div class="home-card home-card--equipment" data-goto="equipment">
+            <span class="home-card-icon">⚔️</span>
             <h3>${this.t('home.card_equipment')}</h3>
             <p>${this.t('home.card_equipment_desc')}</p>
           </div>
-          <div class="home-card" data-goto="gene-calc">
+          <div class="home-card home-card--genes" data-goto="gene-calc">
+            <span class="home-card-icon">🧬</span>
             <h3>${this.t('home.card_genes')}</h3>
             <p>${this.t('home.card_genes_desc')}</p>
           </div>
-          <div class="home-card" data-goto="map">
+          <div class="home-card home-card--map" data-goto="map">
+            <span class="home-card-icon">🗺️</span>
             <h3>${this.t('home.card_map')}</h3>
             <p>${this.t('home.card_map_desc')}</p>
           </div>

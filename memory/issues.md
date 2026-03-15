@@ -51,6 +51,33 @@
 - **Ursache**: `_Recipe` Feld in Waffen/Rüstungs-JSON ist meistens 0. Rezept-Tabellen noch nicht gefunden.
 - **Status**: OFFEN. Materials-Arrays sind leer (`[]`) in der DB.
 
+## Session 2026-03-15: Gene Integration, Cache-Busting, Landing Page
+
+### Problem: Gene-Daten nur Platzhalter (25 Stück)
+- **Lösung**: Pipeline `tools/build_gene_data.js` erstellt — GeneDef.ID → PassiveSkillData MSG cross-reference
+- **Ergebnis**: 115 echte Gene mit bilingualen Namen/Descriptions geseeded
+- **Offen**: Element/Type NULL (gendata REasy-Export leer)
+
+### Problem: Equipment Status nicht übersetzt
+- **Ursache**: `status` Wert aus JSONB ("poison", "sleep") wurde raw angezeigt
+- **Lösung**: `te('status_effects', v)` in `_equipCards()` und `showEquipModal()`, neue Enum-Gruppe in Locale-Dateien
+
+### Problem: Cloudflare Cache zeigt alte Version
+- **Lösung**: Auto Cache-Busting via Docker ARG BUILD_VERSION — CI/CD injiziert Timestamp (`YYYYMMDDHHmm`) per `sed` in index.html
+
+### Problem: DB-Seeds laufen nur bei frischem Volume
+- **Ursache**: `docker-entrypoint-initdb.d` Scripts werden nur bei Volume-Erstellung ausgeführt
+- **Lösung**: `src/database/migrate.js` — Auto-Migration/Seed beim App-Start, prüft Zählung und seeded bei Bedarf (idempotent)
+
+### Problem: Equipment Seed mit Escaped Quotes
+- **Ursache**: SQL-Statements mit `''` (escaped single quotes) werden beim naiven `;`-Split falsch geteilt
+- **Lösung**: Regex-basierter Split `sql.match(/INSERT[^;]*(?:''[^;]*)*;/gi)` im migrate.js
+
+### SEO-Audit Ergebnis
+- **KRITISCH**: Hash-Routing (`#/monsties`) verhindert Google-Indexierung
+- **GUT**: robots.txt, meta robots, viewport, JSON-LD, OG-Tags, hreflang
+- **TODO**: Migration zu History API pushState Routing
+
 ## Rechtliche Hinweise (Capcom / Datamining)
 
 ### Risiko-Einschätzung: GitHub + Spieldaten

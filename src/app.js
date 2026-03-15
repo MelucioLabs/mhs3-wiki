@@ -3,7 +3,8 @@ const path = require('path');
 const compression = require('compression');
 const helmet = require('helmet');
 const cors = require('cors');
-const { checkConnection, shutdown } = require('./database/connection');
+const { pool, checkConnection, shutdown } = require('./database/connection');
+const migrate = require('./database/migrate');
 
 const monstiesRouter = require('./modules/monsties/router');
 const bestiaryRouter = require('./modules/bestiary/router');
@@ -65,6 +66,7 @@ async function start() {
   try {
     await checkConnection();
     console.log('Database connected.');
+    await migrate(pool);
   } catch (err) {
     console.error('Database connection failed, retrying in 3s...', err.message);
     await new Promise((r) => setTimeout(r, 3000));

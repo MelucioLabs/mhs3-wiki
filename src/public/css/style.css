@@ -124,25 +124,105 @@ body {
   font-size: 0.8rem;
   border-top: 1px solid var(--border);
 }
+.footer a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer a:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+/* Home Hero */
+.home-hero {
+  text-align: center;
+  padding: 2.5rem 1rem 1rem;
+  background: linear-gradient(135deg, rgba(245,158,11,0.08) 0%, rgba(168,85,247,0.08) 50%, rgba(59,130,246,0.08) 100%);
+  border-radius: 16px;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(245,158,11,0.15);
+}
+.home-hero-title {
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent) 0%, #f97316 50%, var(--dragon) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+.home-hero-sub {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
 
 /* Home Cards */
 .home-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5rem;
-  margin-top: 2rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
 }
 .home-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.5rem;
+  border-radius: 12px;
+  padding: 1.75rem 1.25rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.25s ease;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
 }
-.home-card:hover { background: var(--bg-card-hover); border-color: var(--accent); transform: translateY(-2px); }
-.home-card h3 { color: var(--accent); margin-bottom: 0.5rem; }
-.home-card p { color: var(--text-muted); font-size: 0.9rem; }
+.home-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 12px 12px 0 0;
+}
+.home-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+.home-card-icon { font-size: 2.5rem; display: block; margin-bottom: 0.75rem; }
+.home-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+.home-card p { color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; }
+
+/* Card accent colors */
+.home-card--monsties::before { background: linear-gradient(90deg, var(--fire), var(--dragon)); }
+.home-card--monsties:hover { border-color: var(--fire); }
+.home-card--monsties h3 { color: var(--fire); }
+
+.home-card--bestiary::before { background: linear-gradient(90deg, var(--technical), #10b981); }
+.home-card--bestiary:hover { border-color: var(--technical); }
+.home-card--bestiary h3 { color: var(--technical); }
+
+.home-card--equipment::before { background: linear-gradient(90deg, var(--accent), #f97316); }
+.home-card--equipment:hover { border-color: var(--accent); }
+.home-card--equipment h3 { color: var(--accent); }
+
+.home-card--genes::before { background: linear-gradient(90deg, var(--dragon), #ec4899); }
+.home-card--genes:hover { border-color: var(--dragon); }
+.home-card--genes h3 { color: var(--dragon); }
+
+.home-card--map::before { background: linear-gradient(90deg, var(--water), var(--ice)); }
+.home-card--map:hover { border-color: var(--water); }
+.home-card--map h3 { color: var(--water); }
+
+/* 5 cards: 3 top, 2 bottom centered */
+.home-card:nth-child(4) { grid-column: 1 / 2; }
+.home-card:nth-child(5) { grid-column: 2 / 3; }
+@supports (grid-template-columns: subgrid) {
+  .home-grid { justify-items: center; }
+}
+/* Center the last row (2 items) */
+.home-grid::after {
+  content: '';
+  grid-column: 3 / 4;
+  grid-row: 2 / 3;
+}
 
 .page-title {
   font-size: 1.75rem;
@@ -765,6 +845,10 @@ body {
   }
   .card-list { grid-template-columns: 1fr; }
   .home-grid { grid-template-columns: 1fr; }
+  .home-card:nth-child(4), .home-card:nth-child(5) { grid-column: auto; }
+  .home-grid::after { display: none; }
+  .home-hero-title { font-size: 1.5rem; }
+  .home-hero { padding: 1.5rem 1rem 1rem; }
   .modal-overlay { padding: 1rem; }
   .modal-content { max-height: 90vh; }
   .modal-header { padding: 1rem 1.25rem; }
