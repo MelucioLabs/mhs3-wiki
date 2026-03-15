@@ -848,9 +848,9 @@ const App = {
         color: '#4ade80',
         habitatKeys: ['Azuria'],  // same in DE/EN
         subMaps: [
-          { id: 'azuria_main', name_de: 'Hauptgebiet', name_en: 'Main Area', file: 'azuria_main.png', w: 1065, h: 1039 },
+          { id: 'azuria_main', name_de: 'Hauptgebiet', name_en: 'Main Area', file: 'azuria_main.png', w: 1135, h: 1064 },
           { id: 'azuria_ashen_pass', name_de: 'Aschenpfad', name_en: 'Ashen Pass', file: 'azuria_ashen_pass.png', w: 959, h: 1014 },
-          { id: 'azuria_castle', name_de: 'Schloss Azuria', name_en: 'Azuria Castle', file: 'azuria_azuria_castle.png', w: 963, h: 965 },
+          { id: 'azuria_castle', name_de: 'Schloss Azuria', name_en: 'Azuria Castle', file: 'azuria_azuria_castle.png', w: 944, h: 954 },
         ],
       },
       {
