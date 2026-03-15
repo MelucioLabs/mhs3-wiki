@@ -90,3 +90,33 @@
   - Fan-Wiki-Disclaimer im Footer ist bereits vorhanden (gut!)
   - Capcom hat historisch Fan-Wikis toleriert (Kiranico, MH Wiki etc.)
   - DMCA-Takedowns betreffen typischerweise Rips von Assets (Texturen, Sounds), nicht Stats/Namen
+
+## Session 2026-03-15 (Abend): Gene Type/Element, Horn Melodies, Google Search Console
+
+### Gene Type/Element aus Binärdaten extrahiert
+- **Methode**: Direktes Parsen von `genedata_v_09_00.user.3` (RSZ v16 Format)
+- **Problem**: REasy Export für gendata war leer, RSZ v16 Parser extrem komplex
+- **Lösung**: Byte-Pattern-Analyse der Datensektion (56-Byte-Stride pro Gen-Eintrag)
+- **Erkenntnisse**:
+  - Field[0] = THREE_WAY_TYPE hash (inline, nicht Object-Ref)
+  - Field[1] = EREM_ATTR_TYPE hash (inline)
+  - Field[2] = GeneDef.ID_Fixed hash (unique per gene)
+  - THREE_WAY Hashes: 0x3c1aeb40=NONE(null), 0x58201900=technical, 0xaeda6400=speed, 0xf08f0680=power
+  - Nur 71 Gene haben GeneDef.ID_Fixed Hashes im Enum → 60 gematcht
+  - 327 Gene total in genedata, nur 60 mit unseren 115 DB-Genen verknüpfbar
+
+### Horn Melody Resolution
+- **Methode**: WeaponDef.MELODY_ID + MELODY_ID_Fixed Enums → MelodyData MSG cross-reference
+- **27 Melodien** komplett aufgelöst (bilingual DE/EN)
+- **3 fehlende Hashes** manuell identifiziert:
+  - -1506610944 → Wyvernfell Melody (default partner melody)
+  - -349999872 → Elementless Melody (general horns)
+  - -488356384 → Blazing Melody (fire horns: Rathalos, Anjanath etc.)
+- Frontend: Melody-Tags auf Horn-Cards, Melodie-Sektion im Detail-Modal
+- `_melodyLookup` Map direkt im Frontend (kein extra API-Call nötig)
+
+### Google Search Console
+- Verifizierung über `googlefbaf7bba739cdbf1.html` (statische Datei in src/public/)
+- Sitemap eingereicht
+- Account: mccmdave@gmail.com
+- Hinweis: Verification-Datei kann für verschiedene Domains gleich sein wenn selber Account

@@ -24,10 +24,11 @@ Fan-Wiki web app for "Monster Hunter Stories 3: Twisted Reflection". Docker-depl
 ## Current State (15. März 2026, Abend)
 - **97 monsties** (84 base + 13 story monsties) with official DE/EN names
 - **98 bestiary entries** with bilingual habitats
-- **115 genes** from game data (bilingual names/descriptions, element/type NULL)
+- **115 genes** from game data (bilingual names/descriptions, **60 with type/element** from genedata binary)
 - **297 equipment** items (32 GS, 34 LS, 37 Hammer, 37 Horn, 37 Bow, 33 GL, 87 Armor)
   - Status effects translated (poison→Gift, sleep→Schlaf etc.)
-  - Element filter + tags, melody hashes hidden
+  - Element filter + tags
+  - **Horn melodies resolved**: 27 melodies mapped (hash→bilingual name), shown on cards + modals
   - Materials empty (recipe data not found yet)
 - Gene Calculator with 3x3 Bingo-Bonus + search filter
 - Full-text search (PostgreSQL GIN indexes, DE+EN)
@@ -69,10 +70,9 @@ Fan-Wiki web app for "Monster Hunter Stories 3: Twisted Reflection". Docker-depl
 - 💡 Portfolio meluciolabs.de sollte auch in GSC eingerichtet werden
 
 ## Pending Tasks (Priority Order)
-1. **Gene Element/Type Data**: gendata/genebingobonus REasy export empty. Need alternative source for gene element + type to enable bingo bonuses. ← CURRENT
-2. **Horn Melody Resolution**: melodydata.msg parsed — 27 melodies with DE/EN names. Map melody hash arrays in equipment JSONB to melody names. ← CURRENT
-3. **Equipment Upgrade Pipeline**: Need weaponupgradedata/armorupgradedata from game files for per-level stats. User wants forge calculator showing stats per upgrade level (+ materials if available).
-4. **Texture Extraction**: Monster icons + HD maps from already-extracted pak files. Noesis installed for `.tex` → `.png`
+1. **Gene Element/Type: Remaining 55 genes** — 60/115 genes have type/element from genedata binary. Remaining 55 need alternative source (web scraping or manual). THREE_WAY_TYPE_NONE maps to null type (20 genes).
+2. **Equipment Upgrade Pipeline**: Need weaponupgradedata/armorupgradedata from game files for per-level stats. User wants forge calculator showing stats per upgrade level (+ materials if available).
+3. **Texture Extraction**: Monster icons + HD maps from already-extracted pak files. Noesis installed for `.tex` → `.png`
 
 ## Legal Note
 Game data in GitHub repo — user should consider making repo private or excluding raw game data files from version control. See issues.md for details.

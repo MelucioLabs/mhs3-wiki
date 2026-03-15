@@ -26,15 +26,16 @@
 | habitat_de/en | VARCHAR(100) | |
 | description_de/en | TEXT | |
 
-### genes (25 entries — PLACEHOLDER, needs real data)
+### genes (115 entries — from game data)
 | Column | Type | Description |
 |--------|------|-------------|
 | id | SERIAL PK | |
-| name_de/en | VARCHAR(100) | Currently placeholder names |
-| gene_type | VARCHAR(50) | power/speed/technical |
-| element | VARCHAR(50) | fire/water/thunder/ice/dragon/none |
-| skill_name_de/en | VARCHAR(100) | |
-| description_de/en | TEXT | |
+| game_id | INTEGER | GeneDef.ID number (GENE_N) |
+| name_de/en | VARCHAR(100) | Official from PassiveSkillData MSG |
+| gene_type | VARCHAR(50) | power/speed/technical (60 set, 55 NULL) |
+| element | VARCHAR(50) | fire/water/thunder/ice/dragon/non_elemental (60 set) |
+| skill_name_de/en | VARCHAR(100) | Same as name |
+| description_de/en | TEXT | Official from PassiveSkillData MSG |
 
 ### equipment (297 entries — from datamined game files)
 | Column | Type | Description |
@@ -54,7 +55,7 @@
 ```
 - `element`: fire/water/thunder/ice/dragon (absent = non-elemental)
 - `status`: poison/paralysis/sleep/blast (optional)
-- `melody`/`partner_melody`: Horn-only, raw hash arrays (hidden in UI)
+- `melody`/`partner_melody`: Horn-only, hash arrays → resolved to melody names in frontend via `_melodyLookup`
 
 **Armor:**
 ```json
@@ -70,11 +71,20 @@
 - 1669704192 = ice
 - 525126112 = dragon
 
-## Gene Data Analysis (~316 real genes)
-- genelottery: Maps OtomonID → 3 fixed genes + random pool
-- genepreset: Complete 3x3 gene configurations (9 genes per preset)
-- gendata/genebingobonus: Export FAILED in REasy (empty dirs)
-- Gene names are only technical codes (GENE_1, PASSIVE_GENE_67) — need MSG file
+## Gene Data Pipeline
+- **genelottery**: Maps OtomonID → 3 fixed genes + random pool (REasy export OK)
+- **genepreset**: Complete 3x3 gene configurations (9 genes per preset) (REasy export OK)
+- **gendata**: REasy export empty, but raw binary parsed directly (RSZ v16, 56-byte stride, 327 entries)
+- **genebingobonus**: REasy export empty
+- **Gene names**: From PassiveSkillData MSG (bilingual DE/EN)
+- **Gene type/element**: 60 of 115 genes matched via GeneDef.ID_Fixed hashes → genedata binary
+- **THREE_WAY hashes**: 0x3c1aeb40=NONE, 0xf08f0680=power, 0xaeda6400=speed, 0x58201900=technical
+- **EREM_ATTR hashes**: Known from equipment hash mapping (fire/water/thunder/ice/dragon/non_elemental)
+
+## Horn Melody Mapping (27 melodies)
+- **Source**: MelodyData MSG (bilingual) + WeaponDef.MELODY_ID/MELODY_ID_Fixed enums
+- **3 manually identified**: -1506610944=Wyvernfell, -349999872=Elementless, -488356384=Blazing
+- **Frontend**: `_melodyLookup` Map in main.js, `_resolveMelody()` converts hash arrays to names
 
 ## API Endpoints
 - `GET /api/monsties[?element=&attack_type=&ride_action=]` - list/filter monsties

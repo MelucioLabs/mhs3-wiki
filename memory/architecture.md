@@ -18,8 +18,10 @@
 - Vanilla JS SPA (`src/public/js/main.js`)
 - Dark theme CSS (`src/public/css/style.css`)
 - Gene Calculator (`src/public/js/gene-calculator.js`)
-- Hash-based routing (#monsties, #bestiary, #equipment, #gene-calc, #map)
+- History API pushState routing (/monsties, /bestiary, /equipment, /gene-calc, /map)
+- Legacy hash URL redirect (#/monsties → /monsties)
 - Detail views: Modal overlays (not separate pages)
+- Horn melody resolution: `_melodyLookup` map converts hash→bilingual name client-side
 - i18n: client-side, fetches `/api/i18n/:lang`
 
 ## SEO Strategy

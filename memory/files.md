@@ -5,8 +5,10 @@ src/
 ├── app.js                        # Express app, routes, middleware, server start
 ├── database/
 │   ├── connection.js             # PostgreSQL pool (pg)
-│   ├── init.sql                  # Schema + seed data (97 monsties, 98 bestiary, 25 genes)
-│   └── equipment_seed.sql        # 297 equipment items (auto-generated, loaded as 02_*)
+│   ├── init.sql                  # Schema + seed data (97 monsties, 98 bestiary)
+│   ├── migrate.js                # Auto-migration/seed on startup (genes, equipment, gene types)
+│   ├── gene_seed.sql             # 115 genes with bilingual names/descriptions
+│   └── equipment_seed.sql        # 297 equipment items (auto-generated)
 ├── modules/
 │   ├── monsties/
 │   │   ├── router.js             # GET /api/monsties, /api/monsties/:id, /api/monsties/filters
@@ -42,6 +44,11 @@ src/
 tools/
 ├── parse_msg.js                  # RE Engine MSG v23 binary parser (runs in Docker)
 ├── build_equipment_data.js       # Equipment pipeline: MSG + stats → SQL seed
+├── build_gene_data.js            # Gene pipeline: enums + PassiveSkillData MSG → gene seed
+├── build_melody_lookup.js        # Melody hash→name resolver
+├── parse_genedata.js             # RSZ v16 gene binary parser (incomplete)
+├── parse_genedata_v2.js          # RSZ v16 gene binary parser v2 (pattern scanner)
+├── update_gene_types.js          # One-off gene type/element DB updater
 ├── parse_all_gamedata.js         # Generic game data parser
 ├── generate_sql.js               # SQL generation from parsed data
 ├── REasy/                        # REasy Editor exports (.user.3 → JSON)
@@ -50,7 +57,9 @@ tools/
 │   └── output/natives/stm/       # Game files (MSG, textures, etc.)
 ├── RETool/                       # RETool v0.230 for .pak extraction
 └── parsed_output/
-    ├── msg/                      # Parsed MSG JSONs (9 files: weapons, armor, items)
-    ├── equipment_seed.sql        # Copy of generated equipment seed
+    ├── msg/                      # Parsed MSG JSONs (23 files: weapons, armor, skills, melodies, items)
+    ├── genes_complete.json       # 115 genes as JSON
+    ├── gene_seed.sql             # Gene seed SQL
+    ├── equipment_seed.sql        # Equipment seed SQL
     └── equipment_complete.json   # All 297 items as JSON
 ```
