@@ -46,17 +46,24 @@ Fan-Wiki web app for "Monster Hunter Stories 3: Twisted Reflection". Docker-depl
 - **MSG Parser**: `tools/parse_msg.js` — RE Engine MSG v23 binary parser with XOR decryption
 - **Equipment Builder**: `tools/build_equipment_data.js` — cross-references UUID names from MSG files with weapon/armor stats
 - **REasy Editor v0.6.9** for .user.3 game data exports
-- **REE.Unpacker** for .pak extraction (one pak extracted so far, more exist)
-- **RETool v0.230** installed at `tools/RETool/` (for pak extraction with file lists)
-- Parsed MSG JSONs: `tools/parsed_output/msg/` (9 files)
+- **REE.Unpacker** — BOTH PAKs already fully extracted (re_chunk_000.pak + sub_000.pak)
+  - 44,930 files in `natives/`, 81,299 in `__Unknown/`, 712 MSG files total
+- **RETool v0.230** installed at `tools/RETool/` (alternative extractor)
+- Parsed MSG JSONs: `tools/parsed_output/msg/` (18 files total)
 - Equipment seed: `src/database/equipment_seed.sql` (auto-loaded via docker-entrypoint-initdb.d)
 
+## Parsed MSG Files Available (ready for use)
+- **Equipment**: greatsword, longsword, hammer, horn, bow, gunlance, armor (names + descriptions)
+- **Skills**: passiveskilldata (354 passive skills), 002_monsterskill (278 active skills), 003_otskill (89 kinship skills)
+- **Melodies**: melodydata (27 horn melodies with DE/EN names + effect descriptions)
+- **Other**: commonskillstatus, skillvariation, commonequipment, commonitem, 000_commonskill
+- **Items**: itemdata, itemmaterialdata
+
 ## Pending Tasks (Priority Order)
-1. **Gene Data**: Find gene MSG files for readable DE/EN names (~316 genes). gendata/genebingobonus exports failed in REasy. Gene lottery + preset data exists with hash IDs.
-2. **Forge Calculator / Schmiederechner**: Materials/recipes needed. `_Recipe` field in weapons mostly 0. Recipe tables not found yet.
-3. **More PAK extraction**: Only one .pak extracted so far (re_chunk_000.pak). More exist with monster icons, HD map textures, etc.
-4. **Texture Extraction**: Monster icons + HD maps from pak archives (needs file list or full extraction ~36GB)
-5. **Horn Melodies**: Raw hash values need MSG file resolution for readable melody names
+1. **Gene Data Integration**: MSG files NOW PARSED — 354 passive + 278 active skill names available. Need to cross-reference with genelottery/genepreset hash IDs to build gene DB. gendata export failed in REasy but skill names are in MSG files.
+2. **Horn Melody Resolution**: melodydata.msg parsed — 27 melodies with DE/EN names. Need to map melody hash arrays in equipment JSONB to melody names.
+3. **Forge Calculator / Schmiederechner**: Materials/recipes needed. `_Recipe` field in weapons mostly 0. Recipe tables not found yet.
+4. **Texture Extraction**: Monster icons + HD maps from already-extracted pak files. Noesis installed for `.tex` → `.png`
 
 ## Legal Note
 Game data in GitHub repo — user should consider making repo private or excluding raw game data files from version control. See issues.md for details.

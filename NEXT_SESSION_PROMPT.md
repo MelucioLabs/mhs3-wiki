@@ -1,44 +1,53 @@
 # Nächste Session — MHS3 Wiki
 
 ## Erledigte Aufgaben
-- [x] Equipment-Daten Integration: 297 Items (alle 6 Waffentypen + Rüstungen) mit offiziellen DE/EN-Namen aus MSG-Dateien
-- [x] Element-Filter für Equipment (fire/water/thunder/ice/dragon/non_elemental)
-- [x] Element-Anzeige auf Equipment-Karten (übersetzte Tags)
+- [x] Equipment-Daten: 297 Items mit offiziellen DE/EN-Namen aus MSG-Dateien
+- [x] Element-Filter + Element-Tags auf Equipment-Karten (übersetzt)
 - [x] Melodie-Hash-Werte bei Jagdhörnern im UI versteckt
-- [x] Cache-Busting auf v=5 aktualisiert
+- [x] ALLE PAKs bereits entpackt (re_chunk_000.pak + sub_000.pak = 126K+ Dateien)
+- [x] 18 MSG-Dateien geparst (Equipment, Skills, Melodien, Items)
 
-## Offene Aufgaben (Priorität)
+## Sofort umsetzbar (Daten liegen bereit!)
 
-### 1. Gene-Daten Integration
-**Status:** ~316 Gene existieren im Spiel, aber nur technische IDs (GENE_1, PASSIVE_GENE_67 etc.)
-**Blocker:** Lesbare Gen-Namen (DE/EN) brauchen MSG-Datei-Parsing. Kandidaten im REE.Unpacker Output:
-- `tools/REE.Unpacker/output/natives/stm/gamedesign/text/excel_other/003_otskill.msg.23` (Otomon-Skills)
-- Weitere MSG-Dateien in `excel/` und `excel_other/` Verzeichnissen durchsuchen
-**Tools:** `tools/parse_msg.js` (funktioniert, läuft in Docker)
-**Daten:** genelottery + genepreset existieren in `tools/REasy/exports/usr/`
-**DB:** Aktuell 25 Platzhalter-Gene in `init.sql`
+### 1. Gene-Daten Integration (HÖCHSTE PRIORITÄT)
+**Was haben wir:**
+- `tools/parsed_output/msg/passiveskilldata.json` — 354 passive Skills (DE/EN Namen + Beschreibungen)
+- `tools/parsed_output/msg/002_monsterskill.json` — 278 aktive Monster-Skills (DE/EN)
+- `tools/parsed_output/msg/003_otskill.json` — 89 Kinship-Skills (DE/EN)
+- `tools/REasy/exports/usr/genelottery/_Values.json` — Monstie → Gene-Mapping
+- `tools/REasy/exports/usr/genepreset/_Values.json` — 3x3 Gen-Presets
+- GeneDef.ID Enum in `tools/REasy/resources/data/enums/mhst3_enums.json` (~316 Gene)
 
-### 2. Schmiederechner / Rezeptdaten
-**Status:** Materials-Arrays sind leer. `_Recipe` Feld in Waffen/Rüstungen ist meist 0.
-**Nächster Schritt:** Rezept-Tabellen in den REasy-Exports oder MSG-Dateien suchen. `itemmaterialdata.msg.23` ist bereits geparst.
-**Ziel:** Forge Calculator UI mit Materialien-Berechnung
+**Was fehlt:**
+- Cross-Referenz: GeneDef.ID_Fixed Hash → Skill-Name aus MSG (numerische IDs korrelieren: `PassiveSkillData_NAME_1` = Skill-ID 1)
+- gendata Export LEER — Element/Typ pro Gen muss aus Enum oder anderem Weg ermittelt werden
+- DB-Schema anpassen: aktuelle 25 Platzhalter-Gene ersetzen durch echte ~316 Gene
 
-### 3. Jagdhorn-Melodien
-**Status:** Rohe Hash-Werte versteckt. Brauchen MSG-Datei für lesbare Melodie-Namen.
-**Hinweis:** Melodie-Daten als Integer-Arrays im JSONB (z.B. `[-488356384, 23079]`)
+**Aktuelles DB-Schema (genes):**
+```sql
+id, name_de, name_en, gene_type (power/speed/technical), element, skill_name_de, skill_name_en, description_de, description_en
+```
 
-### 4. Weitere PAK-Extraktion
-**Status:** Nur `re_chunk_000.pak` extrahiert. Weitere PAKs vorhanden mit Texturen, Icons.
-**Tool:** RETool v0.230 installiert unter `tools/RETool/`
-**Hinweis:** Volle Extraktion ~36GB, aber kann nach Dateityp gefiltert werden
+### 2. Horn-Melodien auflösen
+**Was haben wir:**
+- `tools/parsed_output/msg/melodydata.json` — 27 Melodien mit DE/EN Namen + Effektbeschreibungen
+- Equipment JSONB hat `melody` und `partner_melody` als Hash-Arrays (z.B. `[-488356384, 23079]`)
 
-### 5. Textur-Extraktion
-**Ziel:** Monster-Icons + HD-Karten aus extrahierten PAK-Dateien
-**Tool:** Noesis installiert (`noesis64` CLI) für `.tex` → `.png`
+**Was fehlt:**
+- Mapping: Melody-Hash → Melodie-Name aus MSG. Die zweite Zahl im Array könnte eine Skill-ID sein.
+
+### 3. Schmiederechner / Rezeptdaten
+**Status:** `_Recipe` Feld meist 0. Rezept-Tabellen nicht gefunden.
+**Nächster Schritt:** In REasy-Exports nach recipe/craft Daten suchen, oder weitere .user.3 Dateien exportieren.
+
+### 4. Textur-Extraktion
+**Status:** Alle PAKs entpackt. Monster-Icons und HD-Maps liegen als .tex Dateien vor.
+**Tool:** Noesis (`noesis64` CLI) für `.tex` → `.png`
 
 ## Technische Hinweise
-- Docker: `docker compose build --no-cache app && docker compose up -d app` nach Code-Änderungen
-- DB-Reset nötig bei Schema-Änderungen: `docker compose down -v && docker compose up -d`
-- Equipment-Seed wird via `02_equipment_seed.sql` in docker-entrypoint-initdb.d geladen
-- MSG-Parser läuft im Container: `MSYS_NO_PATHCONV=1 docker exec mhs3-app node /app/parse_msg.js /app/FILE.msg.23 /tmp/OUTPUT.json`
-- Branch-Mapping: Lokal `master` → Remote `main` (`git push origin master:main`)
+- Docker rebuild: `docker compose build --no-cache app && docker compose up -d app`
+- DB-Reset: `docker compose down -v && docker compose up -d`
+- MSG-Parser: `MSYS_NO_PATHCONV=1 docker exec mhs3-app node /app/tools/parse_msg.js /tmp/input.msg.23 /tmp/output.json`
+- Branch-Mapping: `git push origin master:main` (triggert CI/CD → Deploy auf Pi)
+- Cache-Busting: aktuell `?v=5`
+- `tools/` ist in `.gitignore` — Rohdaten werden nicht committed
