@@ -20,7 +20,7 @@
     "card_equipment": "Ausrüstung",
     "card_equipment_desc": "Waffen und Rüstungen mit Stats und Materialien",
     "card_genes": "Gene-Rechner",
-    "card_genes_desc": "Plane dein Rite of Channeling mit dem 3x3 Grid-Rechner",
+    "card_genes_desc": "Plane dein Ritus der Überlieferung mit dem 3x3 Grid-Rechner",
     "card_forge": "Schmiedeplaner",
     "card_forge_desc": "Plane deine Waffen- und Rüstungs-Upgrades mit Stats pro Stufe",
     "card_map": "Interaktive Karte",
@@ -62,7 +62,7 @@
   },
   "gene_calc": {
     "title": "Gene-Rechner",
-    "subtitle": "Rite of Channeling Planer",
+    "subtitle": "Ritus der Überlieferung Planer",
     "select_gene": "Gen auswählen",
     "clear_grid": "Grid leeren",
     "bingo_bonus": "Bingo-Bonus",
