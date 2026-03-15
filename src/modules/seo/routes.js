@@ -28,31 +28,31 @@ router.get('/sitemap.xml', async (req, res) => {
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>${BASE_URL}/#monsties</loc>
+    <loc>${BASE_URL}/monsties</loc>
     <lastmod>${today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>${BASE_URL}/#bestiary</loc>
+    <loc>${BASE_URL}/bestiary</loc>
     <lastmod>${today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>${BASE_URL}/#equipment</loc>
+    <loc>${BASE_URL}/equipment</loc>
     <lastmod>${today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>${BASE_URL}/#gene-calc</loc>
+    <loc>${BASE_URL}/gene-calc</loc>
     <lastmod>${today}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>${BASE_URL}/#map</loc>
+    <loc>${BASE_URL}/map</loc>
     <lastmod>${today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -63,7 +63,7 @@ router.get('/sitemap.xml', async (req, res) => {
       const slug = m.name_en.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '');
       xml += `
   <url>
-    <loc>${BASE_URL}/#monstie/${slug}-${m.id}</loc>
+    <loc>${BASE_URL}/monstie/${slug}-${m.id}</loc>
     <lastmod>${today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -75,7 +75,7 @@ router.get('/sitemap.xml', async (req, res) => {
       const slug = m.name_en.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '');
       xml += `
   <url>
-    <loc>${BASE_URL}/#monster/${slug}-${m.id}</loc>
+    <loc>${BASE_URL}/monster/${slug}-${m.id}</loc>
     <lastmod>${today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>

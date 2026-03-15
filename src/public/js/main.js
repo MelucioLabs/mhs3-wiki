@@ -13,21 +13,32 @@ const App = {
     this.bindSearch();
     this.bindLangToggle();
     this.bindMobileMenu();
-    this.bindHashRouting();
+    this.bindRouting();
 
-    // Navigate based on URL hash or default to home
-    const hash = window.location.hash.replace('#', '') || 'home';
+    // Navigate based on URL path or hash fallback (for old links)
+    let page = 'home';
+    const path = window.location.pathname.replace(/^\//, '');
+    const hash = window.location.hash.replace('#', '').replace(/^\//, '');
     const validPages = ['home', 'monsties', 'bestiary', 'equipment', 'gene-calc', 'map'];
-    this.navigate(validPages.includes(hash) ? hash : 'home');
+
+    if (validPages.includes(path)) {
+      page = path;
+    } else if (hash && validPages.includes(hash)) {
+      // Legacy hash URL support — redirect to clean URL
+      page = hash;
+      history.replaceState(null, '', `/${hash}`);
+    }
+
+    this.navigate(page);
   },
 
-  // Hash-based routing for SEO and deep linking
-  bindHashRouting() {
-    window.addEventListener('hashchange', () => {
-      const hash = window.location.hash.replace('#', '') || 'home';
+  // History API routing for SEO-friendly URLs
+  bindRouting() {
+    window.addEventListener('popstate', () => {
+      const path = window.location.pathname.replace(/^\//, '') || 'home';
       const validPages = ['home', 'monsties', 'bestiary', 'equipment', 'gene-calc', 'map'];
-      if (validPages.includes(hash) && hash !== this.currentPage) {
-        this.navigate(hash);
+      if (validPages.includes(path) && path !== this.currentPage) {
+        this.navigate(path, {}, true);
       }
     });
   },
@@ -84,8 +95,8 @@ const App = {
     // Update canonical URL
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) {
-      const hash = page === 'home' ? '' : `#${page}`;
-      canonical.href = `https://mhs3.meluciolabs.de/${hash}`;
+      const path = page === 'home' ? '' : page;
+      canonical.href = `https://mhs3.meluciolabs.de/${path}`;
     }
 
     // Update meta description
@@ -132,7 +143,7 @@ const App = {
     });
   },
 
-  navigate(page, params = {}) {
+  navigate(page, params = {}, isPopState = false) {
     // Cleanup map when navigating away
     if (this.currentPage === 'map' && page !== 'map') this._destroyMap();
 
@@ -143,10 +154,10 @@ const App = {
     );
     document.querySelector('.nav').classList.remove('open');
 
-    // Update URL hash (without triggering hashchange loop)
-    const newHash = page === 'home' ? '' : page;
-    if (window.location.hash.replace('#', '') !== newHash) {
-      history.replaceState(null, '', newHash ? `#${newHash}` : window.location.pathname);
+    // Update URL with History API (pushState for clicks, skip for popstate/init)
+    const newPath = page === 'home' ? '/' : `/${page}`;
+    if (!isPopState && window.location.pathname !== newPath) {
+      history.pushState(null, '', newPath);
     }
 
     // Update SEO metadata
