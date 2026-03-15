@@ -45,6 +45,7 @@ jobs:
           BUILD_VER=$(date +%Y%m%d%H%M)
           ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 dave@100.103.86.47 << EOF
             cd ~/apps/mhs3-wiki
+            git checkout -- .
             git pull origin main
             DOCKER_API_VERSION=1.41 docker compose build --no-cache --build-arg BUILD_VERSION=${BUILD_VER} app
             DOCKER_API_VERSION=1.41 docker compose up -d
