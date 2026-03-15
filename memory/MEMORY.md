@@ -5,7 +5,7 @@ Fan-Wiki web app for "Monster Hunter Stories 3: Twisted Reflection". Docker-depl
 
 ## Tech Stack
 - **Backend**: Node.js 20 / Express, PostgreSQL 16-alpine, pg pool
-- **Frontend**: Vanilla JS SPA, dark theme, no framework
+- **Frontend**: Vanilla JS SPA, dark/light theme toggle, no framework
 - **Docker**: 3 services (app, postgres, pgadmin) via docker-compose
 - **i18n**: DE/EN bilingual, enum translation system
 
@@ -63,16 +63,29 @@ Fan-Wiki web app for "Monster Hunter Stories 3: Twisted Reflection". Docker-depl
 
 ## SEO Status
 - ✅ History API pushState routing (no more hash URLs)
-- ✅ Sitemap.xml with all pages + individual monstie/monster URLs
-- ✅ robots.txt, JSON-LD structured data, OG tags, hreflang
+- ✅ Sitemap.xml: 498 URLs (main pages + individual monstie/monster/equipment)
+- ✅ hreflang per page in sitemap (DE/EN for all 5 main pages)
+- ✅ Deep-Link SSR: `/monstie/slug-id`, `/monster/slug-id`, `/equipment/slug-id` → dynamic meta/OG tags
+- ✅ Dynamic OG/Twitter tags per page (frontend JS + backend SSR)
+- ✅ robots.txt, JSON-LD structured data
 - ✅ Google Search Console verified (mccmdave@gmail.com) + Sitemap eingereicht
 - ✅ Google verification file: `src/public/googlefbaf7bba739cdbf1.html`
 - 💡 Portfolio meluciolabs.de sollte auch in GSC eingerichtet werden
 
+## UI Features
+- **KHAI Color Palette**: Dark (#1A1A2E bg, #5CB85C accent, #5BC0DE secondary, #7C6AF5 purple) + Light (#f5f5f5 bg, #4CAF50 accent, #2196F3 secondary, #6355D0 purple)
+- **Language Dropdown**: Globe icon button → dropdown with SVG flags (DE/EN), green highlight for active
+- **Theme Toggle**: Sun/Moon icon button, dark mode default, persistent via localStorage
+- **Mobile Landing**: 2-column grid with icon+title only (no description), 5th card centered
+- **Footer**: Bilingual (data-i18n with innerHTML for &mdash;)
+- **Cache-Busting**: `?v=6` (manual bump), CI/CD uses Docker ARG BUILD_VERSION
+- **All colors via CSS custom properties** — no hardcoded hex values in component styles
+
 ## Pending Tasks (Priority Order)
 1. **Gene Element/Type: Remaining 55 genes** — 60/115 genes have type/element from genedata binary. Remaining 55 need alternative source (web scraping or manual). THREE_WAY_TYPE_NONE maps to null type (20 genes).
 2. **Equipment Upgrade Pipeline**: Need weaponupgradedata/armorupgradedata from game files for per-level stats. User wants forge calculator showing stats per upgrade level (+ materials if available).
-3. **Texture Extraction**: Monster icons + HD maps from already-extracted pak files. Noesis installed for `.tex` → `.png`
+3. **Texture Extraction**: Monster icons from pak files. Noesis installed for `.tex` → `.png`
+4. **Map-Bilder Tarkuan/Serathis**: Game-Dateien enthalten KEINE 2D-Karten (live-gerendert aus 3D-Daten). Braucht Game8-Screenshots oder eigene In-Game-Screenshots (wie bei Azuria/Canalta)
 
 ## Legal Note
 Game data in GitHub repo — user should consider making repo private or excluding raw game data files from version control. See issues.md for details.

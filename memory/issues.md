@@ -78,6 +78,50 @@
 - **GUT**: robots.txt, meta robots, viewport, JSON-LD, OG-Tags, hreflang
 - **TODO**: Migration zu History API pushState Routing
 
+## Session 2026-03-15: Map-Textur-Analyse
+
+### Problem: Map-Extraktion aus Game-Dateien nicht möglich
+- **Ursache**: Spiel rendert Karten in Echtzeit aus 3D-Terrain-Daten — es gibt keine vorgerenderten 2D-Übersichtskarten
+- **Untersuchte Dateien**:
+  - `.gtl` (30-50 MB) = 3D-Terrain-Quad-Tiles, NICHT 2D-Karten
+  - `.uvs.8` (~1 KB) = UV-Atlas-Metadaten (nur Referenzen)
+  - `.pfb.18` = Prefab-Container (nur Referenzen)
+  - `mapveilrendertargettexture.rtex` = Render-Targets (live gerendert)
+- **Region-Codes**: st100=Azuria, nt100=Canalta, dg100=Tarkuan, nt108=Serathis
+- **Lösung**: Game8-Screenshots oder eigene In-Game-Screenshots nötig (so wie bestehende Azuria/Canalta-Maps)
+- **Noesis**: Installiert via winget (Pfad: `AppData/Local/Microsoft/WinGet/Packages/RichWhitehouse.Noesis_*/Noesis64.exe`), aber für Map-Extraktion nicht hilfreich
+- **Maps-Verzeichnis**: `maps/` im Projekt-Root, served via `app.use('/maps', express.static(...))`
+
+## Session 2026-03-15: SEO Deep-Links, Theme Toggle, Language Dropdown
+
+### SEO-Fixes implementiert
+- **Sitemap Bug**: Equipment wurde abgefragt aber nicht in XML eingefügt → gefixt (jetzt 498 URLs)
+- **Deep-Link SSR**: `/monstie/slug-id` etc. liefern dynamische meta/OG-Tags serverseitig (`buildDeepLinkHTML()` in app.js)
+- **Deep-Link Frontend**: Regex-Match in `init()` erkennt `/monstie/slug-123` → navigiert zu Parent-Seite + öffnet Modal nach 500ms
+- **hreflang**: Alle 5 Hauptseiten in sitemap.xml haben jetzt DE/EN hreflang-Links
+- **OG-Tags dynamisch**: Frontend aktualisiert og:title, og:description, og:url bei Navigation
+
+### Neues UI: Language Dropdown + Theme Toggle
+- **Globus-Icon** statt "EN" Text-Button → öffnet Dropdown mit SVG-Flaggen
+- **Sonnen/Mond-Toggle** für Light/Dark Mode, persistent in localStorage
+- **Flaggen-Emojis auf Windows**: Werden als "DE"/"GB" Text gerendert → durch inline SVG-Flaggen ersetzt
+- **Footer bilingual**: `data-i18n="footer.*"` mit `innerHTML` (wegen `&mdash;`)
+- **Light Theme CSS**: `[data-theme="light"]` überschreibt CSS-Variablen
+
+### Equipment Deep-Link Fix
+- Equipment-Tabelle hat kein `element` Spalte → `stats->>'element'` aus JSONB extrahiert
+
+### KHAI Color Palette
+- **Problem**: Alte Farben nicht konsistent, hardcoded Hex-Werte verstreut
+- **Lösung**: KHAI-Palette (MelucioLabs Design System) als CSS custom properties
+- Dark: `#1A1A2E` bg, `#5CB85C` accent, `#5BC0DE` secondary, `#7C6AF5` purple
+- Light: `#f5f5f5` bg, `#4CAF50` accent, `#2196F3` secondary, `#6355D0` purple
+- Alle hardcoded Farben (`#22c55e`, `#0a0e14`, `#ec4899`, `#10b981`, `#7c3aed`) durch `var()` ersetzt
+
+### Mobile Landing Page 2-Spalten-Grid
+- **Problem**: Mobile Landing zeigte 1 Spalte mit vollen Karten → viel Scrollen
+- **Lösung**: `repeat(2, 1fr)` Grid, `display: none` auf `.home-card p`, 5. Karte zentriert via `grid-column: 1 / -1` + `max-width: calc(50% - 0.375rem)`
+
 ## Rechtliche Hinweise (Capcom / Datamining)
 
 ### Risiko-Einschätzung: GitHub + Spieldaten
