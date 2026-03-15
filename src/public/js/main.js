@@ -583,6 +583,45 @@ const App = {
   // Stats to hide from equipment display (internal/hash data)
   _hiddenStats: new Set(['element', 'element_resist', 'melody', 'partner_melody', 'skills']),
 
+  // Horn melody hash → bilingual name/description lookup
+  _melodyLookup: {
+    '-1506610944': { en: 'Wyvernfell Melody', de: 'Wyvern-Zerstörungsmelodie' },
+    '-349999872': { en: 'Elementless Melody', de: 'Elementlose Melodie' },
+    '-488356384': { en: 'Blazing Melody', de: 'Flammende Melodie' },
+    '434881472': { en: 'Torrential Melody', de: 'Sintflutartige Melodie' },
+    '944587776': { en: 'Jolting Melody', de: 'Donnernde Melodie' },
+    '1782898432': { en: 'Frigid Melody', de: 'Frostige Melodie' },
+    '3601': { en: 'Venomous Melody', de: 'Giftige Melodie' },
+    '5157': { en: 'Graceful Melody', de: 'Anmutige Melodie' },
+    '7225': { en: 'Blood Moon Melody', de: 'Blutmond-Melodie' },
+    '8255': { en: 'Mighty Melody', de: 'Mächtige Melodie' },
+    '9408': { en: 'Abyssal Melody', de: 'Abgrundtiefe Melodie' },
+    '11744': { en: 'Plucky Melody', de: 'Mutige Melodie' },
+    '12562': { en: 'Pulsing Melody', de: 'Pulsierende Melodie' },
+    '12978': { en: 'Tumultuous Melody', de: 'Turbulente Melodie' },
+    '13552': { en: 'Comforting Melody', de: 'Tröstende Melodie' },
+    '14471': { en: 'Murky Melody', de: 'Trübe Melodie' },
+    '15538': { en: 'Demonic Melody', de: 'Dämonische Melodie' },
+    '17246': { en: 'Frozen Melody', de: 'Gefrorene Melodie' },
+    '19299': { en: 'Revitalizing Melody', de: 'Wiederbelebende Melodie' },
+    '20606': { en: 'Welcoming Melody', de: 'Willkommensmelodie' },
+    '23079': { en: 'Sundering Melody', de: 'Trennende Melodie' },
+    '23637': { en: 'Sheltering Melody', de: 'Beschützende Melodie' },
+    '25753': { en: 'Enervating Melody', de: 'Einschränkende Melodie' },
+    '28261': { en: 'Fleet Melody', de: 'Stürmische Melodie' },
+    '28629': { en: 'Wyrmslayer Melody', de: 'Lindwurmtöter-Melodie' },
+    '31011': { en: 'Beguiling Melody', de: 'Betörende Melodie' },
+    '32671': { en: 'Fettered Melody', de: 'Fesselnde Melodie' },
+  },
+
+  _resolveMelody(hashArr) {
+    if (!Array.isArray(hashArr)) return [];
+    return hashArr.map(h => {
+      const m = this._melodyLookup[h.toString()];
+      return m ? m[this.lang] || m.en : null;
+    }).filter(Boolean);
+  },
+
   _equipCards(list) {
     if (list.length === 0) return `<div class="empty-state">${this.t('equipment.no_results')}</div>`;
     return list.map((e) => {
@@ -608,9 +647,31 @@ const App = {
             ${elemTag}
           </div>
           <div class="stats-grid">${statEntries}</div>
+          ${e.type === 'horn' ? this._melodyTags(stats) : ''}
           <p class="desc">${e.description || ''}</p>
         </div>`;
     }).join('');
+  },
+
+  _melodyTags(stats) {
+    const melodies = this._resolveMelody(stats.melody);
+    if (melodies.length === 0) return '';
+    return `<div class="melody-tags">${melodies.map(m => `<span class="tag tag-melody">🎵 ${m}</span>`).join(' ')}</div>`;
+  },
+
+  _melodySection(stats) {
+    const de = this.lang === 'de';
+    const melodies = this._resolveMelody(stats.melody);
+    const partnerMelodies = this._resolveMelody(stats.partner_melody);
+    if (melodies.length === 0 && partnerMelodies.length === 0) return '';
+    let html = `<h4 style="margin-top:0.75rem">🎵 ${de ? 'Melodien' : 'Melodies'}</h4>`;
+    if (melodies.length > 0) {
+      html += `<div class="stat-item">${de ? 'Melodie' : 'Melody'}: <span>${melodies.join(', ')}</span></div>`;
+    }
+    if (partnerMelodies.length > 0) {
+      html += `<div class="stat-item">${de ? 'Partner-Melodie' : 'Partner Melody'}: <span>${partnerMelodies.join(', ')}</span></div>`;
+    }
+    return html;
   },
 
   _bindEquipClicks() {
@@ -658,6 +719,7 @@ const App = {
           <div class="stats-grid">${statEntries}</div>
           ${elemResistHtml ? `<h4 style="margin-top:0.5rem">${statLabels.element_resist}</h4><div class="stats-grid">${elemResistHtml}</div>` : ''}
           ${skills ? `<p style="margin-top:0.5rem"><strong>Skills:</strong></p><ul class="materials-list">${skills}</ul>` : ''}
+          ${e.type === 'horn' ? this._melodySection(stats) : ''}
         </div>
         ${mats ? `<div class="detail-section">
           <h4>${this.t('equipment.materials')}</h4>

@@ -336,6 +336,8 @@ body {
 .tag-power { background: var(--power); }
 .tag-technical, .tag-technik { background: var(--technical); color: #000; }
 .tag-speed { background: var(--speed); }
+.tag-melody { background: #7c3aed; }
+.melody-tags { margin-top: 0.4rem; display: flex; flex-wrap: wrap; gap: 0.25rem; }
 
 .data-card .desc {
   color: var(--text-muted);

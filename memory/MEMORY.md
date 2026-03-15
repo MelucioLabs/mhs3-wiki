@@ -21,7 +21,7 @@ Fan-Wiki web app for "Monster Hunter Stories 3: Twisted Reflection". Docker-depl
 - German attack types: Kraft/Technik/Geschwindigkeit (not Power/Speed)
 - Prefers datamining over web scraping for game data
 
-## Current State (15. März 2026)
+## Current State (15. März 2026, Abend)
 - **97 monsties** (84 base + 13 story monsties) with official DE/EN names
 - **98 bestiary entries** with bilingual habitats
 - **115 genes** from game data (bilingual names/descriptions, element/type NULL)
@@ -60,12 +60,19 @@ Fan-Wiki web app for "Monster Hunter Stories 3: Twisted Reflection". Docker-depl
 - **Other**: commonskillstatus, skillvariation, commonequipment, commonitem, 000_commonskill
 - **Items**: itemdata, itemmaterialdata
 
+## SEO Status
+- ✅ History API pushState routing (no more hash URLs)
+- ✅ Sitemap.xml with all pages + individual monstie/monster URLs
+- ✅ robots.txt, JSON-LD structured data, OG tags, hreflang
+- ✅ Google Search Console verified (mccmdave@gmail.com) + Sitemap eingereicht
+- ✅ Google verification file: `src/public/googlefbaf7bba739cdbf1.html`
+- 💡 Portfolio meluciolabs.de sollte auch in GSC eingerichtet werden
+
 ## Pending Tasks (Priority Order)
-1. **SEO: Hash→History API Migration**: Hash-Routing (#/monsties) prevents Google indexing. Migrate to pushState routing (/monsties) with server-side fallback. CRITICAL for discoverability.
-2. **Equipment Upgrade Pipeline**: Need weaponupgradedata/armorupgradedata from game files for per-level stats. User wants forge calculator showing stats per upgrade level (+ materials if available).
-3. **Horn Melody Resolution**: melodydata.msg parsed — 27 melodies with DE/EN names. Map melody hash arrays in equipment JSONB to melody names.
-4. **Gene Element/Type Data**: gendata/genebingobonus REasy export empty. Need alternative source for gene element + type to enable bingo bonuses.
-5. **Texture Extraction**: Monster icons + HD maps from already-extracted pak files. Noesis installed for `.tex` → `.png`
+1. **Gene Element/Type Data**: gendata/genebingobonus REasy export empty. Need alternative source for gene element + type to enable bingo bonuses. ← CURRENT
+2. **Horn Melody Resolution**: melodydata.msg parsed — 27 melodies with DE/EN names. Map melody hash arrays in equipment JSONB to melody names. ← CURRENT
+3. **Equipment Upgrade Pipeline**: Need weaponupgradedata/armorupgradedata from game files for per-level stats. User wants forge calculator showing stats per upgrade level (+ materials if available).
+4. **Texture Extraction**: Monster icons + HD maps from already-extracted pak files. Noesis installed for `.tex` → `.png`
 
 ## Legal Note
 Game data in GitHub repo — user should consider making repo private or excluding raw game data files from version control. See issues.md for details.
