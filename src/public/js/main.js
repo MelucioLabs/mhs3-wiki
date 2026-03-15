@@ -1037,7 +1037,7 @@ const App = {
       attributionControl: false,
     });
 
-    L.imageOverlay(`/maps/${file}`, bounds).addTo(map);
+    L.imageOverlay(`/maps/${file}?v=${Date.now()}`, bounds).addTo(map);
     map.fitBounds(bounds);
 
     L.control.attribution({ prefix: false, position: 'bottomright' })
