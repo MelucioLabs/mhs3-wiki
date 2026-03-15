@@ -83,7 +83,7 @@
   },
   "search": {
     "title": "Suche",
-    "placeholder": "Monster, Monstie oder Ausrüstung suchen...",
+    "placeholder": "Suche...",
     "no_results": "Keine Ergebnisse gefunden.",
     "results_for": "Ergebnisse für",
     "category_monstie": "Monstie",
