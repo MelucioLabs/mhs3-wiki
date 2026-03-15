@@ -516,12 +516,20 @@ const App = {
 
   _renderEquipList(equip, filters) {
     const app = document.getElementById('app');
+    const elementOptions = (filters.elements || []).map((e) => {
+      const label = e === 'non_elemental' ? this.te('elements', 'none') : this.te('elements', e);
+      return `<option value="${e}">${label}</option>`;
+    }).join('');
     app.innerHTML = `
       <h1 class="page-title">${this.t('equipment.title')}</h1>
       <div class="filter-bar">
         <select id="filter-type">
           <option value="">${this.t('equipment.filter_type')}: ${this.t('equipment.filter_all')}</option>
           ${filters.types.map((t) => `<option value="${t}">${this.te('equip_types', t)}</option>`).join('')}
+        </select>
+        <select id="filter-element">
+          <option value="">${this.t('monsties.filter_element')}: ${this.t('equipment.filter_all')}</option>
+          ${elementOptions}
         </select>
         <select id="filter-rarity">
           <option value="">${this.t('equipment.filter_rarity')}: ${this.t('equipment.filter_all')}</option>
@@ -535,8 +543,10 @@ const App = {
     const reload = async () => {
       const params = new URLSearchParams();
       const t = document.getElementById('filter-type').value;
+      const el = document.getElementById('filter-element').value;
       const r = document.getElementById('filter-rarity').value;
       if (t) params.set('type', t);
+      if (el) params.set('element', el);
       if (r) params.set('rarity', r);
       const data = await this.api(`/api/equipment?${params}`);
       document.getElementById('equip-list').innerHTML = this._equipCards(data);
@@ -547,19 +557,34 @@ const App = {
     this._bindEquipClicks();
   },
 
+  _equipTypeTag(type) {
+    const tagMap = { greatsword: 'power', longsword: 'speed', hammer: 'power', bow: 'technical', horn: 'technical', gunlance: 'power', armor: 'speed' };
+    return tagMap[type] || 'power';
+  },
+
+  // Stats to hide from equipment display (internal/hash data)
+  _hiddenStats: new Set(['element', 'element_resist', 'melody', 'partner_melody', 'skills']),
+
   _equipCards(list) {
     if (list.length === 0) return `<div class="empty-state">${this.t('equipment.no_results')}</div>`;
     return list.map((e) => {
       const stats = e.stats || {};
+      const statLabels = { attack: this.lang === 'de' ? 'Angriff' : 'Attack', critical: this.lang === 'de' ? 'Krit.' : 'Crit', defense: this.lang === 'de' ? 'Vert.' : 'Def', max_level: 'Max Lv', status: 'Status', status_rate: this.lang === 'de' ? 'Status-Rate' : 'Status Rate' };
       const statEntries = Object.entries(stats)
-        .filter(([k]) => !['skills'].includes(k))
-        .map(([k, v]) => `<div class="stat-item">${k}: <span>${v}</span></div>`)
+        .filter(([k]) => !this._hiddenStats.has(k))
+        .filter(([, v]) => v !== 0 && v !== '')
+        .map(([k, v]) => `<div class="stat-item">${statLabels[k] || k}: <span>${v}</span></div>`)
         .join('');
+      const elemKey = stats.element;
+      const elemTag = elemKey
+        ? `<span class="tag tag-${this.elementClass(elemKey)}">${this.te('elements', elemKey)}</span>`
+        : '';
       return `
         <div class="data-card" data-equip-id="${e.id}">
           <h3>${e.name} ${this.rarityStars(e.rarity)}</h3>
           <div class="tags">
-            <span class="tag tag-${e.type === 'weapon' ? 'power' : 'speed'}">${this.te('equip_types', e.type)}</span>
+            <span class="tag tag-${this._equipTypeTag(e.type)}">${this.te('equip_types', e.type)}</span>
+            ${elemTag}
           </div>
           <div class="stats-grid">${statEntries}</div>
           <p class="desc">${e.description || ''}</p>
@@ -578,24 +603,42 @@ const App = {
       const e = await this.api(`/api/equipment/${id}`);
       this.updateSEO('equipment', `${e.name} - ${this.lang === 'de' ? 'Ausrüstung' : 'Equipment'} | MHS3 Wiki`);
       const stats = e.stats || {};
+      const de = this.lang === 'de';
+      const statLabels = { attack: de ? 'Angriff' : 'Attack', critical: de ? 'Krit. Rate' : 'Crit Rate', defense: de ? 'Verteidigung' : 'Defense', max_level: 'Max Level', status: 'Status', status_rate: de ? 'Status-Rate' : 'Status Rate', element_resist: de ? 'Element-Resistenz' : 'Element Resistance' };
       const statEntries = Object.entries(stats)
-        .filter(([k]) => k !== 'skills')
-        .map(([k, v]) => `<div class="stat-item">${k}: <span>${v}</span></div>`)
+        .filter(([k]) => !this._hiddenStats.has(k))
+        .filter(([, v]) => v !== 0 && v !== '')
+        .map(([k, v]) => `<div class="stat-item">${statLabels[k] || k}: <span>${v}</span></div>`)
         .join('');
+
+      // Element display
+      const elemKey = stats.element;
+      const elemHtml = elemKey
+        ? `<span class="tag tag-${this.elementClass(elemKey)}" style="margin-left:0.5rem">${this.te('elements', elemKey)}</span>`
+        : '';
+
+      // Element resistance for armor
+      const elemResist = stats.element_resist || {};
+      const resistLabels = { weak: de ? '▼ Schwach' : '▼ Weak', very_weak: de ? '▼▼ Sehr Schwach' : '▼▼ Very Weak', resist: de ? '▲ Resistent' : '▲ Resist', strong_resist: de ? '▲▲ Sehr Resistent' : '▲▲ Strong Resist' };
+      const elemResistHtml = Object.entries(elemResist).map(([elem, level]) =>
+        `<div class="stat-item">${this.te('elements', elem)}: <span class="${level.includes('weak') ? 'text-red' : 'text-green'}">${resistLabels[level] || level}</span></div>`
+      ).join('');
       const skills = (stats.skills || []).map((s) => `<li>${s}</li>`).join('');
       const mats = (e.materials || []).map((m) => `<li>${m}</li>`).join('');
 
       this.openModal(
-        `<h2>${e.name} ${this.rarityStars(e.rarity)}</h2>`,
+        `<h2>${e.name} ${this.rarityStars(e.rarity)}</h2>
+         <span class="tag tag-${this._equipTypeTag(e.type)}" style="margin-bottom:0.5rem;display:inline-block">${this.te('equip_types', e.type)}</span>${elemHtml}`,
         `<div class="detail-section">
           <h4>${this.t('equipment.stats')}</h4>
           <div class="stats-grid">${statEntries}</div>
+          ${elemResistHtml ? `<h4 style="margin-top:0.5rem">${statLabels.element_resist}</h4><div class="stats-grid">${elemResistHtml}</div>` : ''}
           ${skills ? `<p style="margin-top:0.5rem"><strong>Skills:</strong></p><ul class="materials-list">${skills}</ul>` : ''}
         </div>
-        <div class="detail-section">
+        ${mats ? `<div class="detail-section">
           <h4>${this.t('equipment.materials')}</h4>
-          <ul class="materials-list">${mats || '<li>-</li>'}</ul>
-        </div>
+          <ul class="materials-list">${mats}</ul>
+        </div>` : ''}
         <div class="detail-section">
           <h4>${this.t('common.details')}</h4>
           <p>${e.description || '-'}</p>

@@ -2,7 +2,7 @@ const { query } = require('../../database/connection');
 
 async function getAll(req, res) {
   try {
-    const { type, rarity } = req.query;
+    const { type, rarity, element } = req.query;
     const lang = req.lang;
 
     let sql = `SELECT id, name_${lang} AS name, type, rarity, stats, materials_${lang} AS materials,
@@ -16,6 +16,14 @@ async function getAll(req, res) {
     if (rarity) {
       params.push(parseInt(rarity, 10));
       sql += ` AND rarity = $${params.length}`;
+    }
+    if (element) {
+      if (element === 'non_elemental') {
+        sql += ` AND (stats->>'element' IS NULL OR stats->>'element' = '')`;
+      } else {
+        params.push(element);
+        sql += ` AND stats->>'element' = $${params.length}`;
+      }
     }
 
     sql += ' ORDER BY name_en';
@@ -47,9 +55,15 @@ async function getFilters(req, res) {
   try {
     const types = await query('SELECT DISTINCT type FROM equipment ORDER BY type');
     const rarities = await query('SELECT DISTINCT rarity FROM equipment ORDER BY rarity');
+    const elements = await query(
+      `SELECT DISTINCT stats->>'element' AS element FROM equipment
+       WHERE stats->>'element' IS NOT NULL AND stats->>'element' != ''
+       ORDER BY element`
+    );
     res.json({
       types: types.rows.map((r) => r.type),
       rarities: rarities.rows.map((r) => r.rarity),
+      elements: ['non_elemental', ...elements.rows.map((r) => r.element)],
     });
   } catch (err) {
     console.error('equipment.getFilters error:', err);

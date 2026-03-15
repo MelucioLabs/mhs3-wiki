@@ -30,7 +30,8 @@ services:
       POSTGRES_DB: ${DB_NAME:-mhs3_wiki}
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./src/database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./src/database/init.sql:/docker-entrypoint-initdb.d/01_init.sql
+      - ./src/database/equipment_seed.sql:/docker-entrypoint-initdb.d/02_equipment_seed.sql
     # Port not exposed on host - app connects via docker network
     # Avoids conflict with other postgres instances (e.g. KHAI)
     healthcheck:

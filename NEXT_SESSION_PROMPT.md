@@ -1,103 +1,107 @@
-# Prompt für nächste Session: MHS3 Wiki - Daten & Karte
+# MHS3 Wiki - Nächste Session
 
-## Kontext
-MHS3 Wiki (Monster Hunter Stories 3: Twisted Reflection) - Fan-Wiki als Docker-App (Node.js/Express + PostgreSQL).
-Projekt-Verzeichnis: `C:\Users\Startklar\Desktop\MHS3`
-Live unter: `mhs3.meluciolabs.de` (Pi via SSH: `pi-t`)
+## Projekt
+Fan-Wiki für "Monster Hunter Stories 3: Twisted Reflection" — Docker-deployed (Raspberry Pi via Tailscale).
+- **Repo**: https://github.com/MelucioLabs/mhs3-wiki
+- **Live**: https://mhs3.meluciolabs.de
+- **Lokal**: http://localhost:3000
+- **Tech**: Node.js 20/Express, PostgreSQL 16, Vanilla JS SPA, Leaflet.js Maps
+- **Projekt-Verzeichnis**: `C:\Users\Startklar\Desktop\MHS3`
 
-## Aufgabe 1: Monstie/Monster-Datenbank vervollständigen (PRIORITÄT)
+## Aktueller Stand (14. März 2026)
+- **97 Monsties** (84 base + 13 Story) mit offiziellen DE/EN Namen aus dataminierten Spieldateien
+- **98 Bestiary** Einträge mit bilingualen Habitaten
+- **25 Gene**, **10 Equipment** Platzhalter-Items
+- **Interaktive Karten** mit Game8-Map-Screenshots:
+  - Azuria: 3 Sub-Maps (Hauptgebiet, Aschenpfad, Schloss Azuria)
+  - Canalta-Waldland: 1 Map
+  - Tarkuan, Serathis: Platzhalter ("Karte kommt bald")
+- **Monstie-Liste pro Region** mit Sort-Toggle (Element/Name)
+- **13 Story-Monsties** (Ratha V, Plessie, Gravy, Dee, Sereg, Gnocchi, Angie, Chirpy, Kagachi, Fawn, Lenox, Golma, Großpoogie) aus Map-Listen gefiltert
+- **Modals** für Monstie/Bestiary/Equipment Details
+- **Gene-Rechner** mit 3x3 Bingo-Bonus System
+- **Full-Text-Search** (PostgreSQL GIN Indexes, DE+EN)
+- **Cache-Busting** via `?v=3` Query-Parameter (Cloudflare CDN)
 
-### Aktuelle Lage
-- DB hat nur **43 Monsties** und **30 Bestiary-Einträge** in `src/database/init.sql`
-- Das Spiel hat **120+ Monsties** und noch mehr Bestiary-Monster
-- Schema: `monsties` (name_de/en, element, attack_type, ride_action, habitat_de/en, description_de/en)
-- Schema: `monsters` (name_de/en, species, weakness, habitat_de/en, description_de/en)
-- Schema: `genes` (name_de/en, gene_type, element, skill_name_de/en, description_de/en)
+## Was als nächstes ansteht
 
-### Bereits gesammelte Daten aus Community-Quellen
+### 1. Textur-Extraktion: Monster-Icons und HD-Karten
+**Noesis ist installiert** (`noesis64` CLI-Alias via winget).
 
-**Ride Actions (aus TheGamer):**
-- **Fly:** Yian Kut-Ku, Blue Yian Kut-Ku, Gypceros, Purple Gypceros, Aknosom, Pukei-Pukei, Yian Garuga, Deadeye Yian Garuga, Bishaten, Blood Orange Bishaten, Tobi-Kadachi, Paolumu, Khezu, Red Khezu, Rathian, Pink Rathian, Dreadqueen Rathian, Legiana, Barioth, Sand Barioth, Astalos, Boltreaver Astalos, Rathalos, Azure Rathalos, Dreadking Rathalos, Gravios, Black Gravios, Seregios, Espinas, Rey Dau, Arkveld, Namielle, Velkhana, Malzeno
-- **Swim:** Plesioth, Green Plesioth, Royal Ludroth, Purple Ludroth, Somnacanth, Aurora Somnacanth, Lagiacrus, Ivory Lagiacrus, Mizutsune, Soulseer Mizutsune, Almudron
-- **Climb:** Bishaten, Blood Orange Bishaten, Blangonga, Garangolm, Ajarakan, Canyne, Nerscylla, Shrouded Nerscylla, Tobi-Kadachi, Odogaron, Ebony Odogaron, Zinogre, Stygian Zinogre, Thunderlord Zinogre, Lunagaron, Magnamalo, Nargacuga, Green Nargacuga, Silverwind Nargacuga, Tigrex, Brute Tigrex, Grimclaw Tigrex, Barioth, Sand Barioth
-- **Dive (Ground Dig):** Canyne, Shogun Ceanataur, Barroth, Jade Barroth, Almudron, Gravios, Black Gravios, Diablos, Black Diablos, Bloodbath Diablos
-- **Stealth:** Nargacuga, Green Nargacuga, Silverwind Nargacuga
-- **Jump (Basic):** Velocidrome, Kulu-Ya-Ku, Arzuros, Chatacabra, Brachydios, Rakna-Kadaki
-- Manche Monsties haben MEHRERE Ride Actions (z.B. Barioth: fly+climb, Gravios: fly+dive)
+**Problem**: Die `.tex`-Dateien (Karten, Monster-Icons) liegen in den `.pak`-Archiven des Spiels. Workflow:
+1. `.pak`-Archiv entpacken → braucht **RETool** (FluffyQuack) oder ähnliches
+2. `.tex` → `.png` mit **Noesis** konvertieren
 
-**Monster-Daten (aus TheGamer - Habitats/Regionen in MHS3):**
-- Azuria (Sunpetal Plains, Broadleaf Basin) - Startgebiet
-- Canalta Timberland - Waldgebiet
-- Tarkuan (Colossal Dragon's Remains) - Wüste/Ruinen
-- Serathis - Spätes Gebiet
-- Weitere Regionen existieren
+**Spielpfad ermitteln** (Steam-Installation, vermutlich `C:\Program Files (x86)\Steam\steamapps\common\MONSTER_HUNTER_STORIES_3_...`)
 
-**Neue Monsties die NICHT in unserer DB sind (Auswahl):**
-Astalos, Boltreaver Astalos, Azure Rathalos, Dreadking Rathalos, Pink Rathian, Dreadqueen Rathian, Yian Garuga, Deadeye Yian Garuga, Gypceros, Purple Gypceros, Blue Yian Kut-Ku, Red Khezu, Black Gravios, Sand Barioth, Green Nargacuga, Silverwind Nargacuga, Brute Tigrex, Grimclaw Tigrex, Ivory Lagiacrus, Soulseer Mizutsune, Purple Ludroth, Aurora Somnacanth, Stygian Zinogre, Thunderlord Zinogre, Ebony Odogaron, Jade Barroth, Plesioth, Green Plesioth, Blangonga, Ajarakan, Canyne, Shrouded Nerscylla, Blood Orange Bishaten, Black Diablos, Bloodbath Diablos, Diablos, Namielle, Great Izuchi, Aknosom (fehlte evtl.), und weitere...
+**Gesuchte Assets:**
+- **Karten-Texturen**: `natives/stm/gui/ui_map/` → `bc110_IML3.tex` (Azuria=bc110, bc120=Canalta?, bc130=Tarkuan?, bc140=Serathis?)
+- **Monster-Icons**: `natives/stm/gui/ui_monster/` oder `ui_otomon/`
+- **Referenz-Pfad aus Gamedaten**: `GameDesign/GUI/Resource/StageMap/bc110MapTextureUserData.user`
 
-### Quellen zum Fetchen (in dieser Reihenfolge)
-1. **Game8:** https://game8.co/games/Monster-Hunter-Stories-3/archives/584376 (Komplette Monstie-Liste)
-2. **Monster Hunter Wiki:** https://monsterhunterwiki.org/wiki/MHST3/Monsties (Details pro Monstie)
-3. **TheGamer Complete List:** https://www.thegamer.com/monster-hunter-stories-3-twisted-reflection-monsters-weaknesses-type-location-loot-info/
-4. **Deltia's Gaming:** https://deltiasgaming.com/monster-hunter-stories-3-monster-list-guide/
+**RETool beziehen**: Nicht per winget verfügbar. GitHub suchen: https://github.com/FluffyQuack/RETool oder Alternativen. Ggf. auch `REE.PAK.Tool` (https://github.com/Ekey/REE.PAK.Tool).
 
-### Was zu tun ist
-1. Fetch die Quellen oben und sammle ALLE Monstie-Daten
-2. Für jedes Monstie brauchen wir: name_de, name_en, element, attack_type (power/speed/technical), ride_action, habitat_de, habitat_en, description_de, description_en
-3. Aktualisiere `src/database/init.sql` mit allen ~120+ Monsties
-4. Aktualisiere auch die `monsters` (Bestiary) Tabelle - inkl. Small Monsters
-5. Erweitere die `genes` Tabelle mit mehr Genen
-6. Deutsche Namen: Verwende offizielle DE-Lokalisierung (die meisten Monsternamen bleiben gleich)
-7. Attack Types auf Deutsch: Kraft=Power, Technik=Technical, Geschwindigkeit=Speed (werden im Frontend übersetzt)
-8. Regionen DE: Azuria, Canalta-Waldland, Tarkuan, Serathis (offizielle DE-Namen von der Capcom-Seite holen)
+### 2. Sub-Habitate für Azuria (4 Gebiete)
+- 4 Gebiete in Azuria, getrennt durch gepunktete Linien auf der Karte
+- Vermutlich: Sunpetal Plains, Broadleaf Basin, Mirror Lake, Blightstone Woods
+- Picturebook-Daten (`tools/parsed_output/picturebook.json`) haben `regionIds`/`areaIds` als Hashes, aber alle benannten Monsties landen in einer globalen Region
+- Sub-Habitat-Zuordnung muss manuell oder aus Encounter-Tabellen kommen
+- User schaut sich das selbst an
 
-### Sekundär: Datamining aus Spieldateien
-- Spiel installiert unter: `C:\Program Files (x86)\Steam\steamapps\common\MONSTER_HUNTER_STORIES_3_TWISTED_REFLECTION`
-- Hauptdateien: `re_chunk_000.pak` + `re_chunk_000.pak.sub_000.pak` (je 18GB, RE Engine Format)
-- Tool zum Entpacken: https://github.com/Ekey/REE.PAK.Tool
-- Falls REE.PAK.Tool verfügbar: Entpacke die .pak und suche nach JSON/CSV/MSG-Dateien mit Monster-Daten
-- MSG-Dateien (.msg.22) enthalten Lokalisierungstexte
-- user/*.user.2 Dateien enthalten Gameplay-Parameter
+### 3. Equipment-Daten vollständig integrieren
+- 210+ Waffen und 93 Rüstungen aus Gamedaten bereits geparst in `tools/parsed_output/`:
+  - `weapons.json`: Greatswords (32), Longswords (34), Hammers (37), Bows (37), Horns (37), Gunlances (33)
+  - `armors.json`: 93 Einträge
+- Aktuell nur 10 Platzhalter-Einträge in der DB
+- Braucht: SQL-Generation aus parsed JSON + Equipment-UI erweitern
 
----
+### 4. Gene-Daten erweitern
+- `genelottery` + `genepreset` aus Gamedaten exportiert
+- `genedata_v_09_00` und `bingobonusdata` konnten nicht in REasy geöffnet werden
+- Aktuell 25 Gene-Platzhalter in DB
+- Gene-Rechner UI existiert bereits mit 3x3 Grid
 
-## Aufgabe 2: Interaktive Karte integrieren
+## Technische Details
 
-### Anforderungen
-- Eigene interaktive Karte der MHS3-Spielwelt
-- Basiert auf Leaflet.js (bereits als Dependency vorhanden oder hinzufügen)
-- Regionen: Azuria, Canalta Timberland, Tarkuan, Serathis und weitere
-- Markierungen für Monstie-Fundorte, Eier-Nester, NPCs, Truhen etc.
-- **Ohne Login:** Karte ist für jeden nutzbar als Research-Tool
-- **Mit Login:** User können gefundene Monsties "abhaken" und Fortschritt speichern
-- Login-System kommt separat (erstmal nur die Karte ohne Auth)
+### Deployment
+- **CI/CD**: GitHub Actions → SSH zu Pi (Tailscale `100.103.86.47`) → `git pull && docker compose up -d --build`
+- **WICHTIG**: `docker compose up` resettet die DB NICHT! Bei init.sql-Änderungen: `docker compose down -v && docker compose up -d --build`
+- **Docker API**: `DOCKER_API_VERSION=1.41` Prefix nötig auf Pi
+- **SSH**: `ssh pi-t` (Tailscale-Alias)
+- **Build-Cache**: `docker compose build --no-cache app` für sauberes Build
+- **Branch-Mapping**: Lokal `master` → Remote `main` (push: `git push origin master:main`)
 
-### Technisch
-- Neue Route: `/map` oder als eigener Bereich im SPA
-- Kartenbild: Entweder selbst erstellen aus In-Game-Screenshots oder Community-Map als Vorlage
-- Marker-Daten in DB speichern (neue Tabelle `map_markers`)
-- Frontend: Leaflet.js mit Custom Tiles oder einzelnem großen Bild
-- Responsive, touch-fähig
+### Maps-Setup
+- Map-Bilder in `maps/` (im `.gitignore`, nicht in Git!)
+- Docker-Volume: `./maps:/app/maps:ro`
+- Express: `/maps/` als statischer Pfad (`src/app.js`)
+- Neue Maps hinzufügen:
+  1. PNG in `maps/` ablegen
+  2. `_mapConfig` in `src/public/js/main.js` erweitern
+  3. Per SCP auf Pi: `scp maps/neue_map.png pi-t:~/apps/mhs3-wiki/maps/`
+- Aktuelle Dateien: `azuria_main.png` (1065x1039), `azuria_ashen_pass.png` (959x1014), `azuria_azuria_castle.png` (963x965), `canalta_timperland_main.png` (923x913)
 
-### Karten-Vorlage
-- Eventuell von Community-Maps (z.B. mapgenie.io) als Vorlage inspirieren lassen
-- Eigene Karte erstellen die zu unserem Dark-Theme passt
+### Datamining-Tools & Erkenntnisse
+- **REasy Editor v0.6.9**: GUI für `.user.3` Dateien (Gameplay-Daten)
+- **Noesis**: Installiert via winget für `.tex` → `.png`
+- **Parsed Output**: `tools/parsed_output/` (monsties_complete.json, weapons.json, armors.json, picturebook.json, enum_mappings.json, names_all_languages.json)
+- **Parse-Skript**: `tools/parse_all_gamedata.js` (läuft im Docker-Container)
+- **Erkenntnisse**:
+  - `_defaultGoodElem` und `_triType` in otomondata ≠ In-Game Element/Angriffstyp!
+  - Element/Attack-Type Daten kommen von Game8/Community-Quellen
+  - MSG-Dateien (.msg.23) enthalten alle Sprachen (Index 1=EN, 4=DE)
+  - 99 Einträge in otomondata (inkl. NPC/Story-Monsties)
+- **Docker auf Windows**: `MSYS_NO_PATHCONV=1` Prefix für docker exec in Git Bash
 
----
+### DB-Zugang
+- Host: `postgres` (Container-intern)
+- DB: `mhs3_wiki`
+- User: `mhs3_user`
+- PW: `changeme123`
 
-## SEO (falls noch nicht gemacht)
-- Meta-Tags mit "MHS3 Wiki", "Monster Hunter Stories 3 Wiki", "Interaktive Karte"
-- Open Graph Tags für Social Sharing
-- Strukturierte Daten (JSON-LD) für die Monster-Einträge
-- Sitemap.xml und robots.txt
-- Seitentitel-Pattern: "Monstie-Name | MHS3 Wiki - Monster Hunter Stories 3"
-
----
-
-## Wichtige Hinweise
+### Wichtige Hinweise
 - Kommunikation auf Deutsch
-- Dark Theme ist bereits implementiert
+- Dark Theme durchgängig
 - Modals statt separate Detail-Seiten
-- Docker-Deployment: Raspberry Pi (ARM64) + AWS EC2 (AMD64)
-- PostgreSQL mit GIN Full-Text-Search Indexes (DE+EN)
-- Live-Server: mhs3.meluciolabs.de (SSH: pi-t)
+- Deutsche Angriffstypen: Kraft/Technik/Geschwindigkeit
+- Cache-Busting bei CSS/JS-Änderungen: Version in index.html hochzählen (`?v=N`)

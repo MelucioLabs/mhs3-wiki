@@ -94,7 +94,8 @@
       "thunder": "Thunder",
       "ice": "Ice",
       "dragon": "Dragon",
-      "none": "None"
+      "none": "None",
+      "non_elemental": "Non-Elemental"
     },
     "attack_types": {
       "power": "Power",
@@ -121,7 +122,13 @@
     },
     "equip_types": {
       "weapon": "Weapon",
-      "armor": "Armor"
+      "armor": "Armor",
+      "greatsword": "Great Sword",
+      "longsword": "Long Sword",
+      "hammer": "Hammer",
+      "bow": "Bow",
+      "horn": "Hunting Horn",
+      "gunlance": "Gunlance"
     }
   }
 }

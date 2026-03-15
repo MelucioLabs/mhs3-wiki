@@ -94,7 +94,8 @@
       "thunder": "Blitz",
       "ice": "Eis",
       "dragon": "Drache",
-      "none": "Kein Element"
+      "none": "Kein Element",
+      "non_elemental": "Elementlos"
     },
     "attack_types": {
       "power": "Kraft",
@@ -121,7 +122,13 @@
     },
     "equip_types": {
       "weapon": "Waffe",
-      "armor": "Rüstung"
+      "armor": "Rüstung",
+      "greatsword": "Großschwert",
+      "longsword": "Langschwert",
+      "hammer": "Hammer",
+      "bow": "Bogen",
+      "horn": "Jagdhorn",
+      "gunlance": "Gewehrlanze"
     }
   }
 }
