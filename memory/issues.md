@@ -143,6 +143,18 @@
   - Capcom hat historisch Fan-Wikis toleriert (Kiranico, MH Wiki etc.)
   - DMCA-Takedowns betreffen typischerweise Rips von Assets (Texturen, Sounds), nicht Stats/Namen
 
+## Session 2026-03-15: Deployment-Fix Container Rebuild
+
+### Problem: Änderungen nach Commit nicht sichtbar (localhost + live)
+- **Ursache**: Docker-Container wurde nur `restart`-ed, aber Code-Änderungen (migrate.js) sind im **Image gebacken** — braucht `docker compose build --no-cache app`
+- **Fix lokal**: `docker compose build --no-cache --build-arg BUILD_VERSION=$(date +%Y%m%d%H%M) app && docker compose up -d app`
+- **Fix Pi**: `DOCKER_API_VERSION=1.41` vor docker compose Befehlen nötig (Docker Engine 20.10 + Compose v5.1.0 = API-Version-Mismatch)
+- **Merke**: Immer `--build-arg BUILD_VERSION=$(date +%Y%m%d%H%M)` beim Build übergeben!
+
+### Problem: Map-Bilder nicht aktualisiert trotz neuer Dateien
+- **Ursache**: Map-Images (`/maps/*.png`) werden als Docker-Volume gemountet, kein Build-Cache-Busting
+- **Fix**: `Date.now()` Query-Parameter an Map-URL im Frontend (`/maps/${file}?v=${Date.now()}`)
+
 ## Session 2026-03-15 (Abend): Gene Type/Element, Horn Melodies, Google Search Console
 
 ### Gene Type/Element aus Binärdaten extrahiert

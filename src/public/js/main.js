@@ -1028,9 +1028,9 @@ const App = {
 
     const map = L.map('mhs3-map', {
       crs: L.CRS.Simple,
-      minZoom: -1,
+      minZoom: -2,
       maxZoom: 4,
-      zoomSnap: 0.25,
+      zoomSnap: 0.1,
       zoomDelta: 0.5,
       maxBounds: [[-50, -50], [h + 50, w + 50]],
       maxBoundsViscosity: 0.8,
@@ -1038,7 +1038,12 @@ const App = {
     });
 
     L.imageOverlay(`/maps/${file}?v=${Date.now()}`, bounds).addTo(map);
-    map.fitBounds(bounds);
+
+    // Ensure container is measured before fitting
+    setTimeout(() => {
+      map.invalidateSize();
+      map.fitBounds(bounds, { padding: [10, 10] });
+    }, 50);
 
     L.control.attribution({ prefix: false, position: 'bottomright' })
       .addAttribution('MHS3 Wiki')

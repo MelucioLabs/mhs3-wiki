@@ -74,6 +74,9 @@
     "element_match": "Element-Bonus",
     "both_match": "Doppel-Bonus",
     "search_gene": "Gen suchen...",
+    "all_types": "Alle Typen",
+    "all_elements": "Alle Elemente",
+    "no_type": "Ohne Typ",
     "instructions": "Klicke auf ein Feld und wähle ein Gen aus der Liste. Gleiche Typen oder Elemente in einer Reihe ergeben Boni."
   },
   "forge": {

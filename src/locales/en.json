@@ -74,6 +74,9 @@
     "element_match": "Element Bonus",
     "both_match": "Double Bonus",
     "search_gene": "Search gene...",
+    "all_types": "All Types",
+    "all_elements": "All Elements",
+    "no_type": "No Type",
     "instructions": "Click a cell and select a gene from the list. Matching types or elements in a row grant bonuses."
   },
   "forge": {
