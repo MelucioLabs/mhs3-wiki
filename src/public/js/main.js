@@ -12,16 +12,27 @@ const App = {
     this.bindNav();
     this.bindSearch();
     this.bindLangToggle();
+    this.bindThemeToggle();
     this.bindMobileMenu();
     this.bindRouting();
+    this.initTheme();
 
     // Navigate based on URL path or hash fallback (for old links)
     let page = 'home';
+    let deepLinkId = null;
+    let deepLinkType = null;
     const path = window.location.pathname.replace(/^\//, '');
     const hash = window.location.hash.replace('#', '').replace(/^\//, '');
     const validPages = ['home', 'monsties', 'bestiary', 'equipment', 'gene-calc', 'map'];
 
-    if (validPages.includes(path)) {
+    // Deep-link support for sitemap URLs: /monstie/slug-123, /monster/slug-123, /equipment/slug-123
+    const deepLinkMatch = path.match(/^(monstie|monster|equipment)\/.*-(\d+)$/);
+    if (deepLinkMatch) {
+      deepLinkType = deepLinkMatch[1];
+      deepLinkId = deepLinkMatch[2];
+      // Navigate to parent page, then open modal
+      page = deepLinkType === 'monstie' ? 'monsties' : deepLinkType === 'monster' ? 'bestiary' : 'equipment';
+    } else if (validPages.includes(path)) {
       page = path;
     } else if (hash && validPages.includes(hash)) {
       // Legacy hash URL support — redirect to clean URL
@@ -30,6 +41,15 @@ const App = {
     }
 
     this.navigate(page);
+
+    // Open deep-linked modal after page has loaded
+    if (deepLinkId) {
+      setTimeout(() => {
+        if (deepLinkType === 'monstie') this.showMonstieModal(deepLinkId);
+        else if (deepLinkType === 'monster') this.showMonsterModal(deepLinkId);
+        else if (deepLinkType === 'equipment') this.showEquipModal(deepLinkId);
+      }, 500);
+    }
   },
 
   // History API routing for SEO-friendly URLs
@@ -50,7 +70,7 @@ const App = {
       const res = await fetch(`/api/i18n/${this.lang}`);
       this.i18n = await res.json();
       this.updateI18n();
-      document.getElementById('lang-toggle').textContent = this.lang === 'de' ? 'EN' : 'DE';
+      this._updateLangMenu();
     } catch (e) {
       console.error('i18n load failed:', e);
     }
@@ -68,7 +88,10 @@ const App = {
 
   updateI18n() {
     document.querySelectorAll('[data-i18n]').forEach((el) => {
-      el.textContent = this.t(el.dataset.i18n);
+      const val = this.t(el.dataset.i18n);
+      // Use innerHTML for footer (contains &mdash;), textContent for everything else
+      if (el.dataset.i18n.startsWith('footer.')) el.innerHTML = val;
+      else el.textContent = val;
     });
     document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
       el.placeholder = this.t(el.dataset.i18nPlaceholder);
@@ -101,29 +124,40 @@ const App = {
 
     // Update meta description
     const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) {
-      const descs = {
-        home: this.lang === 'de'
-          ? 'Das umfassende Fan-Wiki zu Monster Hunter Stories 3: Twisted Reflection. Monstie-Datenbank, Bestiarum, Gene-Rechner, interaktive Karte und mehr.'
-          : 'The comprehensive fan wiki for Monster Hunter Stories 3: Twisted Reflection. Monstie database, bestiary, gene calculator, interactive map and more.',
-        monsties: this.lang === 'de'
-          ? 'Alle Monsties in MHS3 mit Elementen, Angriffstypen, Ride-Actions und Habitaten. Finde dein perfektes Team!'
-          : 'All Monsties in MHS3 with elements, attack types, ride actions and habitats. Find your perfect team!',
-        bestiary: this.lang === 'de'
-          ? 'Komplettes Bestiarum von MHS3. Alle Monster mit Schwächen, Spezies und Fundorten.'
-          : 'Complete MHS3 bestiary. All monsters with weaknesses, species and habitats.',
-        equipment: this.lang === 'de'
-          ? 'Alle Waffen und Rüstungen in MHS3 mit Stats, Skills und benötigten Materialien.'
-          : 'All weapons and armor in MHS3 with stats, skills and required materials.',
-        'gene-calc': this.lang === 'de'
-          ? 'MHS3 Gene-Rechner: Plane dein Rite of Channeling mit dem 3x3 Grid. Optimiere Bingo-Boni!'
-          : 'MHS3 Gene Calculator: Plan your Rite of Channeling with the 3x3 grid. Optimize Bingo Bonuses!',
-        map: this.lang === 'de'
-          ? 'Interaktive Weltkarte von MHS3. Finde alle Monsties, markiere deinen Fortschritt und teile deine Entdeckungen.'
-          : 'Interactive MHS3 world map. Find all monsties, track your progress and share your discoveries.',
-      };
-      metaDesc.content = descs[page] || descs.home;
-    }
+    const descs = {
+      home: this.lang === 'de'
+        ? 'Das umfassende Fan-Wiki zu Monster Hunter Stories 3: Twisted Reflection. Monstie-Datenbank, Bestiarum, Gene-Rechner, interaktive Karte und mehr.'
+        : 'The comprehensive fan wiki for Monster Hunter Stories 3: Twisted Reflection. Monstie database, bestiary, gene calculator, interactive map and more.',
+      monsties: this.lang === 'de'
+        ? 'Alle Monsties in MHS3 mit Elementen, Angriffstypen, Ride-Actions und Habitaten. Finde dein perfektes Team!'
+        : 'All Monsties in MHS3 with elements, attack types, ride actions and habitats. Find your perfect team!',
+      bestiary: this.lang === 'de'
+        ? 'Komplettes Bestiarum von MHS3. Alle Monster mit Schwächen, Spezies und Fundorten.'
+        : 'Complete MHS3 bestiary. All monsters with weaknesses, species and habitats.',
+      equipment: this.lang === 'de'
+        ? 'Alle Waffen und Rüstungen in MHS3 mit Stats, Skills und benötigten Materialien.'
+        : 'All weapons and armor in MHS3 with stats, skills and required materials.',
+      'gene-calc': this.lang === 'de'
+        ? 'MHS3 Gene-Rechner: Plane dein Rite of Channeling mit dem 3x3 Grid. Optimiere Bingo-Boni!'
+        : 'MHS3 Gene Calculator: Plan your Rite of Channeling with the 3x3 grid. Optimize Bingo Bonuses!',
+      map: this.lang === 'de'
+        ? 'Interaktive Weltkarte von MHS3. Finde alle Monsties, markiere deinen Fortschritt und teile deine Entdeckungen.'
+        : 'Interactive MHS3 world map. Find all monsties, track your progress and share your discoveries.',
+    };
+    const desc = detail ? detail : (descs[page] || descs.home);
+    if (metaDesc) metaDesc.content = desc;
+
+    // Update OG tags dynamically
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    const ogUrl = document.querySelector('meta[property="og:url"]');
+    const twTitle = document.querySelector('meta[name="twitter:title"]');
+    const twDesc = document.querySelector('meta[name="twitter:description"]');
+    if (ogTitle) ogTitle.content = document.title;
+    if (ogDesc) ogDesc.content = desc;
+    if (ogUrl) ogUrl.content = canonical ? canonical.href : `https://mhs3.meluciolabs.de/${page === 'home' ? '' : page}`;
+    if (twTitle) twTitle.content = document.title;
+    if (twDesc) twDesc.content = desc;
   },
 
   // --- Navigation ---
@@ -177,14 +211,59 @@ const App = {
     }
   },
 
-  // --- Lang Toggle ---
+  // --- Lang Toggle (Dropdown) ---
+
+  _updateLangMenu() {
+    document.querySelectorAll('.toolbar-menu-item[data-lang]').forEach((el) => {
+      el.classList.toggle('active', el.dataset.lang === this.lang);
+    });
+  },
 
   bindLangToggle() {
-    document.getElementById('lang-toggle').addEventListener('click', async () => {
-      this.lang = this.lang === 'de' ? 'en' : 'de';
-      localStorage.setItem('mhs3-lang', this.lang);
-      await this.loadI18n();
-      this.navigate(this.currentPage, this._lastParams);
+    const btn = document.getElementById('lang-toggle');
+    const menu = document.getElementById('lang-menu');
+
+    // Toggle dropdown
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      menu.classList.toggle('open');
+    });
+
+    // Language selection
+    document.querySelectorAll('.toolbar-menu-item[data-lang]').forEach((el) => {
+      el.addEventListener('click', async () => {
+        this.lang = el.dataset.lang;
+        localStorage.setItem('mhs3-lang', this.lang);
+        menu.classList.remove('open');
+        await this.loadI18n();
+        this.navigate(this.currentPage, this._lastParams);
+      });
+    });
+
+    // Close on outside click
+    document.addEventListener('click', () => menu.classList.remove('open'));
+  },
+
+  // --- Theme Toggle (Light/Dark) ---
+
+  initTheme() {
+    const saved = localStorage.getItem('mhs3-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', saved);
+    this._updateThemeIcon(saved);
+  },
+
+  _updateThemeIcon(theme) {
+    document.getElementById('theme-icon-sun').style.display = theme === 'dark' ? 'block' : 'none';
+    document.getElementById('theme-icon-moon').style.display = theme === 'light' ? 'block' : 'none';
+  },
+
+  bindThemeToggle() {
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('mhs3-theme', next);
+      this._updateThemeIcon(next);
     });
   },
 

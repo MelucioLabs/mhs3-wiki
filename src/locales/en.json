@@ -82,6 +82,11 @@
     "category_monster": "Monster",
     "category_equipment": "Equipment"
   },
+  "footer": {
+    "project": "MHS3 Wiki &mdash; An unofficial fan project by",
+    "disclaimer": "Not affiliated with Capcom Co., Ltd.",
+    "trademark": "Monster Hunter Stories 3: Twisted Reflection is a trademark of"
+  },
   "common": {
     "loading": "Loading...",
     "error": "An error occurred.",

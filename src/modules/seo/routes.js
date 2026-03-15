@@ -29,30 +29,40 @@ router.get('/sitemap.xml', async (req, res) => {
   </url>
   <url>
     <loc>${BASE_URL}/monsties</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="${BASE_URL}/monsties?lang=de"/>
+    <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/monsties?lang=en"/>
     <lastmod>${today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>${BASE_URL}/bestiary</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="${BASE_URL}/bestiary?lang=de"/>
+    <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/bestiary?lang=en"/>
     <lastmod>${today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>${BASE_URL}/equipment</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="${BASE_URL}/equipment?lang=de"/>
+    <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/equipment?lang=en"/>
     <lastmod>${today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>${BASE_URL}/gene-calc</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="${BASE_URL}/gene-calc?lang=de"/>
+    <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/gene-calc?lang=en"/>
     <lastmod>${today}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>${BASE_URL}/map</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="${BASE_URL}/map?lang=de"/>
+    <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/map?lang=en"/>
     <lastmod>${today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -79,6 +89,18 @@ router.get('/sitemap.xml', async (req, res) => {
     <lastmod>${today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
+  </url>`;
+    }
+
+    // Add individual equipment pages
+    for (const e of equipment.rows) {
+      const slug = e.name_en.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '');
+      xml += `
+  <url>
+    <loc>${BASE_URL}/equipment/${slug}-${e.id}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
   </url>`;
     }
 

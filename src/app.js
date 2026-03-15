@@ -14,8 +14,26 @@ const searchRouter = require('./modules/search/router');
 const seoRouter = require('./modules/seo/routes');
 const { i18nMiddleware } = require('./modules/i18n/middleware');
 
+const fs = require('fs');
+
 const app = express();
 const PORT = process.env.APP_PORT || 3000;
+
+// Read index.html template once for deep-link SSR
+const indexTemplate = fs.readFileSync(path.join(__dirname, 'public', 'index.html'), 'utf8');
+
+function buildDeepLinkHTML({ title, description, url }) {
+  const esc = (s) => s.replace(/"/g, '&quot;').replace(/</g, '&lt;');
+  return indexTemplate
+    .replace(/<title>[^<]*<\/title>/, `<title>${esc(title)}</title>`)
+    .replace(/<meta name="description" content="[^"]*">/, `<meta name="description" content="${esc(description)}">`)
+    .replace(/<link rel="canonical" href="[^"]*">/, `<link rel="canonical" href="${esc(url)}">`)
+    .replace(/<meta property="og:title" content="[^"]*">/, `<meta property="og:title" content="${esc(title)}">`)
+    .replace(/<meta property="og:description" content="[^"]*">/, `<meta property="og:description" content="${esc(description)}">`)
+    .replace(/<meta property="og:url" content="[^"]*">/, `<meta property="og:url" content="${esc(url)}">`)
+    .replace(/<meta name="twitter:title" content="[^"]*">/, `<meta name="twitter:title" content="${esc(title)}">`)
+    .replace(/<meta name="twitter:description" content="[^"]*">/, `<meta name="twitter:description" content="${esc(description)}">`);
+}
 
 // Middleware
 app.use(compression());
@@ -54,6 +72,61 @@ app.get('/api/health', async (req, res) => {
   } catch (err) {
     res.status(503).json({ status: 'error', message: 'Database unavailable' });
   }
+});
+
+// Deep-link SSR: Inject dynamic meta tags for crawlers (SEO + social sharing)
+app.get('/monstie/:slug', async (req, res) => {
+  const idMatch = req.params.slug.match(/-(\d+)$/);
+  if (idMatch) {
+    try {
+      const result = await pool.query('SELECT name_de, name_en, element, attack_type, habitat_de, habitat_en FROM monsties WHERE id = $1', [idMatch[1]]);
+      if (result.rows.length) {
+        const m = result.rows[0];
+        return res.send(buildDeepLinkHTML({
+          title: `${m.name_de} (${m.name_en}) | MHS3 Wiki`,
+          description: `${m.name_de} — Element: ${m.element || '-'}, Typ: ${m.attack_type || '-'}, Habitat: ${m.habitat_de || '-'}. Monstie-Daten im MHS3 Wiki.`,
+          url: `https://mhs3.meluciolabs.de${req.originalUrl}`,
+        }));
+      }
+    } catch (e) { console.error('Deep-link monstie error:', e); }
+  }
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/monster/:slug', async (req, res) => {
+  const idMatch = req.params.slug.match(/-(\d+)$/);
+  if (idMatch) {
+    try {
+      const result = await pool.query('SELECT name_de, name_en, species_de, species_en, weakness, habitat_de, habitat_en FROM monsters WHERE id = $1', [idMatch[1]]);
+      if (result.rows.length) {
+        const m = result.rows[0];
+        return res.send(buildDeepLinkHTML({
+          title: `${m.name_de} (${m.name_en}) | MHS3 Wiki`,
+          description: `${m.name_de} — Spezies: ${m.species_de || '-'}, Schwäche: ${m.weakness || '-'}, Habitat: ${m.habitat_de || '-'}. Bestiarum-Eintrag im MHS3 Wiki.`,
+          url: `https://mhs3.meluciolabs.de${req.originalUrl}`,
+        }));
+      }
+    } catch (e) { console.error('Deep-link monster error:', e); }
+  }
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/equipment/:slug', async (req, res) => {
+  const idMatch = req.params.slug.match(/-(\d+)$/);
+  if (idMatch) {
+    try {
+      const result = await pool.query("SELECT name_de, name_en, type, stats->>'element' AS element FROM equipment WHERE id = $1", [idMatch[1]]);
+      if (result.rows.length) {
+        const e = result.rows[0];
+        return res.send(buildDeepLinkHTML({
+          title: `${e.name_de} (${e.name_en}) | MHS3 Wiki`,
+          description: `${e.name_de} — Typ: ${e.type || '-'}${e.element ? ', Element: ' + e.element : ''}. Ausrüstungsdaten im MHS3 Wiki.`,
+          url: `https://mhs3.meluciolabs.de${req.originalUrl}`,
+        }));
+      }
+    } catch (e2) { console.error('Deep-link equipment error:', e2); }
+  }
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // SPA fallback - serve index.html for all non-API routes
