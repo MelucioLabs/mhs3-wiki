@@ -302,22 +302,13 @@ body {
 .home-card--genes:hover { border-color: var(--dragon); }
 .home-card--genes h3 { color: var(--dragon); }
 
+.home-card--forge::before { background: linear-gradient(90deg, var(--thunder), var(--fire)); }
+.home-card--forge:hover { border-color: var(--thunder); }
+.home-card--forge h3 { color: var(--thunder); }
+
 .home-card--map::before { background: linear-gradient(90deg, var(--water), var(--ice)); }
 .home-card--map:hover { border-color: var(--water); }
 .home-card--map h3 { color: var(--water); }
-
-/* 5 cards: 3 top, 2 bottom centered */
-.home-card:nth-child(4) { grid-column: 1 / 2; }
-.home-card:nth-child(5) { grid-column: 2 / 3; }
-@supports (grid-template-columns: subgrid) {
-  .home-grid { justify-items: center; }
-}
-/* Center the last row (2 items) */
-.home-grid::after {
-  content: '';
-  grid-column: 3 / 4;
-  grid-row: 2 / 3;
-}
 
 .page-title {
   font-size: 1.75rem;
@@ -941,14 +932,12 @@ body {
     grid-template-rows: repeat(3, 80px);
   }
   .card-list { grid-template-columns: 1fr; }
-  .home-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+  .home-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; justify-items: stretch; }
   .home-card { padding: 1rem 0.75rem; }
   .home-card-icon { font-size: 1.75rem; margin-bottom: 0.35rem; }
   .home-card h3 { font-size: 0.95rem; margin-bottom: 0; }
   .home-card p { display: none; }
-  .home-card:nth-child(4), .home-card:nth-child(5) { grid-column: auto; }
-  .home-card:last-child:nth-child(odd) { grid-column: 1 / -1; max-width: calc(50% - 0.375rem); justify-self: center; }
-  .home-grid::after { display: none; }
+  .home-card:nth-child(n) { grid-column: auto; }
   .home-hero-title { font-size: 1.5rem; }
   .home-hero { padding: 1.5rem 1rem 1rem; }
   .modal-overlay { padding: 1rem; }

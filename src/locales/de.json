@@ -6,6 +6,7 @@
     "bestiary": "📖 Bestiarum",
     "equipment": "⚔️ Ausrüstung",
     "gene_calc": "🧬 Gene-Rechner",
+    "forge": "🔨 Schmiede",
     "map": "🗺️ Karte",
     "search": "Suche"
   },
@@ -20,6 +21,8 @@
     "card_equipment_desc": "Waffen und Rüstungen mit Stats und Materialien",
     "card_genes": "Gene-Rechner",
     "card_genes_desc": "Plane dein Rite of Channeling mit dem 3x3 Grid-Rechner",
+    "card_forge": "Schmiedeplaner",
+    "card_forge_desc": "Plane deine Waffen- und Rüstungs-Upgrades mit Stats pro Stufe",
     "card_map": "Interaktive Karte",
     "card_map_desc": "Erkunde die Welt von MHS3 und markiere deine gefundenen Monsties (wird noch massiv erweitert — Feedback willkommen!)"
   },
@@ -72,6 +75,11 @@
     "both_match": "Doppel-Bonus",
     "search_gene": "Gen suchen...",
     "instructions": "Klicke auf ein Feld und wähle ein Gen aus der Liste. Gleiche Typen oder Elemente in einer Reihe ergeben Boni."
+  },
+  "forge": {
+    "title": "Schmiedeplaner",
+    "coming_soon": "Kommt bald!",
+    "coming_soon_desc": "Der Schmiedeplaner wird derzeit entwickelt. Hier kannst du bald Waffen- und Rüstungs-Upgrades planen und Stats pro Stufe einsehen."
   },
   "search": {
     "title": "Suche",

@@ -23,7 +23,7 @@ const App = {
     let deepLinkType = null;
     const path = window.location.pathname.replace(/^\//, '');
     const hash = window.location.hash.replace('#', '').replace(/^\//, '');
-    const validPages = ['home', 'monsties', 'bestiary', 'equipment', 'gene-calc', 'map'];
+    const validPages = ['home', 'monsties', 'bestiary', 'equipment', 'gene-calc', 'forge', 'map'];
 
     // Deep-link support for sitemap URLs: /monstie/slug-123, /monster/slug-123, /equipment/slug-123
     const deepLinkMatch = path.match(/^(monstie|monster|equipment)\/.*-(\d+)$/);
@@ -56,7 +56,7 @@ const App = {
   bindRouting() {
     window.addEventListener('popstate', () => {
       const path = window.location.pathname.replace(/^\//, '') || 'home';
-      const validPages = ['home', 'monsties', 'bestiary', 'equipment', 'gene-calc', 'map'];
+      const validPages = ['home', 'monsties', 'bestiary', 'equipment', 'gene-calc', 'forge', 'map'];
       if (validPages.includes(path) && path !== this.currentPage) {
         this.navigate(path, {}, true);
       }
@@ -206,6 +206,7 @@ const App = {
       case 'bestiary': this.renderBestiary(); break;
       case 'equipment': this.renderEquipment(); break;
       case 'gene-calc': this.renderGeneCalc(); break;
+      case 'forge': this.renderForge(); break;
       case 'map': this.renderMap(); break;
       case 'search-results': this.renderSearchResults(params.query); break;
     }
@@ -388,6 +389,11 @@ const App = {
             <span class="home-card-icon">🧬</span>
             <h3>${this.t('home.card_genes')}</h3>
             <p>${this.t('home.card_genes_desc')}</p>
+          </div>
+          <div class="home-card home-card--forge" data-goto="forge">
+            <span class="home-card-icon">🔨</span>
+            <h3>${this.t('home.card_forge')}</h3>
+            <p>${this.t('home.card_forge_desc')}</p>
           </div>
           <div class="home-card home-card--map" data-goto="map">
             <span class="home-card-icon">🗺️</span>
@@ -886,6 +892,22 @@ const App = {
     'Ratha V', 'Plessie', 'Gravy', 'Dee', 'Sereg', 'Gnocchi', 'Angie',
     'Chirpy', 'Kagachi', 'Fawn', 'Lenox', 'Legia', 'Golma', 'Großpoogie', 'Great Poogie',
   ]),
+
+  // --- FORGE (Placeholder) ---
+
+  renderForge() {
+    document.getElementById('app').innerHTML = `
+      <div class="forge-page">
+        <h2 class="page-title">${this.t('forge.title')}</h2>
+        <div class="map-placeholder">
+          <span class="map-placeholder-icon">🔨</span>
+          <h3>${this.t('forge.coming_soon')}</h3>
+          <p>${this.t('forge.coming_soon_desc')}</p>
+        </div>
+      </div>`;
+  },
+
+  // --- MAP ---
 
   _mapSortMode: 'element', // 'element' or 'name'
 
