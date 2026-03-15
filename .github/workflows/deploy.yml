@@ -42,13 +42,13 @@ jobs:
 
       - name: Deploy to Pi
         run: |
-          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          BUILD_VER=$(date +%Y%m%d%H%M)
           ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 dave@100.103.86.47 << EOF
             cd ~/apps/mhs3-wiki
             git pull origin main
-            DOCKER_API_VERSION=1.41 docker compose build --no-cache --build-arg BUILD_VERSION=${SHORT_SHA} app
+            DOCKER_API_VERSION=1.41 docker compose build --no-cache --build-arg BUILD_VERSION=${BUILD_VER} app
             DOCKER_API_VERSION=1.41 docker compose up -d
-            echo "Deploy completed at \$(date) - version: ${SHORT_SHA}"
+            echo "Deploy completed at \$(date) - version: ${BUILD_VER}"
           EOF
 
       - name: Health Check
