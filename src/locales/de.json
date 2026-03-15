@@ -70,6 +70,7 @@
     "type_match": "Typ-Bonus",
     "element_match": "Element-Bonus",
     "both_match": "Doppel-Bonus",
+    "search_gene": "Gen suchen...",
     "instructions": "Klicke auf ein Feld und wähle ein Gen aus der Liste. Gleiche Typen oder Elemente in einer Reihe ergeben Boni."
   },
   "search": {
@@ -119,6 +120,12 @@
       "temnoceran": "Temnoceran",
       "carapaceon": "Krebstier",
       "amphibian": "Amphibium"
+    },
+    "status_effects": {
+      "poison": "Gift",
+      "sleep": "Schlaf",
+      "paralysis": "Paralyse",
+      "blast": "Explosion"
     },
     "equip_types": {
       "weapon": "Waffe",

@@ -52,7 +52,7 @@ async function getGenes(req, res) {
     const lang = req.lang;
     const { gene_type, element } = req.query;
 
-    let sql = `SELECT id, name_${lang} AS name, gene_type, element,
+    let sql = `SELECT id, game_id, name_${lang} AS name, gene_type, element,
                skill_name_${lang} AS skill_name, description_${lang} AS description FROM genes WHERE 1=1`;
     const params = [];
 

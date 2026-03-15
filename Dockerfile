@@ -8,12 +8,18 @@ RUN npm install --omit=dev
 FROM node:20-alpine
 LABEL maintainer="MHS3 Wiki"
 
+ARG BUILD_VERSION=dev
+ENV BUILD_VERSION=${BUILD_VERSION}
+
 RUN apk add --no-cache tini
 WORKDIR /app
 
 COPY --from=builder /app/node_modules ./node_modules
 COPY package.json ./
 COPY src/ ./src/
+
+# Inject build version into HTML for cache busting (?v=<git-sha>)
+RUN sed -i "s/?v=[a-zA-Z0-9]*/?v=${BUILD_VERSION}/g" src/public/index.html
 
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 USER appuser

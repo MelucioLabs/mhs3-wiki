@@ -573,7 +573,10 @@ const App = {
       const statEntries = Object.entries(stats)
         .filter(([k]) => !this._hiddenStats.has(k))
         .filter(([, v]) => v !== 0 && v !== '')
-        .map(([k, v]) => `<div class="stat-item">${statLabels[k] || k}: <span>${v}</span></div>`)
+        .map(([k, v]) => {
+          const display = k === 'status' ? this.te('status_effects', v) || v : v;
+          return `<div class="stat-item">${statLabels[k] || k}: <span>${display}</span></div>`;
+        })
         .join('');
       const elemKey = stats.element;
       const elemTag = elemKey
@@ -608,7 +611,10 @@ const App = {
       const statEntries = Object.entries(stats)
         .filter(([k]) => !this._hiddenStats.has(k))
         .filter(([, v]) => v !== 0 && v !== '')
-        .map(([k, v]) => `<div class="stat-item">${statLabels[k] || k}: <span>${v}</span></div>`)
+        .map(([k, v]) => {
+          const display = k === 'status' ? this.te('status_effects', v) || v : v;
+          return `<div class="stat-item">${statLabels[k] || k}: <span>${display}</span></div>`;
+        })
         .join('');
 
       // Element display

@@ -49,7 +49,7 @@ app.use('/api/search', searchRouter);
 app.get('/api/health', async (req, res) => {
   try {
     await checkConnection();
-    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+    res.json({ status: 'ok', version: process.env.BUILD_VERSION || 'dev', timestamp: new Date().toISOString() });
   } catch (err) {
     res.status(503).json({ status: 'error', message: 'Database unavailable' });
   }

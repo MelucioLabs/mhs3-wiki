@@ -6,6 +6,7 @@ const GeneCalculator = {
   app: null,
   grid: Array(9).fill(null), // 3x3 = 9 cells
   genes: [],
+  filteredGenes: [],
   selectedCell: null,
 
   async init(rootId, app) {
@@ -18,6 +19,7 @@ const GeneCalculator = {
     } catch (e) {
       this.genes = [];
     }
+    this.filteredGenes = [...this.genes];
 
     this.render(rootId);
   },
@@ -37,9 +39,10 @@ const GeneCalculator = {
           </div>
         </div>
         <div class="gene-list-panel" id="gene-list-panel">
-          <h3>${this.app.t('gene_calc.select_gene')}</h3>
-          <div id="gene-options">
-            ${this.genes.map((g) => this._geneOptionHTML(g)).join('')}
+          <h3>${this.app.t('gene_calc.select_gene')} <span class="gene-count">(${this.genes.length})</span></h3>
+          <input type="text" id="gene-search" class="gene-search-input" placeholder="${this.app.t('gene_calc.search_gene') || 'Gen suchen...'}" />
+          <div id="gene-options" class="gene-options-list">
+            ${this.filteredGenes.map((g) => this._geneOptionHTML(g)).join('')}
           </div>
         </div>
       </div>`;
@@ -53,8 +56,9 @@ const GeneCalculator = {
       return `<div class="gene-cell empty" data-cell="${index}"></div>`;
     }
     const icon = this._typeIcon(gene.gene_type);
+    const elClass = this.app.elementClass(gene.element);
     return `
-      <div class="gene-cell" data-cell="${index}">
+      <div class="gene-cell ${elClass ? 'el-' + elClass : ''}" data-cell="${index}" title="${gene.description || ''}">
         <div class="gene-icon">${icon}</div>
         <div class="gene-name">${gene.name}</div>
       </div>`;
@@ -62,16 +66,21 @@ const GeneCalculator = {
 
   _geneOptionHTML(gene) {
     const icon = this._typeIcon(gene.gene_type);
+    const typeTag = gene.gene_type
+      ? `<span class="tag tag-${gene.gene_type.toLowerCase()}" style="font-size:0.65rem">${this.app.te('attack_types', gene.gene_type)}</span>`
+      : '';
+    const elemTag = gene.element
+      ? `<span class="tag tag-${this.app.elementClass(gene.element)}" style="font-size:0.65rem">${this.app.te('elements', gene.element)}</span>`
+      : '';
     return `
-      <div class="gene-option" data-gene-id="${gene.id}">
+      <div class="gene-option" data-gene-id="${gene.id}" title="${gene.description || ''}">
         <div class="gene-icon">${icon}</div>
         <div class="gene-option-info">
           <div class="name">${gene.name}</div>
           <div class="skill">
-            <span class="tag tag-${(gene.gene_type || '').toLowerCase()}" style="font-size:0.65rem">${this.app.te('attack_types', gene.gene_type)}</span>
-            <span class="tag tag-${this.app.elementClass(gene.element)}" style="font-size:0.65rem">${this.app.te('elements', gene.element)}</span>
-            ${gene.skill_name || ''}
+            ${typeTag}${elemTag}
           </div>
+          ${gene.description ? `<div class="gene-desc">${gene.description}</div>` : ''}
         </div>
       </div>`;
   },
@@ -81,8 +90,41 @@ const GeneCalculator = {
       case 'power': return '\u2694\uFE0F';
       case 'technical': return '\uD83D\uDEE0\uFE0F';
       case 'speed': return '\u26A1';
-      default: return '\u2753';
+      default: return '\uD83E\uDDEC';
     }
+  },
+
+  _filterGenes(searchTerm) {
+    const term = (searchTerm || '').toLowerCase().trim();
+    if (!term) {
+      this.filteredGenes = [...this.genes];
+    } else {
+      this.filteredGenes = this.genes.filter((g) =>
+        (g.name || '').toLowerCase().includes(term) ||
+        (g.description || '').toLowerCase().includes(term) ||
+        (g.skill_name || '').toLowerCase().includes(term)
+      );
+    }
+    const optionsEl = document.getElementById('gene-options');
+    if (optionsEl) {
+      optionsEl.innerHTML = this.filteredGenes.map((g) => this._geneOptionHTML(g)).join('');
+      this._bindGeneOptionClicks();
+    }
+    const countEl = document.querySelector('.gene-count');
+    if (countEl) countEl.textContent = `(${this.filteredGenes.length})`;
+  },
+
+  _bindGeneOptionClicks() {
+    document.querySelectorAll('.gene-option').forEach((el) => {
+      el.addEventListener('click', () => {
+        if (this.selectedCell === null) return;
+        const geneId = parseInt(el.dataset.geneId, 10);
+        const gene = this.genes.find((g) => g.id === geneId);
+        if (!gene) return;
+        this.grid[this.selectedCell] = { ...gene };
+        this._refreshGrid();
+      });
+    });
   },
 
   _bindEvents() {
@@ -96,17 +138,16 @@ const GeneCalculator = {
       });
     });
 
-    // Gene option clicks
-    document.querySelectorAll('.gene-option').forEach((el) => {
-      el.addEventListener('click', () => {
-        if (this.selectedCell === null) return;
-        const geneId = parseInt(el.dataset.geneId, 10);
-        const gene = this.genes.find((g) => g.id === geneId);
-        if (!gene) return;
-        this.grid[this.selectedCell] = { ...gene };
-        this._refreshGrid();
+    // Gene search
+    const searchInput = document.getElementById('gene-search');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        this._filterGenes(e.target.value);
       });
-    });
+    }
+
+    // Gene option clicks
+    this._bindGeneOptionClicks();
 
     // Clear
     document.getElementById('clear-grid').addEventListener('click', () => {

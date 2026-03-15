@@ -70,6 +70,7 @@
     "type_match": "Type Bonus",
     "element_match": "Element Bonus",
     "both_match": "Double Bonus",
+    "search_gene": "Search gene...",
     "instructions": "Click a cell and select a gene from the list. Matching types or elements in a row grant bonuses."
   },
   "search": {
@@ -119,6 +120,12 @@
       "temnoceran": "Temnoceran",
       "carapaceon": "Carapaceon",
       "amphibian": "Amphibian"
+    },
+    "status_effects": {
+      "poison": "Poison",
+      "sleep": "Sleep",
+      "paralysis": "Paralysis",
+      "blast": "Blast"
     },
     "equip_types": {
       "weapon": "Weapon",

@@ -1,6 +1,9 @@
 services:
   app:
-    build: .
+    build:
+      context: .
+      args:
+        BUILD_VERSION: ${BUILD_VERSION:-dev}
     container_name: mhs3-app
     restart: unless-stopped
     ports:
@@ -32,6 +35,7 @@ services:
       - pgdata:/var/lib/postgresql/data
       - ./src/database/init.sql:/docker-entrypoint-initdb.d/01_init.sql
       - ./src/database/equipment_seed.sql:/docker-entrypoint-initdb.d/02_equipment_seed.sql
+      - ./src/database/gene_seed.sql:/docker-entrypoint-initdb.d/03_gene_seed.sql
     # Port not exposed on host - app connects via docker network
     # Avoids conflict with other postgres instances (e.g. KHAI)
     healthcheck:

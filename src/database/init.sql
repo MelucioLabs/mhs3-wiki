@@ -21,9 +21,10 @@ CREATE TABLE IF NOT EXISTS monsties (
 -- Genes (Rite of Channeling)
 CREATE TABLE IF NOT EXISTS genes (
   id SERIAL PRIMARY KEY,
+  game_id INTEGER,
   name_de VARCHAR(100) NOT NULL,
   name_en VARCHAR(100) NOT NULL,
-  gene_type VARCHAR(50) NOT NULL,
+  gene_type VARCHAR(50),
   element VARCHAR(50),
   skill_name_de VARCHAR(100),
   skill_name_en VARCHAR(100),
@@ -206,41 +207,9 @@ INSERT INTO monsties (name_de, name_en, element, attack_type, ride_action, habit
 
 
 -- ============================================
--- GENES (expanded from 5 to 25)
+-- GENES — loaded from gene_seed.sql (115 genes from game data)
 -- ============================================
-INSERT INTO genes (name_de, name_en, gene_type, element, skill_name_de, skill_name_en, description_de, description_en) VALUES
--- Fire Genes
-('Feuerstrahl-Gen', 'Fire Beam Gene', 'power', 'fire', 'Feuerstrahl', 'Fire Beam', 'Verleiht dem Monstie einen mächtigen Feuerangriff.', 'Grants the Monstie a powerful fire attack.'),
-('Flammenklinge-Gen', 'Flame Blade Gene', 'speed', 'fire', 'Flammenklinge', 'Flame Blade', 'Ein schneller Feuerangriff der den Gegner verbrennen kann.', 'A fast fire attack that can inflict burn on the opponent.'),
-('Feuerstrudel-Gen', 'Fire Vortex Gene', 'technical', 'fire', 'Feuerstrudel', 'Fire Vortex', 'Ein technischer Flächenangriff der Feuer um das Monstie wirbelt.', 'A technical area attack that swirls fire around the Monstie.'),
-('Feueratem-Gen', 'Fire Breath Gene', 'power', 'fire', 'Feueratem', 'Fire Breath', 'Ein mächtiger Feueratem-Angriff der alle Gegner vor dem Monstie trifft.', 'A mighty fire breath attack that hits all enemies in front of the Monstie.'),
--- Water Genes
-('Wasserbombe-Gen', 'Water Bomb Gene', 'technical', 'water', 'Wasserbombe', 'Water Bomb', 'Ein flächendeckender Wasserangriff.', 'An area-of-effect water attack.'),
-('Aquastrahl-Gen', 'Aqua Beam Gene', 'power', 'water', 'Aquastrahl', 'Aqua Beam', 'Ein konzentrierter Wasserstrahl der enormen Schaden verursacht.', 'A concentrated water beam dealing enormous damage.'),
-('Blasenwand-Gen', 'Bubble Wall Gene', 'technical', 'water', 'Blasenwand', 'Bubble Wall', 'Erzeugt eine schützende Blasenwand die Schaden absorbiert.', 'Creates a protective bubble wall that absorbs damage.'),
--- Thunder Genes
-('Blitzschlag-Gen', 'Thunder Strike Gene', 'technical', 'thunder', 'Blitzschlag', 'Thunder Strike', 'Ein technischer Blitzangriff der den Gegner lähmen kann.', 'A technical thunder attack that can paralyze the opponent.'),
-('Donnerklinge-Gen', 'Thunder Blade Gene', 'speed', 'thunder', 'Donnerklinge', 'Thunder Blade', 'Ein blitzschneller Angriff mit elektrischer Energie.', 'A lightning-fast attack with electrical energy.'),
-('Blitzgewitter-Gen', 'Thunderstorm Gene', 'power', 'thunder', 'Blitzgewitter', 'Thunderstorm', 'Ruft ein verheerendes Gewitter herbei das alle Gegner trifft.', 'Summons a devastating thunderstorm that hits all enemies.'),
--- Ice Genes
-('Eislanze-Gen', 'Ice Lance Gene', 'speed', 'ice', 'Eislanze', 'Ice Lance', 'Ein schneller Eisangriff der den Gegner einfrieren kann.', 'A fast ice attack that can freeze the opponent.'),
-('Frosthauch-Gen', 'Frost Breath Gene', 'power', 'ice', 'Frosthauch', 'Frost Breath', 'Ein mächtiger Eisstoß der Gegner in Eis hüllt.', 'A powerful ice blast that encases enemies in ice.'),
-('Eisspiegel-Gen', 'Ice Mirror Gene', 'technical', 'ice', 'Eisspiegel', 'Ice Mirror', 'Erzeugt Eisspiegel die feindliche Angriffe reflektieren.', 'Creates ice mirrors that reflect enemy attacks.'),
--- Dragon Genes
-('Drachenpuls-Gen', 'Dragon Pulse Gene', 'power', 'dragon', 'Drachenpuls', 'Dragon Pulse', 'Ein mächtiger Drachenangriff der pure Drachenenergie entfesselt.', 'A mighty dragon attack that unleashes pure dragon energy.'),
-('Drachenklinge-Gen', 'Dragon Blade Gene', 'speed', 'dragon', 'Drachenklinge', 'Dragon Blade', 'Ein schneller Angriff mit Drachenenergie der elementare Resistenzen senkt.', 'A fast attack with dragon energy that lowers elemental resistances.'),
-('Drachenaura-Gen', 'Dragon Aura Gene', 'technical', 'dragon', 'Drachenaura', 'Dragon Aura', 'Umhüllt das Monstie mit Drachenenergie und stärkt alle Angriffe.', 'Envelops the Monstie in dragon energy, boosting all attacks.'),
--- Non-Elemental Genes
-('Schnellangriff-Gen', 'Quick Strike Gene', 'speed', 'none', 'Schnellangriff', 'Quick Strike', 'Ein schneller Angriff der zuerst zuschlägt.', 'A fast attack that strikes first.'),
-('Kraftladung-Gen', 'Power Charge Gene', 'power', 'none', 'Kraftladung', 'Power Charge', 'Erhöht die Angriffskraft für mehrere Runden.', 'Increases attack power for several turns.'),
-('Giftstachel-Gen', 'Poison Sting Gene', 'technical', 'none', 'Giftstachel', 'Poison Sting', 'Ein technischer Angriff der den Gegner vergiften kann.', 'A technical attack that can poison the opponent.'),
-('Panzerbrecher-Gen', 'Armor Break Gene', 'power', 'none', 'Panzerbrecher', 'Armor Break', 'Ein durchdringender Angriff der die Verteidigung des Gegners senkt.', 'A piercing attack that lowers the opponent''s defense.'),
-('Ausweichmanöver-Gen', 'Evasion Gene', 'speed', 'none', 'Ausweichmanöver', 'Evasion', 'Erhöht die Ausweichrate des Monsties für mehrere Runden.', 'Increases the Monstie''s evasion rate for several turns.'),
--- Healing/Support Genes
-('Heilaura-Gen', 'Healing Aura Gene', 'technical', 'none', 'Heilaura', 'Healing Aura', 'Heilt das Monstie und seinen Reiter über mehrere Runden.', 'Heals the Monstie and its rider over several turns.'),
-('Lebenskraft-Gen', 'Vitality Gene', 'power', 'none', 'Lebenskraft', 'Vitality', 'Erhöht die maximalen Lebenspunkte des Monsties dauerhaft.', 'Permanently increases the Monstie''s maximum health points.'),
-('Bindungsstärke-Gen', 'Kinship Gene', 'technical', 'none', 'Bindungsstärke', 'Kinship Boost', 'Erhöht die Kinship-Anzeige schneller durch Angriffe.', 'Increases the Kinship gauge faster through attacks.'),
-('Kritischer Stoß-Gen', 'Critical Strike Gene', 'speed', 'none', 'Kritischer Stoß', 'Critical Strike', 'Erhöht die Chance auf kritische Treffer erheblich.', 'Significantly increases the chance of critical hits.');
+-- Gene data is seeded via 03_gene_seed.sql (docker-entrypoint-initdb.d)
 
 
 -- ============================================
