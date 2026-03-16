@@ -302,10 +302,6 @@ body {
 .home-card--genes:hover { border-color: var(--dragon); }
 .home-card--genes h3 { color: var(--dragon); }
 
-.home-card--forge::before { background: linear-gradient(90deg, var(--thunder), var(--fire)); }
-.home-card--forge:hover { border-color: var(--thunder); }
-.home-card--forge h3 { color: var(--thunder); }
-
 .home-card--map::before { background: linear-gradient(90deg, var(--water), var(--ice)); }
 .home-card--map:hover { border-color: var(--water); }
 .home-card--map h3 { color: var(--water); }
@@ -940,79 +936,39 @@ body {
   font-size: 0.9rem;
 }
 
-/* Forge Page */
-.forge-page { max-width: 1200px; margin: 0 auto; }
-.forge-search-input {
-  background: var(--bg-card);
-  color: var(--text);
-  border: 1px solid var(--border);
-  padding: 0.5rem 0.75rem;
-  border-radius: var(--radius);
-  font-size: 0.85rem;
-  outline: none;
-  flex: 1;
-  min-width: 150px;
-}
-.forge-search-input:focus { border-color: var(--accent); }
-.forge-search-input::placeholder { color: var(--text-muted); }
-
-.forge-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 1rem;
-}
-.forge-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  transition: border-color 0.2s;
-}
-.forge-card:hover { border-color: var(--accent); }
-.forge-card-header {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--border);
-}
-.forge-type-icon { font-size: 1.5rem; }
-.forge-card-name { font-weight: 600; font-size: 0.95rem; }
-.forge-card-meta { display: flex; gap: 0.35rem; align-items: center; margin-top: 0.15rem; }
-.forge-type-label { color: var(--text-muted); font-size: 0.8rem; }
-
-.forge-table {
+/* Upgrade Table (inside equipment modal) */
+.upgrade-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.85rem;
 }
-.forge-table th {
+.upgrade-table th {
   text-align: left;
-  padding: 0.4rem 0.75rem;
+  padding: 0.4rem 0.5rem;
   font-size: 0.75rem;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
-.forge-table td { padding: 0.35rem 0.75rem; }
-.forge-table tbody tr { border-top: 1px solid var(--border); }
-.forge-table tbody tr:hover { background: rgba(255,255,255,0.03); }
-.forge-lvl { font-weight: 600; color: var(--accent); width: 50px; }
+.upgrade-table td { padding: 0.35rem 0.5rem; }
+.upgrade-table tbody tr { border-top: 1px solid var(--border); }
+.upgrade-table tbody tr:hover { background: rgba(255,255,255,0.03); }
+.upgrade-lvl { font-weight: 600; color: var(--accent); width: 50px; }
 
-.forge-bar-wrap {
+.upgrade-bar-wrap {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
-.forge-bar {
+.upgrade-bar {
   height: 6px;
   border-radius: 3px;
   min-width: 4px;
   transition: width 0.3s;
 }
-.forge-bar--atk { background: var(--fire); }
-.forge-bar--def { background: var(--water); }
-.forge-bar-wrap span {
+.upgrade-bar--atk { background: var(--fire); }
+.upgrade-bar--def { background: var(--water); }
+.upgrade-bar-wrap span {
   font-size: 0.8rem;
   font-weight: 500;
   min-width: 2rem;

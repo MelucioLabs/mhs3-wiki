@@ -6,7 +6,6 @@
     "bestiary": "📖 Bestiary",
     "equipment": "⚔️ Equipment",
     "gene_calc": "🧬 Gene Calculator",
-    "forge": "🔨 Forge",
     "map": "🗺️ Map",
     "search": "Search"
   },
@@ -21,8 +20,6 @@
     "card_equipment_desc": "Weapons and armor with stats and required materials",
     "card_genes": "Gene Calculator",
     "card_genes_desc": "Plan your Rite of Channeling with the 3x3 grid calculator",
-    "card_forge": "Forge Planner",
-    "card_forge_desc": "Plan your weapon and armor upgrades with stats per level",
     "card_map": "Interactive Map",
     "card_map_desc": "Explore the world of MHS3 and track your discovered monsties (major improvements coming — feedback welcome!)"
   },
@@ -78,23 +75,6 @@
     "all_elements": "All Elements",
     "no_type": "No Type",
     "instructions": "Click a cell and select a gene from the list. Matching types or elements in a row grant bonuses."
-  },
-  "forge": {
-    "title": "Forge Planner",
-    "subtitle": "Per-level upgrade stats for all weapons and armor",
-    "all_types": "All Types",
-    "greatsword": "Great Sword",
-    "longsword": "Long Sword",
-    "hammer": "Hammer",
-    "horn": "Hunting Horn",
-    "bow": "Bow",
-    "gunlance": "Gunlance",
-    "armor": "Armor",
-    "search": "Search equipment...",
-    "level": "Level",
-    "attack": "Attack",
-    "defense": "Defense",
-    "no_results": "No equipment with upgrade data found."
   },
   "search": {
     "title": "Search",

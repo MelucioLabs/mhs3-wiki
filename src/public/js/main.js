@@ -23,7 +23,7 @@ const App = {
     let deepLinkType = null;
     const path = window.location.pathname.replace(/^\//, '');
     const hash = window.location.hash.replace('#', '').replace(/^\//, '');
-    const validPages = ['home', 'monsties', 'bestiary', 'equipment', 'gene-calc', 'forge', 'map'];
+    const validPages = ['home', 'monsties', 'bestiary', 'equipment', 'gene-calc', 'map'];
 
     // Deep-link support for sitemap URLs: /monstie/slug-123, /monster/slug-123, /equipment/slug-123
     const deepLinkMatch = path.match(/^(monstie|monster|equipment)\/.*-(\d+)$/);
@@ -56,7 +56,7 @@ const App = {
   bindRouting() {
     window.addEventListener('popstate', () => {
       const path = window.location.pathname.replace(/^\//, '') || 'home';
-      const validPages = ['home', 'monsties', 'bestiary', 'equipment', 'gene-calc', 'forge', 'map'];
+      const validPages = ['home', 'monsties', 'bestiary', 'equipment', 'gene-calc', 'map'];
       if (validPages.includes(path) && path !== this.currentPage) {
         this.navigate(path, {}, true);
       }
@@ -206,7 +206,6 @@ const App = {
       case 'bestiary': this.renderBestiary(); break;
       case 'equipment': this.renderEquipment(); break;
       case 'gene-calc': this.renderGeneCalc(); break;
-      case 'forge': this.renderForge(); break;
       case 'map': this.renderMap(); break;
       case 'search-results': this.renderSearchResults(params.query); break;
     }
@@ -389,11 +388,6 @@ const App = {
             <span class="home-card-icon">🧬</span>
             <h3>${this.t('home.card_genes')}</h3>
             <p>${this.t('home.card_genes_desc')}</p>
-          </div>
-          <div class="home-card home-card--forge" data-goto="forge">
-            <span class="home-card-icon">🔨</span>
-            <h3>${this.t('home.card_forge')}</h3>
-            <p>${this.t('home.card_forge_desc')}</p>
           </div>
           <div class="home-card home-card--map" data-goto="map">
             <span class="home-card-icon">🗺️</span>
@@ -666,7 +660,7 @@ const App = {
   },
 
   // Stats to hide from equipment display (internal/hash data)
-  _hiddenStats: new Set(['element', 'element_resist', 'melody', 'partner_melody', 'skills']),
+  _hiddenStats: new Set(['element', 'element_resist', 'melody', 'partner_melody', 'skills', 'levels', 'sort_id', 'max_level']),
 
   // Horn melody hash → bilingual name/description lookup
   _melodyLookup: {
@@ -796,8 +790,32 @@ const App = {
       const skills = (stats.skills || []).map((s) => `<li>${s}</li>`).join('');
       const mats = (e.materials || []).map((m) => `<li>${m}</li>`).join('');
 
+      // Level upgrade table
+      const levels = stats.levels || [];
+      const isWeapon = e.type !== 'armor';
+      let upgradeHtml = '';
+      if (levels.length > 0) {
+        const atkLabel = de ? 'Angriff' : 'Attack';
+        const defLabel = de ? 'Verteidigung' : 'Defense';
+        const lvlLabel = de ? 'Stufe' : 'Level';
+        const rows = levels.map(l => {
+          const lvl = l.level + 1;
+          const atkBar = isWeapon ? `<td><div class="upgrade-bar-wrap"><div class="upgrade-bar upgrade-bar--atk" style="width:${Math.min(l.attack / 2.8, 100)}%"></div><span>${l.attack}</span></div></td>` : '';
+          const defBar = `<td><div class="upgrade-bar-wrap"><div class="upgrade-bar upgrade-bar--def" style="width:${Math.min((isWeapon ? l.defense * 20 : l.defense / 1.5), 100)}%"></div><span>${l.defense}</span></div></td>`;
+          return `<tr><td class="upgrade-lvl">Lv.${lvl}</td>${atkBar}${defBar}</tr>`;
+        }).join('');
+        upgradeHtml = `
+          <div class="detail-section">
+            <h4>${de ? 'Upgrade-Stufen' : 'Upgrade Levels'}</h4>
+            <table class="upgrade-table">
+              <thead><tr><th>${lvlLabel}</th>${isWeapon ? `<th>${atkLabel}</th>` : ''}<th>${defLabel}</th></tr></thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>`;
+      }
+
       this.openModal(
-        `<h2>${e.name} ${this.rarityStars(e.rarity)}</h2>
+        `<h2>${e.name}</h2>
          <span class="tag tag-${this._equipTypeTag(e.type)}" style="margin-bottom:0.5rem;display:inline-block">${this.te('equip_types', e.type)}</span>${elemHtml}`,
         `<div class="detail-section">
           <h4>${this.t('equipment.stats')}</h4>
@@ -806,6 +824,7 @@ const App = {
           ${skills ? `<p style="margin-top:0.5rem"><strong>Skills:</strong></p><ul class="materials-list">${skills}</ul>` : ''}
           ${e.type === 'horn' ? this._melodySection(stats) : ''}
         </div>
+        ${upgradeHtml}
         ${mats ? `<div class="detail-section">
           <h4>${this.t('equipment.materials')}</h4>
           <ul class="materials-list">${mats}</ul>
@@ -892,127 +911,6 @@ const App = {
     'Ratha V', 'Plessie', 'Gravy', 'Dee', 'Sereg', 'Gnocchi', 'Angie',
     'Chirpy', 'Kagachi', 'Fawn', 'Lenox', 'Legia', 'Golma', 'Großpoogie', 'Great Poogie',
   ]),
-
-  // --- FORGE ---
-
-  _forgeEquipment: [],
-  _forgeType: '',
-
-  async renderForge() {
-    const app = document.getElementById('app');
-    app.innerHTML = `
-      <div class="forge-page">
-        <h1 class="page-title">${this.t('forge.title')}</h1>
-        <div class="filter-bar">
-          <select id="forge-type">
-            <option value="">${this.t('equipment.filter_type')}: ${this.t('equipment.filter_all')}</option>
-            <option value="greatsword">${this.te('equip_types', 'greatsword')}</option>
-            <option value="longsword">${this.te('equip_types', 'longsword')}</option>
-            <option value="hammer">${this.te('equip_types', 'hammer')}</option>
-            <option value="horn">${this.te('equip_types', 'horn')}</option>
-            <option value="bow">${this.te('equip_types', 'bow')}</option>
-            <option value="gunlance">${this.te('equip_types', 'gunlance')}</option>
-            <option value="armor">${this.te('equip_types', 'armor')}</option>
-          </select>
-          <input type="text" id="forge-search" class="forge-search-input" placeholder="${this.t('forge.search')}" />
-        </div>
-        <div id="forge-list" class="forge-list"></div>
-      </div>`;
-
-    try {
-      this._forgeEquipment = await this.api('/api/equipment');
-    } catch (e) {
-      this._forgeEquipment = [];
-    }
-
-    this._renderForgeList();
-    this._bindForgeEvents();
-  },
-
-  _bindForgeEvents() {
-    document.getElementById('forge-type')?.addEventListener('change', (e) => {
-      this._forgeType = e.target.value;
-      this._renderForgeList();
-    });
-    document.getElementById('forge-search')?.addEventListener('input', () => {
-      this._renderForgeList();
-    });
-  },
-
-  _renderForgeList() {
-    const search = (document.getElementById('forge-search')?.value || '').toLowerCase().trim();
-    const typeFilter = this._forgeType;
-
-    let items = this._forgeEquipment.filter(e => {
-      if (!e.stats?.levels) return false;
-      if (typeFilter && e.type !== typeFilter) return false;
-      if (search && !e.name.toLowerCase().includes(search)) return false;
-      return true;
-    });
-
-    // Sort by type, then name
-    items.sort((a, b) => a.type.localeCompare(b.type) || a.name.localeCompare(b.name));
-
-    const list = document.getElementById('forge-list');
-    if (!items.length) {
-      list.innerHTML = `<div class="empty-state">${this.t('forge.no_results')}</div>`;
-      return;
-    }
-
-    list.innerHTML = items.map(eq => {
-      const levels = eq.stats.levels || [];
-      const isWeapon = eq.type !== 'armor';
-      const typeIcon = this._forgeTypeIcon(eq.type);
-      const elClass = this.elementClass(eq.stats?.element);
-      const elemTag = eq.stats?.element ? `<span class="tag tag-${elClass}">${this.te('elements', eq.stats.element)}</span>` : '';
-      const typeName = this.te('equip_types', eq.type);
-
-      // Level rows
-      const levelRows = levels.map(l => {
-        const lvl = l.level + 1;
-        const atkBar = isWeapon ? `<div class="forge-bar-wrap"><div class="forge-bar forge-bar--atk" style="width:${Math.min(l.attack / 2.8, 100)}%"></div><span>${l.attack}</span></div>` : '';
-        const defBar = `<div class="forge-bar-wrap"><div class="forge-bar forge-bar--def" style="width:${Math.min((isWeapon ? l.defense * 20 : l.defense / 1.5), 100)}%"></div><span>${l.defense}</span></div>`;
-        return `<tr>
-          <td class="forge-lvl">Lv.${lvl}</td>
-          ${isWeapon ? `<td>${atkBar}</td>` : ''}
-          <td>${defBar}</td>
-        </tr>`;
-      }).join('');
-
-      return `
-        <div class="forge-card">
-          <div class="forge-card-header">
-            <span class="forge-type-icon">${typeIcon}</span>
-            <div class="forge-card-info">
-              <div class="forge-card-name">${eq.name}</div>
-              <div class="forge-card-meta">
-                <span class="forge-type-label">${typeName}</span>
-                ${elemTag}
-                ${eq.stats?.status ? `<span class="tag tag-status">${this.te('status_effects', eq.stats.status)}</span>` : ''}
-              </div>
-            </div>
-          </div>
-          <table class="forge-table">
-            <thead>
-              <tr>
-                <th>${this.t('forge.level')}</th>
-                ${isWeapon ? `<th>${this.t('forge.attack')}</th>` : ''}
-                <th>${this.t('forge.defense')}</th>
-              </tr>
-            </thead>
-            <tbody>${levelRows}</tbody>
-          </table>
-        </div>`;
-    }).join('');
-  },
-
-  _forgeTypeIcon(type) {
-    const icons = {
-      greatsword: '\u2694\uFE0F', longsword: '\uD83D\uDDE1\uFE0F', hammer: '\uD83D\uDD28',
-      horn: '\uD83C\uDFBA', bow: '\uD83C\uDFF9', gunlance: '\uD83D\uDD2B', armor: '\uD83D\uDEE1\uFE0F'
-    };
-    return icons[type] || '\u2699\uFE0F';
-  },
 
   // --- MAP ---
 

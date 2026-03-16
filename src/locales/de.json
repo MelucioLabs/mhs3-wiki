@@ -6,7 +6,6 @@
     "bestiary": "📖 Bestiarum",
     "equipment": "⚔️ Ausrüstung",
     "gene_calc": "🧬 Gene-Rechner",
-    "forge": "🔨 Schmiede",
     "map": "🗺️ Karte",
     "search": "Suche"
   },
@@ -21,8 +20,6 @@
     "card_equipment_desc": "Waffen und Rüstungen mit Stats und Materialien",
     "card_genes": "Gene-Rechner",
     "card_genes_desc": "Plane dein Ritus der Überlieferung mit dem 3x3 Grid-Rechner",
-    "card_forge": "Schmiedeplaner",
-    "card_forge_desc": "Plane deine Waffen- und Rüstungs-Upgrades mit Stats pro Stufe",
     "card_map": "Interaktive Karte",
     "card_map_desc": "Erkunde die Welt von MHS3 und markiere deine gefundenen Monsties (wird noch massiv erweitert — Feedback willkommen!)"
   },
@@ -78,23 +75,6 @@
     "all_elements": "Alle Elemente",
     "no_type": "Ohne Typ",
     "instructions": "Klicke auf ein Feld und wähle ein Gen aus der Liste. Gleiche Typen oder Elemente in einer Reihe ergeben Boni."
-  },
-  "forge": {
-    "title": "Schmiedeplaner",
-    "subtitle": "Upgrade-Stats pro Stufe für alle Waffen und Rüstungen",
-    "all_types": "Alle Typen",
-    "greatsword": "Großschwert",
-    "longsword": "Langschwert",
-    "hammer": "Hammer",
-    "horn": "Jagdhorn",
-    "bow": "Bogen",
-    "gunlance": "Kanonenlanze",
-    "armor": "Rüstung",
-    "search": "Ausrüstung suchen...",
-    "level": "Stufe",
-    "attack": "Angriff",
-    "defense": "Verteidigung",
-    "no_results": "Keine Ausrüstung mit Upgrade-Daten gefunden."
   },
   "search": {
     "title": "Suche",
