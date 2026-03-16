@@ -903,19 +903,18 @@ const App = {
     app.innerHTML = `
       <div class="forge-page">
         <h1 class="page-title">${this.t('forge.title')}</h1>
-        <p class="page-subtitle">${this.t('forge.subtitle')}</p>
-        <div class="forge-filters">
-          <select id="forge-type" class="gene-filter-select">
-            <option value="">${this.t('forge.all_types')}</option>
-            <option value="greatsword">${this.t('forge.greatsword')}</option>
-            <option value="longsword">${this.t('forge.longsword')}</option>
-            <option value="hammer">${this.t('forge.hammer')}</option>
-            <option value="horn">${this.t('forge.horn')}</option>
-            <option value="bow">${this.t('forge.bow')}</option>
-            <option value="gunlance">${this.t('forge.gunlance')}</option>
-            <option value="armor">${this.t('forge.armor')}</option>
+        <div class="filter-bar">
+          <select id="forge-type">
+            <option value="">${this.t('equipment.filter_type')}: ${this.t('equipment.filter_all')}</option>
+            <option value="greatsword">${this.te('equip_types', 'greatsword')}</option>
+            <option value="longsword">${this.te('equip_types', 'longsword')}</option>
+            <option value="hammer">${this.te('equip_types', 'hammer')}</option>
+            <option value="horn">${this.te('equip_types', 'horn')}</option>
+            <option value="bow">${this.te('equip_types', 'bow')}</option>
+            <option value="gunlance">${this.te('equip_types', 'gunlance')}</option>
+            <option value="armor">${this.te('equip_types', 'armor')}</option>
           </select>
-          <input type="text" id="forge-search" class="gene-search-input" placeholder="${this.t('forge.search')}" />
+          <input type="text" id="forge-search" class="forge-search-input" placeholder="${this.t('forge.search')}" />
         </div>
         <div id="forge-list" class="forge-list"></div>
       </div>`;
@@ -966,7 +965,7 @@ const App = {
       const typeIcon = this._forgeTypeIcon(eq.type);
       const elClass = this.elementClass(eq.stats?.element);
       const elemTag = eq.stats?.element ? `<span class="tag tag-${elClass}">${this.te('elements', eq.stats.element)}</span>` : '';
-      const rarityStars = '★'.repeat(eq.rarity || 1);
+      const typeName = this.te('equip_types', eq.type);
 
       // Level rows
       const levelRows = levels.map(l => {
@@ -987,7 +986,7 @@ const App = {
             <div class="forge-card-info">
               <div class="forge-card-name">${eq.name}</div>
               <div class="forge-card-meta">
-                <span class="forge-rarity">${rarityStars}</span>
+                <span class="forge-type-label">${typeName}</span>
                 ${elemTag}
                 ${eq.stats?.status ? `<span class="tag tag-status">${this.te('status_effects', eq.stats.status)}</span>` : ''}
               </div>

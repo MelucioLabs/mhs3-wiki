@@ -942,13 +942,19 @@ body {
 
 /* Forge Page */
 .forge-page { max-width: 1200px; margin: 0 auto; }
-.forge-filters {
-  display: flex;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+.forge-search-input {
+  background: var(--bg-card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  outline: none;
+  flex: 1;
+  min-width: 150px;
 }
-.forge-filters .gene-filter-select { flex: 0 0 200px; }
-.forge-filters .gene-search-input { flex: 1; margin-bottom: 0; }
+.forge-search-input:focus { border-color: var(--accent); }
+.forge-search-input::placeholder { color: var(--text-muted); }
 
 .forge-list {
   display: grid;
@@ -973,7 +979,7 @@ body {
 .forge-type-icon { font-size: 1.5rem; }
 .forge-card-name { font-weight: 600; font-size: 0.95rem; }
 .forge-card-meta { display: flex; gap: 0.35rem; align-items: center; margin-top: 0.15rem; }
-.forge-rarity { color: var(--accent); font-size: 0.8rem; }
+.forge-type-label { color: var(--text-muted); font-size: 0.8rem; }
 
 .forge-table {
   width: 100%;
