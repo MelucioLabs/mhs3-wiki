@@ -334,6 +334,19 @@ body {
   outline: none;
 }
 .filter-bar select:focus { border-color: var(--accent); }
+.equip-search-input {
+  background: var(--bg-card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  outline: none;
+  flex: 1;
+  min-width: 120px;
+}
+.equip-search-input:focus { border-color: var(--accent); }
+.equip-search-input::placeholder { color: var(--text-muted); }
 
 /* Data Cards (list items) */
 .card-list {

@@ -611,7 +611,10 @@ const App = {
     }
   },
 
+  _allEquipment: [],
+
   _renderEquipList(equip, filters) {
+    this._allEquipment = equip;
     const app = document.getElementById('app');
     const elementOptions = (filters.elements || []).map((e) => {
       const label = e === 'non_elemental' ? this.te('elements', 'none') : this.te('elements', e);
@@ -628,29 +631,29 @@ const App = {
           <option value="">${this.t('monsties.filter_element')}: ${this.t('equipment.filter_all')}</option>
           ${elementOptions}
         </select>
-        <select id="filter-rarity">
-          <option value="">${this.t('equipment.filter_rarity')}: ${this.t('equipment.filter_all')}</option>
-          ${filters.rarities.map((r) => `<option value="${r}">${'\u2605'.repeat(r)}</option>`).join('')}
-        </select>
+        <input type="text" id="equip-search" class="equip-search-input" placeholder="${this.t('search.placeholder')}" />
       </div>
       <div class="card-list" id="equip-list">
         ${this._equipCards(equip)}
       </div>`;
 
-    const reload = async () => {
-      const params = new URLSearchParams();
-      const t = document.getElementById('filter-type').value;
-      const el = document.getElementById('filter-element').value;
-      const r = document.getElementById('filter-rarity').value;
-      if (t) params.set('type', t);
-      if (el) params.set('element', el);
-      if (r) params.set('rarity', r);
-      const data = await this.api(`/api/equipment?${params}`);
-      document.getElementById('equip-list').innerHTML = this._equipCards(data);
+    const filterEquip = () => {
+      const typeVal = document.getElementById('filter-type').value;
+      const elemVal = document.getElementById('filter-element').value;
+      const search = (document.getElementById('equip-search').value || '').toLowerCase().trim();
+      let filtered = this._allEquipment;
+      if (typeVal) filtered = filtered.filter(e => e.type === typeVal);
+      if (elemVal) {
+        if (elemVal === 'non_elemental') filtered = filtered.filter(e => !e.stats?.element);
+        else filtered = filtered.filter(e => e.stats?.element === elemVal);
+      }
+      if (search) filtered = filtered.filter(e => e.name.toLowerCase().includes(search));
+      document.getElementById('equip-list').innerHTML = this._equipCards(filtered);
       this._bindEquipClicks();
     };
 
-    app.querySelectorAll('select').forEach((s) => s.addEventListener('change', reload));
+    app.querySelectorAll('select').forEach((s) => s.addEventListener('change', filterEquip));
+    document.getElementById('equip-search').addEventListener('input', filterEquip);
     this._bindEquipClicks();
   },
 
@@ -720,7 +723,7 @@ const App = {
         : '';
       return `
         <div class="data-card" data-equip-id="${e.id}">
-          <h3>${e.name} ${this.rarityStars(e.rarity)}</h3>
+          <h3>${e.name}</h3>
           <div class="tags">
             <span class="tag tag-${this._equipTypeTag(e.type)}">${this.te('equip_types', e.type)}</span>
             ${elemTag}
