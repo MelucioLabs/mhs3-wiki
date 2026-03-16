@@ -940,6 +940,78 @@ body {
   font-size: 0.9rem;
 }
 
+/* Forge Page */
+.forge-page { max-width: 1200px; margin: 0 auto; }
+.forge-filters {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.forge-filters .gene-filter-select { flex: 0 0 200px; }
+.forge-filters .gene-search-input { flex: 1; margin-bottom: 0; }
+
+.forge-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1rem;
+}
+.forge-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.forge-card:hover { border-color: var(--accent); }
+.forge-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.forge-type-icon { font-size: 1.5rem; }
+.forge-card-name { font-weight: 600; font-size: 0.95rem; }
+.forge-card-meta { display: flex; gap: 0.35rem; align-items: center; margin-top: 0.15rem; }
+.forge-rarity { color: var(--accent); font-size: 0.8rem; }
+
+.forge-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.forge-table th {
+  text-align: left;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.forge-table td { padding: 0.35rem 0.75rem; }
+.forge-table tbody tr { border-top: 1px solid var(--border); }
+.forge-table tbody tr:hover { background: rgba(255,255,255,0.03); }
+.forge-lvl { font-weight: 600; color: var(--accent); width: 50px; }
+
+.forge-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.forge-bar {
+  height: 6px;
+  border-radius: 3px;
+  min-width: 4px;
+  transition: width 0.3s;
+}
+.forge-bar--atk { background: var(--fire); }
+.forge-bar--def { background: var(--water); }
+.forge-bar-wrap span {
+  font-size: 0.8rem;
+  font-weight: 500;
+  min-width: 2rem;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .nav { display: none; }

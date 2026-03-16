@@ -81,8 +81,20 @@
   },
   "forge": {
     "title": "Schmiedeplaner",
-    "coming_soon": "Kommt bald!",
-    "coming_soon_desc": "Der Schmiedeplaner wird derzeit entwickelt. Hier kannst du bald Waffen- und Rüstungs-Upgrades planen und Stats pro Stufe einsehen."
+    "subtitle": "Upgrade-Stats pro Stufe für alle Waffen und Rüstungen",
+    "all_types": "Alle Typen",
+    "greatsword": "Großschwert",
+    "longsword": "Langschwert",
+    "hammer": "Hammer",
+    "horn": "Jagdhorn",
+    "bow": "Bogen",
+    "gunlance": "Kanonenlanze",
+    "armor": "Rüstung",
+    "search": "Ausrüstung suchen...",
+    "level": "Stufe",
+    "attack": "Angriff",
+    "defense": "Verteidigung",
+    "no_results": "Keine Ausrüstung mit Upgrade-Daten gefunden."
   },
   "search": {
     "title": "Suche",

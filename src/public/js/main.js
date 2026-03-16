@@ -893,18 +893,126 @@ const App = {
     'Chirpy', 'Kagachi', 'Fawn', 'Lenox', 'Legia', 'Golma', 'Großpoogie', 'Great Poogie',
   ]),
 
-  // --- FORGE (Placeholder) ---
+  // --- FORGE ---
 
-  renderForge() {
-    document.getElementById('app').innerHTML = `
+  _forgeEquipment: [],
+  _forgeType: '',
+
+  async renderForge() {
+    const app = document.getElementById('app');
+    app.innerHTML = `
       <div class="forge-page">
-        <h2 class="page-title">${this.t('forge.title')}</h2>
-        <div class="map-placeholder">
-          <span class="map-placeholder-icon">🔨</span>
-          <h3>${this.t('forge.coming_soon')}</h3>
-          <p>${this.t('forge.coming_soon_desc')}</p>
+        <h1 class="page-title">${this.t('forge.title')}</h1>
+        <p class="page-subtitle">${this.t('forge.subtitle')}</p>
+        <div class="forge-filters">
+          <select id="forge-type" class="gene-filter-select">
+            <option value="">${this.t('forge.all_types')}</option>
+            <option value="greatsword">${this.t('forge.greatsword')}</option>
+            <option value="longsword">${this.t('forge.longsword')}</option>
+            <option value="hammer">${this.t('forge.hammer')}</option>
+            <option value="horn">${this.t('forge.horn')}</option>
+            <option value="bow">${this.t('forge.bow')}</option>
+            <option value="gunlance">${this.t('forge.gunlance')}</option>
+            <option value="armor">${this.t('forge.armor')}</option>
+          </select>
+          <input type="text" id="forge-search" class="gene-search-input" placeholder="${this.t('forge.search')}" />
         </div>
+        <div id="forge-list" class="forge-list"></div>
       </div>`;
+
+    try {
+      this._forgeEquipment = await this.api('/api/equipment');
+    } catch (e) {
+      this._forgeEquipment = [];
+    }
+
+    this._renderForgeList();
+    this._bindForgeEvents();
+  },
+
+  _bindForgeEvents() {
+    document.getElementById('forge-type')?.addEventListener('change', (e) => {
+      this._forgeType = e.target.value;
+      this._renderForgeList();
+    });
+    document.getElementById('forge-search')?.addEventListener('input', () => {
+      this._renderForgeList();
+    });
+  },
+
+  _renderForgeList() {
+    const search = (document.getElementById('forge-search')?.value || '').toLowerCase().trim();
+    const typeFilter = this._forgeType;
+
+    let items = this._forgeEquipment.filter(e => {
+      if (!e.stats?.levels) return false;
+      if (typeFilter && e.type !== typeFilter) return false;
+      if (search && !e.name.toLowerCase().includes(search)) return false;
+      return true;
+    });
+
+    // Sort by type, then name
+    items.sort((a, b) => a.type.localeCompare(b.type) || a.name.localeCompare(b.name));
+
+    const list = document.getElementById('forge-list');
+    if (!items.length) {
+      list.innerHTML = `<div class="empty-state">${this.t('forge.no_results')}</div>`;
+      return;
+    }
+
+    list.innerHTML = items.map(eq => {
+      const levels = eq.stats.levels || [];
+      const isWeapon = eq.type !== 'armor';
+      const typeIcon = this._forgeTypeIcon(eq.type);
+      const elClass = this.elementClass(eq.stats?.element);
+      const elemTag = eq.stats?.element ? `<span class="tag tag-${elClass}">${this.te('elements', eq.stats.element)}</span>` : '';
+      const rarityStars = '★'.repeat(eq.rarity || 1);
+
+      // Level rows
+      const levelRows = levels.map(l => {
+        const lvl = l.level + 1;
+        const atkBar = isWeapon ? `<div class="forge-bar-wrap"><div class="forge-bar forge-bar--atk" style="width:${Math.min(l.attack / 2.8, 100)}%"></div><span>${l.attack}</span></div>` : '';
+        const defBar = `<div class="forge-bar-wrap"><div class="forge-bar forge-bar--def" style="width:${Math.min((isWeapon ? l.defense * 20 : l.defense / 1.5), 100)}%"></div><span>${l.defense}</span></div>`;
+        return `<tr>
+          <td class="forge-lvl">Lv.${lvl}</td>
+          ${isWeapon ? `<td>${atkBar}</td>` : ''}
+          <td>${defBar}</td>
+        </tr>`;
+      }).join('');
+
+      return `
+        <div class="forge-card">
+          <div class="forge-card-header">
+            <span class="forge-type-icon">${typeIcon}</span>
+            <div class="forge-card-info">
+              <div class="forge-card-name">${eq.name}</div>
+              <div class="forge-card-meta">
+                <span class="forge-rarity">${rarityStars}</span>
+                ${elemTag}
+                ${eq.stats?.status ? `<span class="tag tag-status">${this.te('status_effects', eq.stats.status)}</span>` : ''}
+              </div>
+            </div>
+          </div>
+          <table class="forge-table">
+            <thead>
+              <tr>
+                <th>${this.t('forge.level')}</th>
+                ${isWeapon ? `<th>${this.t('forge.attack')}</th>` : ''}
+                <th>${this.t('forge.defense')}</th>
+              </tr>
+            </thead>
+            <tbody>${levelRows}</tbody>
+          </table>
+        </div>`;
+    }).join('');
+  },
+
+  _forgeTypeIcon(type) {
+    const icons = {
+      greatsword: '\u2694\uFE0F', longsword: '\uD83D\uDDE1\uFE0F', hammer: '\uD83D\uDD28',
+      horn: '\uD83C\uDFBA', bow: '\uD83C\uDFF9', gunlance: '\uD83D\uDD2B', armor: '\uD83D\uDEE1\uFE0F'
+    };
+    return icons[type] || '\u2699\uFE0F';
   },
 
   // --- MAP ---

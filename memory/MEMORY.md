@@ -31,18 +31,19 @@ Fan-Wiki web app for "Monster Hunter Stories 3: Twisted Reflection". Docker-depl
   - Element filter + tags
   - **Horn melodies resolved**: 27 melodies mapped (hash→bilingual name), shown on cards + modals
   - Materials empty (recipe data not found yet)
-- Gene Calculator with 3x3 Bingo-Bonus + search filter
+- Gene Calculator with 3x3 Bingo-Bonus, type/element filter dropdowns, drag & drop, sticky header
 - Full-text search (PostgreSQL GIN indexes, DE+EN)
 - **Landing Page**: Hero gradient, 3+3 card grid (6 cards) with icons, colored accents
-- **Forge Planner**: Placeholder page ("Kommt bald!"), route `/forge`, nav link 🔨
+- **Forge Planner**: Funktionale Seite mit Typ-Filter, Suche, per-Level Attack/Defense Bars für alle 297 Equipment
 - **Nav-Tabs** with emoji icons (🐉📖⚔️🧬🔨🗺️)
 - **Interaktive Karten** (Leaflet.js CRS.Simple):
   - Azuria: 3 Sub-Maps, Canalta: 1 Map, Tarkuan/Serathis: Platzhalter
-- **Auto Cache-Busting**: Git SHA timestamp via Docker ARG BUILD_VERSION in CI/CD
+- **Auto Cache-Busting**: Docker ARG BUILD_VERSION (Timestamp) in CI/CD — **immer `--build-arg BUILD_VERSION=$(date +%Y%m%d%H%M)` beim Build!**
 - **Auto-Migration**: `src/database/migrate.js` runs on startup, seeds genes/equipment if missing
 - Docker running on localhost:3000
 - **Live**: https://mhs3.meluciolabs.de
-- CI/CD: GitHub Actions → SSH Pi via Tailscale (push to main)
+- CI/CD: GitHub Actions → SSH Pi via Tailscale (push to main) ✅ **funktioniert einwandfrei**
+- **Pi Docker**: `DOCKER_API_VERSION=1.41` nötig (Engine 20.10 + Compose v5.1.0)
 - Remote: https://github.com/MelucioLabs/mhs3-wiki
 - **Branch-Mapping**: Lokal `master` → Remote `main` (`git push origin master:main`)
 
@@ -88,13 +89,16 @@ Fan-Wiki web app for "Monster Hunter Stories 3: Twisted Reflection". Docker-depl
 
 ## Pending Tasks (Priority Order)
 1. **Multi-Language Support**: FR, ES, IT, JP (Schedule erstellt, Plan in MULTILANG_PLAN.md)
-2. **Equipment Upgrade Pipeline**: Need weaponupgradedata/armorupgradedata from game files for per-level stats. User wants forge calculator showing stats per upgrade level (+ materials if available).
+2. **Equipment Upgrade Verifikation**: Per-Level Werte aus Binärdaten müssen gegen In-Game-Daten verifiziert werden. Materials noch leer.
 3. **Texture Extraction**: Monster icons from pak files. Noesis installed for `.tex` → `.png`
 4. **Map-Bilder Tarkuan/Serathis**: Game-Dateien enthalten KEINE 2D-Karten (live-gerendert aus 3D-Daten). Braucht Game8-Screenshots oder eigene In-Game-Screenshots (wie bei Azuria/Canalta)
 
 ## Erledigte Meilensteine
 - ✅ **Gene Element/Type VOLLSTÄNDIG** (15.03.2026): Alle 115 Gene haben Element, 73 haben gene_type (42 rainbow=NULL korrekt). Gelöst durch binäres Parsing von `genedata_v_09_00.user.3` — Einträge korrespondieren 1:1 mit GeneDef.ID sequential values. Hash-Mapping: `-1361419264`=speed, `-259062144`=power, `1478498560`=technical, `1008397120`=rainbow/null.
 - ✅ **Map-Bilder Azuria** transparent ersetzt (15.03.2026): Ingame-Screenshots mit transparentem Hintergrund statt Game8-Screenshots
+- ✅ **Gene Calculator Filter & Drag&Drop** (15.03.2026): Typ/Element-Dropdowns, Drag&Drop von Genen ins Grid, sticky Header, 2-Zeilen-Beschreibungen
+- ✅ **CI/CD Deploy-Fix** (15.03.2026): `DOCKER_API_VERSION=1.41` + `BUILD_VERSION` im deploy.yml, läuft jetzt sauber durch
+- ✅ **Equipment Upgrade Pipeline** (16.03.2026): Binäres Parsing von `*param.user.3` Dateien (Stride 68, typ-spezifische Hashes). Per-Level Attack/Defense für alle 297 Equipment. Forge-Seite implementiert.
 
 ## Legal Note
 Game data in GitHub repo — user should consider making repo private or excluding raw game data files from version control. See issues.md for details.

@@ -109,6 +109,44 @@ async function migrate(pool) {
     console.log(`[migrate] Equipment: ${equipCount} - OK`);
   }
 
+  // Check equipment sort_id (needed for upgrade data matching)
+  const equipWithSortId = (await pool.query("SELECT COUNT(*)::int AS c FROM equipment WHERE stats ? 'sort_id'")).rows[0].c;
+  if (equipWithSortId < 200) {
+    console.log(`[migrate] Equipment sort_id: only ${equipWithSortId} have sort_id, applying from equipSortIds...`);
+    const sortIdPath = path.join(__dirname, 'equip_sort_ids.sql');
+    if (fs.existsSync(sortIdPath)) {
+      const sql = fs.readFileSync(sortIdPath, 'utf8');
+      const stmts = sql.split('\n').filter(l => l.startsWith('UPDATE'));
+      let updated = 0;
+      for (const stmt of stmts) {
+        try { const r = await pool.query(stmt); if (r.rowCount > 0) updated++; } catch (e) { /* skip */ }
+      }
+      console.log(`[migrate] Equipment sort_ids applied: ${updated}`);
+    }
+  } else {
+    console.log(`[migrate] Equipment sort_id: ${equipWithSortId} - OK`);
+  }
+
+  // Check equipment upgrade data (per-level stats)
+  const equipWithLevels = (await pool.query("SELECT COUNT(*)::int AS c FROM equipment WHERE stats ? 'levels'")).rows[0].c;
+  if (equipWithLevels < 200) {
+    console.log(`[migrate] Equipment upgrade data: only ${equipWithLevels} have levels, applying...`);
+    const upgradeSeedPath = path.join(__dirname, 'upgrade_seed.sql');
+    if (fs.existsSync(upgradeSeedPath)) {
+      const sql = fs.readFileSync(upgradeSeedPath, 'utf8');
+      const stmts = sql.split('\n').filter(l => l.startsWith('UPDATE'));
+      let updated = 0;
+      for (const stmt of stmts) {
+        try { const r = await pool.query(stmt); if (r.rowCount > 0) updated++; } catch (e) { /* skip */ }
+      }
+      console.log(`[migrate] Equipment upgrade data applied: ${updated}`);
+    } else {
+      console.log('[migrate] upgrade_seed.sql not found, skipping');
+    }
+  } else {
+    console.log(`[migrate] Equipment upgrade data: ${equipWithLevels} - OK`);
+  }
+
   console.log('[migrate] Done.');
 }
 

@@ -81,8 +81,20 @@
   },
   "forge": {
     "title": "Forge Planner",
-    "coming_soon": "Coming Soon!",
-    "coming_soon_desc": "The Forge Planner is currently in development. Soon you'll be able to plan weapon and armor upgrades and view stats per level."
+    "subtitle": "Per-level upgrade stats for all weapons and armor",
+    "all_types": "All Types",
+    "greatsword": "Great Sword",
+    "longsword": "Long Sword",
+    "hammer": "Hammer",
+    "horn": "Hunting Horn",
+    "bow": "Bow",
+    "gunlance": "Gunlance",
+    "armor": "Armor",
+    "search": "Search equipment...",
+    "level": "Level",
+    "attack": "Attack",
+    "defense": "Defense",
+    "no_results": "No equipment with upgrade data found."
   },
   "search": {
     "title": "Search",
