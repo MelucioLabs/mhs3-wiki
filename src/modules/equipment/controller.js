@@ -26,7 +26,7 @@ async function getAll(req, res) {
       }
     }
 
-    sql += ` ORDER BY type, (stats->>'sort_id')::int NULLS LAST, name_en`;
+    sql += ` ORDER BY name_en`;
     const result = await query(sql, params);
     res.json(result.rows);
   } catch (err) {
