@@ -1,0 +1,169 @@
+{
+  "site_title": "MHS3 Wiki - モンスターハンターストーリーズ3",
+  "nav": {
+    "home": "ホーム",
+    "monsties": "🐉 オトモン",
+    "bestiary": "📖 モンスター図鑑",
+    "equipment": "⚔️ 装備",
+    "gene_calc": "🧬 遺伝子計算機",
+    "forge": "🔨 鍛冶",
+    "map": "🗺️ マップ",
+    "search": "検索"
+  },
+  "home": {
+    "welcome": "MHS3 Wikiへようこそ",
+    "subtitle": "モンスターハンターストーリーズ3：捩じれた鏡の百科事典",
+    "card_monsties": "オトモンデータベース",
+    "card_monsties_desc": "全オトモンの属性、攻撃タイプ、ライドアクション",
+    "card_bestiary": "モンスター図鑑",
+    "card_bestiary_desc": "全モンスターの弱点、生息地、説明",
+    "card_equipment": "装備",
+    "card_equipment_desc": "武器と防具のステータスと素材",
+    "card_genes": "遺伝子計算機",
+    "card_genes_desc": "3x3グリッドで絆の儀を計画しよう",
+    "card_forge": "鍛冶プランナー",
+    "card_forge_desc": "武器・防具の強化ステータスをレベル別に確認",
+    "card_map": "インタラクティブマップ",
+    "card_map_desc": "MHS3の世界を探索してオトモンを記録しよう（大幅改善予定！）"
+  },
+  "monsties": {
+    "title": "オトモンデータベース",
+    "filter_element": "属性",
+    "filter_attack": "攻撃タイプ",
+    "filter_ride": "ライドアクション",
+    "filter_all": "すべて",
+    "element": "属性",
+    "attack_type": "攻撃タイプ",
+    "ride_action": "ライドアクション",
+    "habitat": "生息地",
+    "no_results": "オトモンが見つかりません。"
+  },
+  "bestiary": {
+    "title": "モンスター図鑑",
+    "filter_weakness": "弱点",
+    "filter_habitat": "生息地",
+    "filter_species": "種族",
+    "filter_all": "すべて",
+    "weakness": "弱点",
+    "habitat": "生息地",
+    "species": "種族",
+    "no_results": "モンスターが見つかりません。"
+  },
+  "equipment": {
+    "title": "装備",
+    "filter_type": "タイプ",
+    "filter_rarity": "レア度",
+    "filter_all": "すべて",
+    "type_weapon": "武器",
+    "type_armor": "防具",
+    "stats": "ステータス",
+    "materials": "素材",
+    "no_results": "装備が見つかりません。"
+  },
+  "gene_calc": {
+    "title": "遺伝子計算機",
+    "subtitle": "絆の儀プランナー",
+    "select_gene": "遺伝子を選択",
+    "clear_grid": "グリッドをクリア",
+    "bingo_bonus": "ビンゴボーナス",
+    "row": "行",
+    "column": "列",
+    "diagonal": "斜め",
+    "no_bonus": "ボーナスなし",
+    "type_match": "タイプボーナス",
+    "element_match": "属性ボーナス",
+    "both_match": "ダブルボーナス",
+    "search_gene": "遺伝子を検索...",
+    "all_types": "全タイプ",
+    "all_elements": "全属性",
+    "no_type": "タイプなし",
+    "instructions": "マスをクリックして遺伝子を選択してください。同じタイプや属性が揃うとボーナスが発動します。"
+  },
+  "forge": {
+    "title": "鍛冶プランナー",
+    "subtitle": "全武器・防具のレベル別強化ステータス",
+    "all_types": "全タイプ",
+    "greatsword": "大剣",
+    "longsword": "太刀",
+    "hammer": "ハンマー",
+    "horn": "狩猟笛",
+    "bow": "弓",
+    "gunlance": "ガンランス",
+    "armor": "防具",
+    "search": "装備を検索...",
+    "level": "レベル",
+    "attack": "攻撃力",
+    "defense": "防御力",
+    "no_results": "強化データのある装備が見つかりません。"
+  },
+  "search": {
+    "title": "検索",
+    "placeholder": "検索...",
+    "no_results": "結果が見つかりません。",
+    "results_for": "の検索結果",
+    "category_monstie": "オトモン",
+    "category_monster": "モンスター",
+    "category_equipment": "装備"
+  },
+  "footer": {
+    "project": "MHS3 Wiki &mdash; 非公式ファンプロジェクト by",
+    "disclaimer": "Capcom Co., Ltd.とは無関係です。",
+    "trademark": "モンスターハンターストーリーズ3：捩じれた鏡はCapcomの商標です"
+  },
+  "common": {
+    "loading": "読み込み中...",
+    "error": "エラーが発生しました。",
+    "back": "戻る",
+    "details": "詳細"
+  },
+  "enums": {
+    "elements": {
+      "fire": "火",
+      "water": "水",
+      "thunder": "雷",
+      "ice": "氷",
+      "dragon": "龍",
+      "none": "なし",
+      "non_elemental": "無属性"
+    },
+    "attack_types": {
+      "power": "力",
+      "technical": "技",
+      "speed": "速"
+    },
+    "ride_actions": {
+      "fly": "飛行",
+      "swim": "水中",
+      "jump": "ジャンプ",
+      "climb": "登攀"
+    },
+    "species": {
+      "flying_wyvern": "飛竜種",
+      "brute_wyvern": "牙竜種",
+      "elder_dragon": "古龍種",
+      "leviathan": "海竜種",
+      "fanged_wyvern": "牙竜種",
+      "fanged_beast": "牙獣種",
+      "bird_wyvern": "鳥竜種",
+      "temnoceran": "甲殻種",
+      "carapaceon": "甲殻種",
+      "amphibian": "両生種"
+    },
+    "status_effects": {
+      "poison": "毒",
+      "sleep": "睡眠",
+      "paralysis": "麻痺",
+      "blast": "爆破"
+    },
+    "equip_types": {
+      "weapon": "武器",
+      "armor": "防具",
+      "greatsword": "大剣",
+      "longsword": "太刀",
+      "hammer": "ハンマー",
+      "bow": "弓",
+      "horn": "狩猟笛",
+      "gunlance": "ガンランス"
+    }
+  }
+}

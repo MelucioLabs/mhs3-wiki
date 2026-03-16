@@ -1,4 +1,4 @@
-const SUPPORTED_LANGS = ['de', 'en'];
+const SUPPORTED_LANGS = ['de', 'en', 'fr', 'es', 'it', 'ja'];
 const DEFAULT_LANG = 'de';
 
 function i18nMiddleware(req, res, next) {

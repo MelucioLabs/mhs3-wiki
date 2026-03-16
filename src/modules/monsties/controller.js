@@ -5,8 +5,8 @@ async function getAll(req, res) {
     const { element, attack_type, ride_action } = req.query;
     const lang = req.lang;
 
-    let sql = `SELECT id, name_${lang} AS name, element, attack_type, ride_action,
-               habitat_${lang} AS habitat, description_${lang} AS description, image_url, created_at FROM monsties WHERE 1=1`;
+    let sql = `SELECT id, COALESCE(name_${lang}, name_en) AS name, element, attack_type, ride_action,
+               COALESCE(habitat_${lang}, habitat_en) AS habitat, COALESCE(description_${lang}, description_en) AS description, image_url, created_at FROM monsties WHERE 1=1`;
     const params = [];
 
     if (element) {
@@ -35,8 +35,8 @@ async function getById(req, res) {
   try {
     const lang = req.lang;
     const result = await query(
-      `SELECT id, name_${lang} AS name, element, attack_type, ride_action,
-       habitat_${lang} AS habitat, description_${lang} AS description, image_url, created_at FROM monsties WHERE id = $1`,
+      `SELECT id, COALESCE(name_${lang}, name_en) AS name, element, attack_type, ride_action,
+       COALESCE(habitat_${lang}, habitat_en) AS habitat, COALESCE(description_${lang}, description_en) AS description, image_url, created_at FROM monsties WHERE id = $1`,
       [req.params.id]
     );
     if (result.rows.length === 0) return res.status(404).json({ error: 'Monstie not found' });
@@ -52,8 +52,8 @@ async function getGenes(req, res) {
     const lang = req.lang;
     const { gene_type, element } = req.query;
 
-    let sql = `SELECT id, game_id, name_${lang} AS name, gene_type, element,
-               skill_name_${lang} AS skill_name, description_${lang} AS description FROM genes WHERE 1=1`;
+    let sql = `SELECT id, game_id, COALESCE(name_${lang}, name_en) AS name, gene_type, element,
+               COALESCE(skill_name_${lang}, skill_name_en) AS skill_name, COALESCE(description_${lang}, description_en) AS description FROM genes WHERE 1=1`;
     const params = [];
 
     if (gene_type) {
@@ -65,7 +65,7 @@ async function getGenes(req, res) {
       sql += ` AND element = $${params.length}`;
     }
 
-    sql += ` ORDER BY name_${lang}`;
+    sql += ` ORDER BY name_en`;
     const result = await query(sql, params);
     res.json(result.rows);
   } catch (err) {

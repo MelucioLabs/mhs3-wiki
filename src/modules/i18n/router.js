@@ -7,8 +7,8 @@ const localesDir = path.join(__dirname, '../../locales');
 
 router.get('/:lang', (req, res) => {
   const { lang } = req.params;
-  if (!['de', 'en'].includes(lang)) {
-    return res.status(400).json({ error: 'Unsupported language. Use "de" or "en".' });
+  if (!['de', 'en', 'fr', 'es', 'it', 'ja'].includes(lang)) {
+    return res.status(400).json({ error: 'Unsupported language.' });
   }
 
   const filePath = path.join(localesDir, `${lang}.json`);

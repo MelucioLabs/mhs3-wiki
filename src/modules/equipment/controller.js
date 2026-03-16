@@ -5,8 +5,8 @@ async function getAll(req, res) {
     const { type, rarity, element } = req.query;
     const lang = req.lang;
 
-    let sql = `SELECT id, name_${lang} AS name, type, rarity, stats, materials_${lang} AS materials,
-               description_${lang} AS description, created_at FROM equipment WHERE 1=1`;
+    let sql = `SELECT id, COALESCE(name_${lang}, name_en) AS name, type, rarity, stats, COALESCE(materials_${lang}, materials_en) AS materials,
+               COALESCE(description_${lang}, description_en) AS description, created_at FROM equipment WHERE 1=1`;
     const params = [];
 
     if (type) {
@@ -39,8 +39,8 @@ async function getById(req, res) {
   try {
     const lang = req.lang;
     const result = await query(
-      `SELECT id, name_${lang} AS name, type, rarity, stats, materials_${lang} AS materials,
-       description_${lang} AS description, created_at FROM equipment WHERE id = $1`,
+      `SELECT id, COALESCE(name_${lang}, name_en) AS name, type, rarity, stats, COALESCE(materials_${lang}, materials_en) AS materials,
+       COALESCE(description_${lang}, description_en) AS description, created_at FROM equipment WHERE id = $1`,
       [req.params.id]
     );
     if (result.rows.length === 0) return res.status(404).json({ error: 'Equipment not found' });

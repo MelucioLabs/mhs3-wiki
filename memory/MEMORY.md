@@ -7,7 +7,7 @@ Fan-Wiki web app for "Monster Hunter Stories 3: Twisted Reflection". Docker-depl
 - **Backend**: Node.js 20 / Express, PostgreSQL 16-alpine, pg pool
 - **Frontend**: Vanilla JS SPA, dark/light theme toggle, no framework
 - **Docker**: 3 services (app, postgres, pgadmin) via docker-compose
-- **i18n**: DE/EN bilingual, enum translation system
+- **i18n**: 6 Sprachen: DE/EN/FR/ES/IT/JA, COALESCE-Fallback auf EN
 
 ## Key Architecture Details → [architecture.md](architecture.md)
 ## File Map → [files.md](files.md)
@@ -22,20 +22,23 @@ Fan-Wiki web app for "Monster Hunter Stories 3: Twisted Reflection". Docker-depl
 - "Rite of Channeling" = "Ritus der Überlieferung" (DE)
 - Prefers datamining over web scraping for game data
 
-## Current State (15. März 2026, Nacht)
+## Current State (16. März 2026, aktualisiert)
 - **97 monsties** (84 base + 13 story monsties) with official DE/EN names
 - **98 bestiary entries** with bilingual habitats
 - **115 genes** from game data (bilingual names/descriptions, **alle 115 mit Element**, **73 mit gene_type** — 42 sind "rainbow"/NULL = korrekt)
 - **297 equipment** items (32 GS, 34 LS, 37 Hammer, 37 Horn, 37 Bow, 33 GL, 87 Armor)
   - Status effects translated (poison→Gift, sleep→Schlaf etc.)
-  - Element filter + tags
+  - Element filter + text search + type filter (client-side)
+  - Sorted alphabetically by name_en (default)
   - **Horn melodies resolved**: 27 melodies mapped (hash→bilingual name), shown on cards + modals
-  - Materials empty (recipe data not found yet)
+  - **Per-Level Upgrade Stats** in Equipment-Modals (Lv.1/2/3 Attack/Defense Bars)
+  - Materials empty — **Rezeptdaten nicht in Gamedateien** (`_Recipe` = 0 für alle, `_Rare` = 1 für alle)
+  - Rarity display removed (useless, all items = 1)
 - Gene Calculator with 3x3 Bingo-Bonus, type/element filter dropdowns, drag & drop, sticky header
 - Full-text search (PostgreSQL GIN indexes, DE+EN)
-- **Landing Page**: Hero gradient, 3+3 card grid (6 cards) with icons, colored accents
-- **Forge Planner**: Funktionale Seite mit Typ-Filter, Suche, per-Level Attack/Defense Bars für alle 297 Equipment
-- **Nav-Tabs** with emoji icons (🐉📖⚔️🧬🔨🗺️)
+- **Landing Page**: Hero gradient, 3+2 card grid (5 cards) with icons, colored accents
+- **Forge Planner ENTFERNT**: Upgrade-Daten stattdessen in Equipment-Modals integriert
+- **Nav-Tabs** with emoji icons (🐉📖⚔️🧬🗺️)
 - **Interaktive Karten** (Leaflet.js CRS.Simple):
   - Azuria: 3 Sub-Maps, Canalta: 1 Map, Tarkuan/Serathis: Platzhalter
 - **Auto Cache-Busting**: Docker ARG BUILD_VERSION (Timestamp) in CI/CD — **immer `--build-arg BUILD_VERSION=$(date +%Y%m%d%H%M)` beim Build!**
@@ -54,6 +57,9 @@ Fan-Wiki web app for "Monster Hunter Stories 3: Twisted Reflection". Docker-depl
 - **REE.Unpacker** — BOTH PAKs already fully extracted (re_chunk_000.pak + sub_000.pak)
   - 44,930 files in `natives/`, 81,299 in `__Unknown/`, 712 MSG files total
 - **RETool v0.230** installed at `tools/RETool/` (alternative extractor)
+- **TEX→PNG Pipeline**: `MHWs_Tex_Chopper` (GDeflate decompress) → `texconv.exe` (BC7→PNG). Tools in `tools/`
+  - Demo-Dateiliste: `tools/REE.Unpacker/Projects/MHS3_TR_STM_Demo.list` (57K Einträge, nur Demo-Content)
+  - Extrahierte TEX: `tools/tex_input/`, konvertierte PNGs: `tools/extracted_icons/`
 - Parsed MSG JSONs: `tools/parsed_output/msg/` (18 files total)
 - Equipment seed: `src/database/equipment_seed.sql` (auto-loaded via docker-entrypoint-initdb.d)
 
@@ -77,28 +83,42 @@ Fan-Wiki web app for "Monster Hunter Stories 3: Twisted Reflection". Docker-depl
 
 ## UI Features
 - **KHAI Color Palette**: Dark (#1A1A2E bg, #5CB85C accent, #5BC0DE secondary, #7C6AF5 purple) + Light (#f5f5f5 bg, #4CAF50 accent, #2196F3 secondary, #6355D0 purple)
-- **Language Dropdown**: Globe icon button → dropdown with SVG flags (DE/EN), green highlight for active
+- **Language Dropdown**: Globe icon button → dropdown mit SVG-Flaggen (DE/EN/FR/ES/IT/JA), grüner Marker für aktiv
 - **Theme Toggle**: Sun/Moon icon button, dark mode default, persistent via localStorage
 - **Mobile Landing**: 2-column grid with icon+title only (no description), 3×2 even layout
 - **Footer**: Bilingual (data-i18n with innerHTML for &mdash;)
 - **Cache-Busting**: `?v=6` lokal (Platzhalter), CI/CD ersetzt automatisch via Docker ARG BUILD_VERSION (Timestamp `YYYYMMDDHHmm`)
 - **All colors via CSS custom properties** — no hardcoded hex values in component styles
 
-## Scheduled Tasks
-- **mhs3-multilang**: Multi-Language Support (FR, ES, IT, JP) — manuell startbar über Claude Sidebar → "Scheduled". Details in `MULTILANG_PLAN.md`.
-
 ## Pending Tasks (Priority Order)
-1. **Multi-Language Support**: FR, ES, IT, JP (Schedule erstellt, Plan in MULTILANG_PLAN.md)
-2. **Equipment Upgrade Verifikation**: Per-Level Werte aus Binärdaten müssen gegen In-Game-Daten verifiziert werden. Materials noch leer.
-3. **Texture Extraction**: Monster icons from pak files. Noesis installed for `.tex` → `.png`
-4. **Map-Bilder Tarkuan/Serathis**: Game-Dateien enthalten KEINE 2D-Karten (live-gerendert aus 3D-Daten). Braucht Game8-Screenshots oder eigene In-Game-Screenshots (wie bei Azuria/Canalta)
+1. **Karten: NPCs & POIs**: NPCs, Händler, Quest-Geber etc. als Marker auf den interaktiven Karten hinterlegen
+2. **Monstie-Habitate auf Karten**: Habitat-Daten (bereits in DB) auf der Karte anzeigen / mit Monstie-Liste verknüpfen (User will Ingame-Sidebar-Stil, Screenshot kommt später)
+3. **Equipment Upgrade Verifikation**: Per-Level Werte aus Binärdaten müssen gegen In-Game-Daten verifiziert werden.
+4. **Map-Bilder Tarkuan/Serathis**: Game-Dateien enthalten KEINE 2D-Karten (live-gerendert aus 3D-Daten). Braucht In-Game-Screenshots
+
+## Multilang-Architektur (implementiert 16.03.2026)
+- **6 Sprachen**: DE, EN, FR, ES, IT, JA — Whitelist in `middleware.js` + `router.js`
+- **DB-Schema**: Neue Spalten `name_fr/es/it/ja`, `description_fr/es/it/ja`, `habitat_fr/es/it/ja`, `materials_fr/es/it/ja` per `ALTER TABLE IF NOT EXISTS` in migrate.js
+- **Datenbefüllung**: `tools/build_multilang_updates.js` generiert `src/database/multilang_seed.sql` aus MSG-JSONs und `names_all_languages.json`
+  - **Equipment (297)**: Vollständig aus MSG-Dateien (greatsword/longsword/hammer/horn/bow/gunlance/armor.json)
+  - **Genes (115)**: Vollständig aus passiveskilldata.json (PassiveSkillData_NAME_N / EXP_N)
+  - **Monsters/Monsties (98)**: Aus names_all_languages.json — viele Namen international gleich (Rathalos=Rathalos)
+- **COALESCE-Fallback**: `COALESCE(name_fr, name_en)` in allen Controllern — neue Sprachen zeigen EN wenn keine Übersetzung
+- **Locale-Dateien**: `src/locales/fr.json`, `es.json`, `it.json`, `ja.json` mit UI-Strings + Enum-Übersetzungen
+- **FTS-Configs**: `german`, `english`, `french`, `italian`, `spanish`, `simple` (für JA) in search.controller
+- **SEO**: hreflang für alle 6 Sprachen in sitemap.xml via `hreflangLinks()` Helfer-Funktion
+- **Docker**: Beim nächsten Rebuild wird `multilang_seed.sql` automatisch via migrate.js angewendet
 
 ## Erledigte Meilensteine
 - ✅ **Gene Element/Type VOLLSTÄNDIG** (15.03.2026): Alle 115 Gene haben Element, 73 haben gene_type (42 rainbow=NULL korrekt). Gelöst durch binäres Parsing von `genedata_v_09_00.user.3` — Einträge korrespondieren 1:1 mit GeneDef.ID sequential values. Hash-Mapping: `-1361419264`=speed, `-259062144`=power, `1478498560`=technical, `1008397120`=rainbow/null.
 - ✅ **Map-Bilder Azuria** transparent ersetzt (15.03.2026): Ingame-Screenshots mit transparentem Hintergrund statt Game8-Screenshots
 - ✅ **Gene Calculator Filter & Drag&Drop** (15.03.2026): Typ/Element-Dropdowns, Drag&Drop von Genen ins Grid, sticky Header, 2-Zeilen-Beschreibungen
 - ✅ **CI/CD Deploy-Fix** (15.03.2026): `DOCKER_API_VERSION=1.41` + `BUILD_VERSION` im deploy.yml, läuft jetzt sauber durch
-- ✅ **Equipment Upgrade Pipeline** (16.03.2026): Binäres Parsing von `*param.user.3` Dateien (Stride 68, typ-spezifische Hashes). Per-Level Attack/Defense für alle 297 Equipment. Forge-Seite implementiert.
+- ✅ **Equipment Upgrade Pipeline** (16.03.2026): Binäres Parsing von `*param.user.3` Dateien (Stride 68, typ-spezifische Hashes). Per-Level Attack/Defense für alle 297 Equipment.
+- ✅ **Forge → Equipment-Modal Merge** (16.03.2026): Forge-Seite entfernt, Upgrade-Tabellen in Equipment-Modals integriert. Equipment-Seite: Textsuche, sort_id-Sortierung, Rarity-Filter entfernt.
+- ✅ **Multi-Language Support** (16.03.2026): FR/ES/IT/JA implementiert — Equipment (297), Genes (115), Monster (98), Monsties (98) haben Übersetzungen. Locale-Dateien, COALESCE-Controller, SVG-Flaggen im Dropdown, hreflang SEO.
+- ✅ **Map-Bilder aufgeräumt** (16.03.2026): Backups in `maps/backups/`, Duplikate gelöscht. Azuria Aschenpfad transparent.
+- ✅ **Texture Extraction abgeschlossen** (16.03.2026): Pipeline TEX→GDeflate→DDS→PNG funktioniert. Ergebnis: **Monster-Icons existieren NICHT als statische Texturen** — werden in Echtzeit aus 3D-Modellen gerendert. Nur Tier-Portraits (14 Tiere), Ei-Muster und Rang-Icons extrahierbar, aber für Wiki nicht brauchbar. Game8 hat niedrigauflösende Monster-Icons als Alternative.
 
 ## Legal Note
 Game data in GitHub repo — user should consider making repo private or excluding raw game data files from version control. See issues.md for details.

@@ -9,6 +9,44 @@ const path = require('path');
 async function migrate(pool) {
   console.log('[migrate] Checking database state...');
 
+  // Add multilanguage columns (FR, ES, IT, JA)
+  const newLangs = ['fr', 'es', 'it', 'ja'];
+  for (const lang of newLangs) {
+    await pool.query(`ALTER TABLE monsties ADD COLUMN IF NOT EXISTS name_${lang} VARCHAR(100)`);
+    await pool.query(`ALTER TABLE monsties ADD COLUMN IF NOT EXISTS habitat_${lang} VARCHAR(100)`);
+    await pool.query(`ALTER TABLE monsties ADD COLUMN IF NOT EXISTS description_${lang} TEXT`);
+    await pool.query(`ALTER TABLE monsters ADD COLUMN IF NOT EXISTS name_${lang} VARCHAR(100)`);
+    await pool.query(`ALTER TABLE monsters ADD COLUMN IF NOT EXISTS habitat_${lang} VARCHAR(100)`);
+    await pool.query(`ALTER TABLE monsters ADD COLUMN IF NOT EXISTS description_${lang} TEXT`);
+    await pool.query(`ALTER TABLE equipment ADD COLUMN IF NOT EXISTS name_${lang} VARCHAR(100)`);
+    await pool.query(`ALTER TABLE equipment ADD COLUMN IF NOT EXISTS description_${lang} TEXT`);
+    await pool.query(`ALTER TABLE equipment ADD COLUMN IF NOT EXISTS materials_${lang} JSONB DEFAULT '[]'`);
+    await pool.query(`ALTER TABLE genes ADD COLUMN IF NOT EXISTS name_${lang} VARCHAR(100)`);
+    await pool.query(`ALTER TABLE genes ADD COLUMN IF NOT EXISTS skill_name_${lang} VARCHAR(100)`);
+    await pool.query(`ALTER TABLE genes ADD COLUMN IF NOT EXISTS description_${lang} TEXT`);
+  }
+
+  // Apply multilang seed if present and not yet applied
+  const multilangSeedPath = path.join(__dirname, 'multilang_seed.sql');
+  if (fs.existsSync(multilangSeedPath)) {
+    const frEquipCount = (await pool.query("SELECT COUNT(*)::int AS c FROM equipment WHERE name_fr IS NOT NULL")).rows[0].c;
+    if (frEquipCount < 100) {
+      console.log('[migrate] Applying multilang seed...');
+      const sql = fs.readFileSync(multilangSeedPath, 'utf8');
+      const stmts = sql.split('\n').filter(l => l.trim().startsWith('UPDATE'));
+      let updated = 0;
+      for (const stmt of stmts) {
+        try {
+          const r = await pool.query(stmt);
+          if (r.rowCount > 0) updated++;
+        } catch (e) { /* skip */ }
+      }
+      console.log(`[migrate] Multilang seed applied: ${updated} rows`);
+    } else {
+      console.log(`[migrate] Multilang: ${frEquipCount} FR equipment - OK`);
+    }
+  }
+
   // Schema migrations
   await pool.query('ALTER TABLE genes ADD COLUMN IF NOT EXISTS game_id INTEGER');
   await pool.query('ALTER TABLE genes ALTER COLUMN gene_type DROP NOT NULL');

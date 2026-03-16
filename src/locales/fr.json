@@ -1,0 +1,169 @@
+{
+  "site_title": "MHS3 Wiki - Monster Hunter Stories 3",
+  "nav": {
+    "home": "Accueil",
+    "monsties": "🐉 Monsties",
+    "bestiary": "📖 Bestiaire",
+    "equipment": "⚔️ Équipement",
+    "gene_calc": "🧬 Gènes",
+    "forge": "🔨 Forge",
+    "map": "🗺️ Carte",
+    "search": "Rechercher"
+  },
+  "home": {
+    "welcome": "Bienvenue sur MHS3 Wiki",
+    "subtitle": "Votre encyclopédie pour Monster Hunter Stories 3: Twisted Reflection",
+    "card_monsties": "Base de données Monsties",
+    "card_monsties_desc": "Tous les Monsties avec éléments, types d'attaque et actions de chevauchée",
+    "card_bestiary": "Bestiaire",
+    "card_bestiary_desc": "Tous les monstres avec faiblesses, habitats et descriptions",
+    "card_equipment": "Équipement",
+    "card_equipment_desc": "Armes et armures avec statistiques et matériaux",
+    "card_genes": "Calculateur de gènes",
+    "card_genes_desc": "Planifiez votre Rite de Canalisation avec le calculateur 3x3",
+    "card_forge": "Planificateur de forge",
+    "card_forge_desc": "Planifiez vos améliorations avec les statistiques par niveau",
+    "card_map": "Carte interactive",
+    "card_map_desc": "Explorez le monde de MHS3 et trouvez vos Monsties (améliorations majeures à venir !)"
+  },
+  "monsties": {
+    "title": "Base de données Monsties",
+    "filter_element": "Élément",
+    "filter_attack": "Type d'attaque",
+    "filter_ride": "Action de chevauchée",
+    "filter_all": "Tout",
+    "element": "Élément",
+    "attack_type": "Type d'attaque",
+    "ride_action": "Action de chevauchée",
+    "habitat": "Habitat",
+    "no_results": "Aucun Monstie trouvé."
+  },
+  "bestiary": {
+    "title": "Bestiaire",
+    "filter_weakness": "Faiblesse",
+    "filter_habitat": "Habitat",
+    "filter_species": "Espèce",
+    "filter_all": "Tout",
+    "weakness": "Faiblesse",
+    "habitat": "Habitat",
+    "species": "Espèce",
+    "no_results": "Aucun monstre trouvé."
+  },
+  "equipment": {
+    "title": "Équipement",
+    "filter_type": "Type",
+    "filter_rarity": "Rareté",
+    "filter_all": "Tout",
+    "type_weapon": "Arme",
+    "type_armor": "Armure",
+    "stats": "Statistiques",
+    "materials": "Matériaux",
+    "no_results": "Aucun équipement trouvé."
+  },
+  "gene_calc": {
+    "title": "Calculateur de gènes",
+    "subtitle": "Planificateur de Rite de Canalisation",
+    "select_gene": "Sélectionner un gène",
+    "clear_grid": "Vider la grille",
+    "bingo_bonus": "Bonus Bingo",
+    "row": "Rangée",
+    "column": "Colonne",
+    "diagonal": "Diagonale",
+    "no_bonus": "Aucun bonus",
+    "type_match": "Bonus de type",
+    "element_match": "Bonus d'élément",
+    "both_match": "Double bonus",
+    "search_gene": "Rechercher un gène...",
+    "all_types": "Tous les types",
+    "all_elements": "Tous les éléments",
+    "no_type": "Sans type",
+    "instructions": "Cliquez sur une case et sélectionnez un gène. Des types ou éléments identiques dans une rangée accordent des bonus."
+  },
+  "forge": {
+    "title": "Planificateur de forge",
+    "subtitle": "Statistiques par niveau pour toutes les armes et armures",
+    "all_types": "Tous les types",
+    "greatsword": "Grande épée",
+    "longsword": "Espadon",
+    "hammer": "Marteau",
+    "horn": "Cor de chasse",
+    "bow": "Arc",
+    "gunlance": "Lance-canon",
+    "armor": "Armure",
+    "search": "Rechercher un équipement...",
+    "level": "Niveau",
+    "attack": "Attaque",
+    "defense": "Défense",
+    "no_results": "Aucun équipement avec données d'amélioration trouvé."
+  },
+  "search": {
+    "title": "Rechercher",
+    "placeholder": "Rechercher...",
+    "no_results": "Aucun résultat trouvé.",
+    "results_for": "résultats pour",
+    "category_monstie": "Monstie",
+    "category_monster": "Monstre",
+    "category_equipment": "Équipement"
+  },
+  "footer": {
+    "project": "MHS3 Wiki &mdash; Un projet fan non officiel par",
+    "disclaimer": "Non affilié avec Capcom Co., Ltd.",
+    "trademark": "Monster Hunter Stories 3: Twisted Reflection est une marque de"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur s'est produite.",
+    "back": "Retour",
+    "details": "Détails"
+  },
+  "enums": {
+    "elements": {
+      "fire": "Feu",
+      "water": "Eau",
+      "thunder": "Tonnerre",
+      "ice": "Glace",
+      "dragon": "Dragon",
+      "none": "Aucun",
+      "non_elemental": "Sans élément"
+    },
+    "attack_types": {
+      "power": "Force",
+      "technical": "Technique",
+      "speed": "Vitesse"
+    },
+    "ride_actions": {
+      "fly": "Voler",
+      "swim": "Nager",
+      "jump": "Sauter",
+      "climb": "Grimper"
+    },
+    "species": {
+      "flying_wyvern": "Wyverne ailée",
+      "brute_wyvern": "Wyverne brute",
+      "elder_dragon": "Dragon ancien",
+      "leviathan": "Léviathan",
+      "fanged_wyvern": "Wyverne croc",
+      "fanged_beast": "Bête croc",
+      "bird_wyvern": "Wyverne-oiseau",
+      "temnoceran": "Temnocéran",
+      "carapaceon": "Crustacé",
+      "amphibian": "Amphibien"
+    },
+    "status_effects": {
+      "poison": "Poison",
+      "sleep": "Sommeil",
+      "paralysis": "Paralysie",
+      "blast": "Explosion"
+    },
+    "equip_types": {
+      "weapon": "Arme",
+      "armor": "Armure",
+      "greatsword": "Grande épée",
+      "longsword": "Espadon",
+      "hammer": "Marteau",
+      "bow": "Arc",
+      "horn": "Cor de chasse",
+      "gunlance": "Lance-canon"
+    }
+  }
+}

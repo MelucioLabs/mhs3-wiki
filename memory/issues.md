@@ -179,6 +179,30 @@
 - Frontend: Melody-Tags auf Horn-Cards, Melodie-Sektion im Detail-Modal
 - `_melodyLookup` Map direkt im Frontend (kein extra API-Call nötig)
 
+## Session 2026-03-16: Texture Extraction (Monster Icons)
+
+### Problem: Monster-Icons aus Gamedateien extrahieren
+- **Untersuchte Dateien**: `re_chunk_000.pak` (126K Dateien) + `re_chunk_000.pak.sub_000.pak` (Streaming-Texturen)
+- **Demo-Dateiliste**: `MHS3_TR_STM_Demo.list` — nur 57K Einträge, viele Pfade fehlen im Vollspiel
+- **Pipeline aufgebaut**: TEX → MHWs_Tex_Chopper (GDeflate Decompress) → DDS → texconv.exe → PNG
+- **GDeflate-Kompression**: RE Engine TEX-Dateien v251111100 nutzen GDeflate (Magic: `04 FB`), nicht zstd. Ohne Dekomprimierung sind DDS-Dateien abgeschnitten/korrupt.
+- **Tools installiert**: `MHWs_Tex_Chopper` (AsteriskAmpersand), `texconv.exe` (Microsoft DirectXTex)
+- **Brute-Force**: 30.000 Pfade getestet (`am`/`em`/`ot` 0000-9999) — keine Monster-Icons gefunden
+
+### Ergebnis: Monster-Icons existieren NICHT als statische Texturen
+- **Tier-Portraits**: 14 Tiere im `visual_dictionary/am{ID}_iml4.tex` (2048x2048 BC7_UNORM)
+- **Ei-Muster**: `eggicon_iml4.tex` (2048x2048, alle Monstie-Ei-Designs)
+- **Rang-Icons**: `monster_rankicon_iml4.tex` (512x256, S/A/B/C)
+- **Monster-Faces**: Werden in Echtzeit aus 3D-Modellen gerendert, keine vorgerenderten Icons
+- **Für Wiki nicht brauchbar**: Ei-Muster (Spiel zeigt direkt welches Monstie), Ränge (alle steigen auf S)
+- **Alternative**: Game8 hat niedrigauflösende Monster-Icons, In-Game-Screenshots als bessere Option
+
+### Bekannte Fallstricke
+- **RETool DDS-Konvertierung fehlerhaft** für `iml4` Texturen — Header korrekt aber Daten noch GDeflate-komprimiert
+- **Noesis ?cmode** erzeugt keine Ausgabe für RE Engine TEX-Dateien (Plugin geladen aber CLI-Export scheitert)
+- **Pfade mit Punkten** (`re_chunk_000.pak.sub_000/...`) brechen MHWs_Tex_Chopper Ausgabepfad — TEX-Dateien in Ordner ohne Punkte kopieren
+- **Noesis BC7-Konvertierung** ohne RE Engine Plugin erzeugt komplett weiße Bilder (DDS→PNG)
+
 ### Google Search Console
 - Verifizierung über `googlefbaf7bba739cdbf1.html` (statische Datei in src/public/)
 - Sitemap eingereicht

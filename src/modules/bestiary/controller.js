@@ -5,8 +5,8 @@ async function getAll(req, res) {
     const { weakness, habitat, species } = req.query;
     const lang = req.lang;
 
-    let sql = `SELECT id, name_${lang} AS name, species, weakness, habitat_${lang} AS habitat,
-               description_${lang} AS description, image_url, created_at FROM monsters WHERE 1=1`;
+    let sql = `SELECT id, COALESCE(name_${lang}, name_en) AS name, species, weakness, COALESCE(habitat_${lang}, habitat_en) AS habitat,
+               COALESCE(description_${lang}, description_en) AS description, image_url, created_at FROM monsters WHERE 1=1`;
     const params = [];
 
     if (weakness) {
@@ -15,7 +15,7 @@ async function getAll(req, res) {
     }
     if (habitat) {
       params.push(habitat);
-      sql += ` AND habitat_${lang} = $${params.length}`;
+      sql += ` AND habitat_en = $${params.length}`;
     }
     if (species) {
       params.push(species);
@@ -35,8 +35,8 @@ async function getById(req, res) {
   try {
     const lang = req.lang;
     const result = await query(
-      `SELECT id, name_${lang} AS name, species, weakness, habitat_${lang} AS habitat,
-       description_${lang} AS description, image_url, created_at FROM monsters WHERE id = $1`,
+      `SELECT id, COALESCE(name_${lang}, name_en) AS name, species, weakness, COALESCE(habitat_${lang}, habitat_en) AS habitat,
+       COALESCE(description_${lang}, description_en) AS description, image_url, created_at FROM monsters WHERE id = $1`,
       [req.params.id]
     );
     if (result.rows.length === 0) return res.status(404).json({ error: 'Monster not found' });
@@ -49,9 +49,8 @@ async function getById(req, res) {
 
 async function getFilters(req, res) {
   try {
-    const lang = req.lang;
     const weaknesses = await query('SELECT DISTINCT weakness FROM monsters WHERE weakness IS NOT NULL ORDER BY weakness');
-    const habitats = await query(`SELECT DISTINCT habitat_${lang} AS habitat FROM monsters WHERE habitat_${lang} IS NOT NULL ORDER BY habitat_${lang}`);
+    const habitats = await query('SELECT DISTINCT habitat_en AS habitat FROM monsters WHERE habitat_en IS NOT NULL ORDER BY habitat_en');
     const species = await query('SELECT DISTINCT species FROM monsters WHERE species IS NOT NULL ORDER BY species');
     res.json({
       weaknesses: weaknesses.rows.map((r) => r.weakness),

@@ -3,6 +3,13 @@ const router = express.Router();
 const { query } = require('../../database/connection');
 
 const BASE_URL = 'https://mhs3.meluciolabs.de';
+const SUPPORTED_LANGS = ['de', 'en', 'fr', 'es', 'it', 'ja'];
+
+function hreflangLinks(path) {
+  return SUPPORTED_LANGS.map(lang =>
+    `    <xhtml:link rel="alternate" hreflang="${lang}" href="${BASE_URL}${path}${path.includes('?') ? '&' : '?'}lang=${lang}"/>`
+  ).join('\n');
+}
 
 // Sitemap.xml - dynamic, includes all monsties and monsters
 router.get('/sitemap.xml', async (req, res) => {
@@ -15,58 +22,30 @@ router.get('/sitemap.xml', async (req, res) => {
 
     const today = new Date().toISOString().split('T')[0];
 
+    const mainPages = [
+      { path: '/', freq: 'daily', priority: '1.0' },
+      { path: '/monsties', freq: 'weekly', priority: '0.9' },
+      { path: '/bestiary', freq: 'weekly', priority: '0.9' },
+      { path: '/equipment', freq: 'weekly', priority: '0.8' },
+      { path: '/gene-calc', freq: 'monthly', priority: '0.8' },
+      { path: '/map', freq: 'weekly', priority: '0.9' },
+    ];
+
     let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  <!-- Main Pages -->
+  <!-- Main Pages -->`;
+
+    for (const page of mainPages) {
+      xml += `
   <url>
-    <loc>${BASE_URL}/</loc>
-    <xhtml:link rel="alternate" hreflang="de" href="${BASE_URL}/?lang=de"/>
-    <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/?lang=en"/>
+    <loc>${BASE_URL}${page.path}</loc>
+${hreflangLinks(page.path)}
     <lastmod>${today}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>${BASE_URL}/monsties</loc>
-    <xhtml:link rel="alternate" hreflang="de" href="${BASE_URL}/monsties?lang=de"/>
-    <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/monsties?lang=en"/>
-    <lastmod>${today}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>${BASE_URL}/bestiary</loc>
-    <xhtml:link rel="alternate" hreflang="de" href="${BASE_URL}/bestiary?lang=de"/>
-    <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/bestiary?lang=en"/>
-    <lastmod>${today}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>${BASE_URL}/equipment</loc>
-    <xhtml:link rel="alternate" hreflang="de" href="${BASE_URL}/equipment?lang=de"/>
-    <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/equipment?lang=en"/>
-    <lastmod>${today}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>${BASE_URL}/gene-calc</loc>
-    <xhtml:link rel="alternate" hreflang="de" href="${BASE_URL}/gene-calc?lang=de"/>
-    <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/gene-calc?lang=en"/>
-    <lastmod>${today}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>${BASE_URL}/map</loc>
-    <xhtml:link rel="alternate" hreflang="de" href="${BASE_URL}/map?lang=de"/>
-    <xhtml:link rel="alternate" hreflang="en" href="${BASE_URL}/map?lang=en"/>
-    <lastmod>${today}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <changefreq>${page.freq}</changefreq>
+    <priority>${page.priority}</priority>
   </url>`;
+    }
 
     // Add individual monstie pages
     for (const m of monsties.rows) {
