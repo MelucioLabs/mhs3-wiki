@@ -176,6 +176,7 @@ body {
   --power: #D9534F;
   --technical: #4CAF50;
   --speed: #2196F3;
+  --none: #8a8a9a;
 }
 [data-theme="light"] .header { background: #ffffff; border-bottom-color: #d1d5db; }
 [data-theme="light"] .leaflet-container { background: #e5e7eb !important; }

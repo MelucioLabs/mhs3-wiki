@@ -208,3 +208,27 @@
 - Sitemap eingereicht
 - Account: mccmdave@gmail.com
 - Hinweis: Verification-Datei kann für verschiedene Domains gleich sein wenn selber Account
+
+## Session 2026-03-16: Multilang (FR/ES/IT/JA)
+
+### Problem: `!` in docker exec -e wird von bash als History-Expansion interpretiert
+- **Ursache**: `docker exec node -e "...!nameInfo..."` — bash expandiert `!`
+- **Lösung**: Script in `.js`-Datei schreiben → `docker cp` in Container → `docker exec node /tmp/script.js`
+
+### Problem: tools/ Verzeichnis nicht im Docker-Image
+- **Ursache**: Docker-Image enthält nur `src/`, `package.json`, `maps/` — tools/ und parsed_output/ fehlen
+- **Lösung**: `/tmp/mhs3_data/` im Container anlegen, alle benötigten Dateien per `docker cp` reinkopieren
+
+### Problem: Fehlende `habitat_*` und `materials_*` Sprachspalten
+- **Ursache**: migrate.js hatte initial nur `name_*` + `description_*` — `habitat_*` (monsties/monsters) und `materials_*` (equipment) fehlten → `column "habitat_fr" does not exist`
+- **Lösung**: Alle fehlenden Spalten in migrate.js ergänzt + direkt via psql nachgetragen
+- **Merke**: Bei neuen Sprachspalten immer ALLE Felder einer Tabelle berücksichtigen (name, description, habitat, materials, skill_name etc.)
+
+### Problem: Falsche DB-Credentials für psql
+- **Ursache**: Versuche mit `mhs3user`/`mhs3db` und `postgres`/`mhs3db` schlugen fehl
+- **Lösung**: Korrekte Credentials aus docker-compose.yml: User=`mhs3_user`, DB=`mhs3_wiki`
+
+### Wichtige Hinweise für Multilang-Regenerierung
+- `tools/build_multilang_docker.js` + Daten nach `/tmp/mhs3_data/` im Container wenn SQL neu generiert werden muss
+- `multilang_seed.sql` wird durch migrate.js nur einmal angewendet (Guard: `frEquipCount < 100`)
+- LANG_SLOTS im MSG-Format: ja=0, en=1, fr=2, it=3, de=4, es=5

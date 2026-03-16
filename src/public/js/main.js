@@ -299,7 +299,7 @@ const App = {
   // --- Element helpers ---
 
   elementClass(el) {
-    if (!el) return 'none';
+    if (!el || el === 'non_elemental') return 'none';
     return el.toLowerCase().replace(/\s+/g, '-');
   },
 

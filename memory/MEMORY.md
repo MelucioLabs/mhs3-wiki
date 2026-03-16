@@ -25,7 +25,7 @@ Fan-Wiki web app for "Monster Hunter Stories 3: Twisted Reflection". Docker-depl
 ## Current State (16. März 2026, aktualisiert)
 - **97 monsties** (84 base + 13 story monsties) with official DE/EN names
 - **98 bestiary entries** with bilingual habitats
-- **115 genes** from game data (bilingual names/descriptions, **alle 115 mit Element**, **73 mit gene_type** — 42 sind "rainbow"/NULL = korrekt)
+- **354 genes** from PassiveSkillData MSG (alle Sprachen, 137 mit Element, 62 mit gene_type — Rest sind Regenbogen-Gene)
 - **297 equipment** items (32 GS, 34 LS, 37 Hammer, 37 Horn, 37 Bow, 33 GL, 87 Armor)
   - Status effects translated (poison→Gift, sleep→Schlaf etc.)
   - Element filter + text search + type filter (client-side)
@@ -35,7 +35,7 @@ Fan-Wiki web app for "Monster Hunter Stories 3: Twisted Reflection". Docker-depl
   - Materials empty — **Rezeptdaten nicht in Gamedateien** (`_Recipe` = 0 für alle, `_Rare` = 1 für alle)
   - Rarity display removed (useless, all items = 1)
 - Gene Calculator with 3x3 Bingo-Bonus, type/element filter dropdowns, drag & drop, sticky header
-- Full-text search (PostgreSQL GIN indexes, DE+EN)
+- Full-text search (PostgreSQL GIN indexes, DE+EN+FR+IT+ES+simple für JA)
 - **Landing Page**: Hero gradient, 3+2 card grid (5 cards) with icons, colored accents
 - **Forge Planner ENTFERNT**: Upgrade-Daten stattdessen in Equipment-Modals integriert
 - **Nav-Tabs** with emoji icons (🐉📖⚔️🧬🗺️)
@@ -73,7 +73,7 @@ Fan-Wiki web app for "Monster Hunter Stories 3: Twisted Reflection". Docker-depl
 ## SEO Status
 - ✅ History API pushState routing (no more hash URLs)
 - ✅ Sitemap.xml: 498 URLs (main pages + individual monstie/monster/equipment)
-- ✅ hreflang per page in sitemap (DE/EN for all 5 main pages)
+- ✅ hreflang per page in sitemap (DE/EN/FR/ES/IT/JA für alle 6 Haupt-Seiten)
 - ✅ Deep-Link SSR: `/monstie/slug-id`, `/monster/slug-id`, `/equipment/slug-id` → dynamic meta/OG tags
 - ✅ Dynamic OG/Twitter tags per page (frontend JS + backend SSR)
 - ✅ robots.txt, JSON-LD structured data
@@ -99,9 +99,9 @@ Fan-Wiki web app for "Monster Hunter Stories 3: Twisted Reflection". Docker-depl
 ## Multilang-Architektur (implementiert 16.03.2026)
 - **6 Sprachen**: DE, EN, FR, ES, IT, JA — Whitelist in `middleware.js` + `router.js`
 - **DB-Schema**: Neue Spalten `name_fr/es/it/ja`, `description_fr/es/it/ja`, `habitat_fr/es/it/ja`, `materials_fr/es/it/ja` per `ALTER TABLE IF NOT EXISTS` in migrate.js
-- **Datenbefüllung**: `tools/build_multilang_updates.js` generiert `src/database/multilang_seed.sql` aus MSG-JSONs und `names_all_languages.json`
+- **Datenbefüllung**: `tools/build_multilang_docker.js` generiert `/tmp/multilang_seed.sql` → `docker cp` nach `src/database/multilang_seed.sql`. Daten in `/tmp/mhs3_data/` im Container.
   - **Equipment (297)**: Vollständig aus MSG-Dateien (greatsword/longsword/hammer/horn/bow/gunlance/armor.json)
-  - **Genes (115)**: Vollständig aus passiveskilldata.json (PassiveSkillData_NAME_N / EXP_N)
+  - **Genes (354)**: Alle PassiveSkillData MSG-Einträge (NAME_N/EXP_N), cross-ref mit GeneDef.ID Enum für Kategorien (normal/s_rank/passive)
   - **Monsters/Monsties (98)**: Aus names_all_languages.json — viele Namen international gleich (Rathalos=Rathalos)
 - **COALESCE-Fallback**: `COALESCE(name_fr, name_en)` in allen Controllern — neue Sprachen zeigen EN wenn keine Übersetzung
 - **Locale-Dateien**: `src/locales/fr.json`, `es.json`, `it.json`, `ja.json` mit UI-Strings + Enum-Übersetzungen
@@ -110,13 +110,14 @@ Fan-Wiki web app for "Monster Hunter Stories 3: Twisted Reflection". Docker-depl
 - **Docker**: Beim nächsten Rebuild wird `multilang_seed.sql` automatisch via migrate.js angewendet
 
 ## Erledigte Meilensteine
-- ✅ **Gene Element/Type VOLLSTÄNDIG** (15.03.2026): Alle 115 Gene haben Element, 73 haben gene_type (42 rainbow=NULL korrekt). Gelöst durch binäres Parsing von `genedata_v_09_00.user.3` — Einträge korrespondieren 1:1 mit GeneDef.ID sequential values. Hash-Mapping: `-1361419264`=speed, `-259062144`=power, `1478498560`=technical, `1008397120`=rainbow/null.
+- ✅ **Gene Element/Type v3** (16.03.2026): 94 Gene aus Binary gemappt via GeneDef.ID enum-value → hash. THREE_WAY Field[3] + EREM_ATTR Field[4] in 56-Byte-Stride. 62 gene_type, 137 Element (inkl. Name-Inferenz). 217 ohne Element = Regenbogen-Gene (korrekt).
 - ✅ **Map-Bilder Azuria** transparent ersetzt (15.03.2026): Ingame-Screenshots mit transparentem Hintergrund statt Game8-Screenshots
 - ✅ **Gene Calculator Filter & Drag&Drop** (15.03.2026): Typ/Element-Dropdowns, Drag&Drop von Genen ins Grid, sticky Header, 2-Zeilen-Beschreibungen
 - ✅ **CI/CD Deploy-Fix** (15.03.2026): `DOCKER_API_VERSION=1.41` + `BUILD_VERSION` im deploy.yml, läuft jetzt sauber durch
 - ✅ **Equipment Upgrade Pipeline** (16.03.2026): Binäres Parsing von `*param.user.3` Dateien (Stride 68, typ-spezifische Hashes). Per-Level Attack/Defense für alle 297 Equipment.
 - ✅ **Forge → Equipment-Modal Merge** (16.03.2026): Forge-Seite entfernt, Upgrade-Tabellen in Equipment-Modals integriert. Equipment-Seite: Textsuche, sort_id-Sortierung, Rarity-Filter entfernt.
-- ✅ **Multi-Language Support** (16.03.2026): FR/ES/IT/JA implementiert — Equipment (297), Genes (115), Monster (98), Monsties (98) haben Übersetzungen. Locale-Dateien, COALESCE-Controller, SVG-Flaggen im Dropdown, hreflang SEO.
+- ✅ **Multi-Language Support** (16.03.2026): FR/ES/IT/JA implementiert — Equipment (297), Genes (354), Monster (98), Monsties (98) haben Übersetzungen. Locale-Dateien, COALESCE-Controller, SVG-Flaggen im Dropdown, hreflang SEO.
+- ✅ **Gene Pipeline v2** (16.03.2026): 116→354 Gene. Alle PassiveSkillData MSG-Einträge als Primärquelle. Cross-ref mit GeneDef.ID (116 normal + 27 s_rank + 173 passive + 122 msg-only). Element-Inferenz aus Skill-Namen. `elementClass('non_elemental')` → 'none' Fix für Light-Mode Tag-Sichtbarkeit.
 - ✅ **Map-Bilder aufgeräumt** (16.03.2026): Backups in `maps/backups/`, Duplikate gelöscht. Azuria Aschenpfad transparent.
 - ✅ **Texture Extraction abgeschlossen** (16.03.2026): Pipeline TEX→GDeflate→DDS→PNG funktioniert. Ergebnis: **Monster-Icons existieren NICHT als statische Texturen** — werden in Echtzeit aus 3D-Modellen gerendert. Nur Tier-Portraits (14 Tiere), Ei-Muster und Rang-Icons extrahierbar, aber für Wiki nicht brauchbar. Game8 hat niedrigauflösende Monster-Icons als Alternative.
 

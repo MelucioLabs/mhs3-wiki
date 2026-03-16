@@ -56,7 +56,7 @@ async function migrate(pool) {
   const geneCount = (await pool.query('SELECT COUNT(*)::int AS c FROM genes')).rows[0].c;
   const geneSeedPath = path.join(__dirname, 'gene_seed.sql');
 
-  if (geneCount < 100 && fs.existsSync(geneSeedPath)) {
+  if (geneCount < 300 && fs.existsSync(geneSeedPath)) {
     console.log(`[migrate] Genes: ${geneCount} found, seeding from gene_seed.sql...`);
     await pool.query('TRUNCATE TABLE genes RESTART IDENTITY');
     const sql = fs.readFileSync(geneSeedPath, 'utf8');
@@ -70,45 +70,27 @@ async function migrate(pool) {
     console.log(`[migrate] Genes: ${geneCount} - OK`);
   }
 
-  // Update gene types/elements from genedata binary (all 115 genes)
+  // Update gene types/elements from genedata binary v3 (94 genes mapped via GeneDef.ID enum)
   const genesWithElem = (await pool.query("SELECT COUNT(*)::int AS c FROM genes WHERE element IS NOT NULL")).rows[0].c;
   if (genesWithElem < 100) {
     console.log(`[migrate] Gene elements: only ${genesWithElem} set, applying full type/element updates...`);
     const geneUpdates = [
-      [2,null,'fire'],[3,'technical','fire'],[4,'speed','non_elemental'],[5,null,'fire'],
-      [6,'speed','non_elemental'],[7,null,'water'],[9,'speed','fire'],[10,'speed','non_elemental'],
-      [11,'power','non_elemental'],[12,'power','fire'],[13,null,'non_elemental'],[14,'speed','fire'],
-      [17,'speed','fire'],[18,null,'non_elemental'],[22,'technical','thunder'],[23,null,'ice'],
-      [24,'technical','thunder'],[25,'technical','thunder'],[27,'power','fire'],
-      [28,'power','non_elemental'],[29,'technical','non_elemental'],[30,null,'non_elemental'],
-      [40,'technical','non_elemental'],[41,'technical','fire'],[42,'technical','non_elemental'],
-      [43,'technical','fire'],[44,'speed','non_elemental'],[45,'power','non_elemental'],
-      [46,null,'thunder'],[47,null,'non_elemental'],[48,'power','non_elemental'],
-      [49,'power','non_elemental'],[50,'speed','non_elemental'],[51,'speed','non_elemental'],
-      [52,null,'water'],[53,'speed','non_elemental'],[54,null,'water'],[61,null,'non_elemental'],
-      [62,'speed','non_elemental'],[63,null,'dragon'],[76,null,'thunder'],[80,null,'dragon'],
-      [102,'technical','ice'],[104,null,'dragon'],[105,'power','dragon'],[106,'power','dragon'],
-      [110,'power','non_elemental'],[118,'power','water'],[119,'technical','water'],
-      [120,'technical','non_elemental'],[125,null,'thunder'],[136,'power','non_elemental'],
-      [137,'power','non_elemental'],[138,null,'fire'],[139,'technical','non_elemental'],
-      [140,'technical','non_elemental'],[141,'technical','non_elemental'],[148,'speed','fire'],
-      [149,'speed','fire'],[150,null,'fire'],[174,'speed','fire'],[182,null,'water'],
-      [199,null,'fire'],[200,'power','fire'],[201,'power','fire'],[204,'technical','non_elemental'],
-      [205,'technical','non_elemental'],[206,'technical','non_elemental'],[213,'speed','thunder'],
-      [214,'speed','thunder'],[215,'technical','non_elemental'],[216,'technical','non_elemental'],
-      [217,'speed','ice'],[218,'speed','ice'],[219,'speed','ice'],[232,'technical','water'],
-      [233,null,'water'],[234,null,'thunder'],[238,null,'ice'],[243,'technical','fire'],
-      [244,'power','non_elemental'],[245,'power','fire'],[246,null,'non_elemental'],
-      [247,'power','non_elemental'],[248,'power','non_elemental'],[255,null,'fire'],
-      [256,null,'fire'],[257,null,'fire'],[258,null,'fire'],[259,'technical','water'],
-      [260,null,'water'],[261,'speed','water'],[262,null,'water'],[263,null,'thunder'],
-      [264,null,'thunder'],[265,'power','thunder'],[266,'technical','thunder'],
-      [267,'speed','ice'],[268,null,'ice'],[269,null,'ice'],[270,'power','ice'],
-      [271,null,'dragon'],[272,'technical','dragon'],[273,'power','dragon'],[274,null,'dragon'],
-      [275,null,'non_elemental'],[276,null,'non_elemental'],[277,null,'non_elemental'],
-      [278,null,'non_elemental'],[282,'speed','non_elemental'],[292,'power','ice'],
-      [295,null,'ice'],[297,'technical','non_elemental'],[298,'speed','non_elemental'],
-      [301,'technical','fire'],
+      [1,'speed','non_elemental'],[3,null,'non_elemental'],[5,'speed','non_elemental'],[7,'speed','non_elemental'],[9,null,'dragon'],[10,null,'non_elemental'],
+      [11,null,'water'],[13,'power','dragon'],[16,'power','dragon'],[18,'speed','non_elemental'],[19,'power','ice'],[21,null,'water'],
+      [23,'power','non_elemental'],[27,'power','water'],[30,'speed','non_elemental'],[31,'technical','water'],[35,'technical','non_elemental'],[39,null,'thunder'],
+      [42,null,'fire'],[43,'power','non_elemental'],[46,'speed','non_elemental'],[47,'power','non_elemental'],[50,null,'fire'],[51,null,'fire'],
+      [53,'technical','fire'],[55,'technical','non_elemental'],[56,null,'non_elemental'],[59,'technical','non_elemental'],[61,'speed','non_elemental'],[63,'technical','non_elemental'],
+      [67,'speed','fire'],[71,'speed','fire'],[75,null,'fire'],[79,'speed','non_elemental'],[80,'power','non_elemental'],[83,null,'water'],
+      [86,null,'dragon'],[87,null,'fire'],[91,'power','fire'],[95,'power','fire'],[99,'technical','non_elemental'],[102,'speed','fire'],
+      [103,'technical','non_elemental'],[105,'speed','non_elemental'],[107,'technical','non_elemental'],[110,'power','non_elemental'],[111,'speed','thunder'],[114,'speed','thunder'],
+      [117,'technical','non_elemental'],[120,'power','fire'],[121,'technical','non_elemental'],[125,'speed','ice'],[129,'speed','ice'],[133,'speed','ice'],
+      [137,'technical','water'],[140,'speed','fire'],[141,null,'water'],[145,null,'thunder'],[149,null,'ice'],[153,'technical','fire'],
+      [157,'power','non_elemental'],[161,'power','fire'],[165,null,'non_elemental'],[169,'power','non_elemental'],[173,'power','non_elemental'],[177,null,'fire'],
+      [181,null,'fire'],[182,null,'ice'],[185,null,'fire'],[189,null,'fire'],[192,'speed','fire'],[195,'technical','water'],
+      [199,null,'water'],[201,'technical','thunder'],[203,'speed','water'],[206,'technical','thunder'],[207,null,'water'],[211,null,'water'],
+      [215,null,'thunder'],[218,null,'thunder'],[222,'power','thunder'],[233,'technical','non_elemental'],[243,null,'non_elemental'],[246,'technical','non_elemental'],
+      [255,'technical','fire'],[258,'technical','non_elemental'],[260,'technical','fire'],[265,'technical','non_elemental'],[267,'power','non_elemental'],[270,null,'thunder'],
+      [272,null,'non_elemental'],[277,'power','non_elemental'],[297,'technical','fire'],[301,null,'non_elemental'],
     ];
     let updated = 0;
     for (const [gameId, geneType, element] of geneUpdates) {
