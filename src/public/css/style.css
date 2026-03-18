@@ -212,13 +212,12 @@ body {
   width: 100%;
 }
 
-/* Footer */
-.footer {
+/* Fan Disclaimer (above shared footer) */
+.fan-disclaimer {
   text-align: center;
-  padding: 1.5rem;
+  padding: 1.5rem 1rem 0;
   color: var(--text-muted);
-  font-size: 0.8rem;
-  border-top: 1px solid var(--border);
+  font-size: 0.75rem;
 }
 .footer a {
   color: var(--accent);
