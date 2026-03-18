@@ -950,6 +950,197 @@ body {
   font-size: 0.9rem;
 }
 
+/* === POI Marker & Toggle System === */
+
+/* Toggle panel */
+.map-poi-toggles {
+  margin: 0.5rem 0 0.25rem;
+}
+.poi-toggle-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+.poi-toggle-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.poi-toggle-all {
+  padding: 0.2rem 0.6rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.poi-toggle-all:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+.poi-toggle-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.poi-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.6rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.15s;
+  user-select: none;
+}
+.poi-toggle:hover {
+  border-color: var(--poi-color, var(--accent));
+  background: var(--bg-card-hover);
+}
+.poi-toggle input[type="checkbox"] {
+  display: none;
+}
+.poi-toggle:has(input:checked) {
+  border-color: var(--poi-color, var(--accent));
+  box-shadow: 0 0 0 1px var(--poi-color, var(--accent));
+}
+.poi-toggle:has(input:not(:checked)) {
+  opacity: 0.5;
+}
+.poi-toggle-icon {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+.poi-toggle-name {
+  color: var(--text);
+  font-weight: 500;
+}
+.poi-toggle-count {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  background: var(--bg-surface);
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+}
+.poi-empty {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  padding: 0.3rem 0;
+}
+
+/* Custom POI markers on map */
+.poi-marker {
+  background: none !important;
+  border: none !important;
+}
+.poi-marker-inner {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  background: var(--poi-color, #333);
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: transform 0.15s;
+  line-height: 1;
+}
+.poi-marker-inner:hover {
+  transform: scale(1.2);
+}
+
+/* POI popup styling */
+.poi-popup-wrapper .leaflet-popup-content-wrapper {
+  background: var(--bg-card) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+.poi-popup-wrapper .leaflet-popup-tip {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+  border-top: none !important;
+  border-left: none !important;
+}
+.poi-popup-wrapper .leaflet-popup-close-button {
+  color: var(--text-muted) !important;
+}
+.poi-popup {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.15rem 0;
+  min-width: 140px;
+}
+.poi-popup-icon {
+  font-size: 1.3rem;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+.poi-popup-content {
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+.poi-popup-content strong {
+  font-weight: 600;
+  color: var(--text);
+}
+.poi-popup-desc {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+.poi-popup-cat {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .poi-toggle-grid {
+    gap: 0.25rem;
+  }
+  .poi-toggle {
+    padding: 0.25rem 0.45rem;
+    font-size: 0.75rem;
+  }
+  .poi-toggle-name {
+    display: none;
+  }
+}
+
+/* POI coordinate helper toast (dev mode) */
+.poi-coord-toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: #000;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  z-index: 10000;
+  animation: toastFade 2s ease-out forwards;
+  pointer-events: none;
+}
+@keyframes toastFade {
+  0%, 70% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
 /* Upgrade Table (inside equipment modal) */
 .upgrade-table {
   width: 100%;

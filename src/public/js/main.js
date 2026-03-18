@@ -859,6 +859,9 @@ const App = {
   _mapInstance: null,
   _mapMarkers: [],
   _activeRegionFilter: null,
+  _mapPOIData: null,
+  _mapPOILayers: {},       // category id -> L.layerGroup
+  _mapPOIVisible: {},      // category id -> boolean
 
   // Map configuration for each region/sub-area
   _mapConfig: {
@@ -947,6 +950,7 @@ const App = {
         </div>
         <div class="map-region-tabs">${regionTabs}</div>
         <div class="map-sub-tabs" id="map-sub-tabs"></div>
+        <div class="map-poi-toggles" id="poi-toggles"></div>
         <div id="mhs3-map" class="map-container"></div>
         <div class="map-monstie-list" id="map-monstie-list"></div>
       </div>`;
@@ -960,8 +964,9 @@ const App = {
       });
     });
 
-    // Load monsties, then select first region
-    this._loadMapMonsties().then(() => this._selectRegion('azuria'));
+    // Load monsties + POI data, then select first region
+    Promise.all([this._loadMapMonsties(), this._loadPOIData()])
+      .then(() => this._selectRegion('azuria'));
   },
 
   async _loadMapMonsties() {
@@ -985,6 +990,8 @@ const App = {
     if (region.subMaps.length === 0) {
       // No maps available yet
       subTabsEl.innerHTML = '';
+      const togglesEl = document.getElementById('poi-toggles');
+      if (togglesEl) togglesEl.innerHTML = '';
       this._destroyMap();
       document.getElementById('mhs3-map').innerHTML = `
         <div class="empty-state map-placeholder">
@@ -1058,6 +1065,28 @@ const App = {
       .addTo(map);
 
     this._mapInstance = map;
+
+    // Dev mode: click to get coordinates (activate via ?poihelper in URL)
+    if (location.search.includes('poihelper')) {
+      map.on('click', (e) => {
+        const x = Math.round(e.latlng.lng);
+        const y = Math.round(e.latlng.lat);
+        const json = `{ "cat": "TODO", "x": ${x}, "y": ${y}, "name_de": "", "name_en": "" }`;
+        console.log(json);
+        // Show coordinate toast
+        const toast = document.createElement('div');
+        toast.className = 'poi-coord-toast';
+        toast.textContent = `x: ${x}, y: ${y}`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2000);
+        // Copy to clipboard
+        navigator.clipboard?.writeText(json).catch(() => {});
+      });
+    }
+
+    // Add POI markers and render toggles
+    this._addPOIMarkers(subMap.id);
+    this._renderPOIToggles(subMap.id);
   },
 
   _showRegionMonsties(region) {
@@ -1150,7 +1179,154 @@ const App = {
       this._mapInstance = null;
     }
     this._mapMarkers = [];
+    this._mapPOILayers = {};
     this._activeRegionFilter = null;
+  },
+
+  // --- POI Layer System ---
+
+  async _loadPOIData() {
+    if (this._mapPOIData) return this._mapPOIData;
+    try {
+      const res = await fetch('/data/map_pois.json?v=3');
+      this._mapPOIData = await res.json();
+      // Initialize visibility (all ON by default)
+      if (Object.keys(this._mapPOIVisible).length === 0) {
+        this._mapPOIData.categories.forEach(c => {
+          this._mapPOIVisible[c.id] = true;
+        });
+      }
+    } catch (e) {
+      console.error('Failed to load POI data', e);
+      this._mapPOIData = { categories: [], maps: {} };
+    }
+    return this._mapPOIData;
+  },
+
+  _renderPOIToggles(subMapId) {
+    const data = this._mapPOIData;
+    if (!data) return;
+
+    const de = this.lang === 'de';
+    const pois = data.maps[subMapId] || [];
+    // Only show categories that have markers on this submap
+    const activeCats = new Set(pois.map(p => p.cat));
+
+    const toggles = data.categories
+      .filter(c => activeCats.has(c.id))
+      .map(c => {
+        const checked = this._mapPOIVisible[c.id] !== false;
+        const name = de ? c.name_de : c.name_en;
+        const count = pois.filter(p => p.cat === c.id).length;
+        return `<label class="poi-toggle" style="--poi-color: ${c.color}">
+          <input type="checkbox" data-cat="${c.id}" ${checked ? 'checked' : ''}>
+          <span class="poi-toggle-icon">${c.icon}</span>
+          <span class="poi-toggle-name">${name}</span>
+          <span class="poi-toggle-count">${count}</span>
+        </label>`;
+      }).join('');
+
+    const container = document.getElementById('poi-toggles');
+    if (!container) return;
+
+    if (activeCats.size === 0) {
+      container.innerHTML = `<div class="poi-empty">${de ? 'Keine Marker für diese Karte' : 'No markers for this map'}</div>`;
+      return;
+    }
+
+    container.innerHTML = `
+      <div class="poi-toggle-header">
+        <span class="poi-toggle-title">${de ? 'Marker' : 'Markers'}</span>
+        <button class="poi-toggle-all" id="poi-toggle-all">${de ? 'Alle ein/aus' : 'Toggle all'}</button>
+      </div>
+      <div class="poi-toggle-grid">${toggles}</div>`;
+
+    // Bind toggle events
+    container.querySelectorAll('input[data-cat]').forEach(cb => {
+      cb.addEventListener('change', () => {
+        this._mapPOIVisible[cb.dataset.cat] = cb.checked;
+        this._updatePOILayer(cb.dataset.cat);
+      });
+    });
+
+    // Toggle all button
+    document.getElementById('poi-toggle-all')?.addEventListener('click', () => {
+      // Only check categories active on this map
+      const anyOn = [...activeCats].some(catId => this._mapPOIVisible[catId]);
+      const newState = !anyOn;
+      data.categories.forEach(c => {
+        if (activeCats.has(c.id)) {
+          this._mapPOIVisible[c.id] = newState;
+        }
+      });
+      container.querySelectorAll('input[data-cat]').forEach(cb => {
+        if (activeCats.has(cb.dataset.cat)) cb.checked = newState;
+      });
+      Object.keys(this._mapPOILayers).forEach(catId => this._updatePOILayer(catId));
+    });
+  },
+
+  _addPOIMarkers(subMapId) {
+    const data = this._mapPOIData;
+    if (!data || !this._mapInstance) return;
+
+    const de = this.lang === 'de';
+    const pois = data.maps[subMapId] || [];
+    const catMap = {};
+    data.categories.forEach(c => { catMap[c.id] = c; });
+
+    // Create layer groups per category
+    this._mapPOILayers = {};
+    data.categories.forEach(c => {
+      this._mapPOILayers[c.id] = L.layerGroup();
+    });
+
+    // Add markers to their layer groups
+    pois.forEach(poi => {
+      const cat = catMap[poi.cat];
+      if (!cat) return;
+
+      const name = de ? poi.name_de : poi.name_en;
+      const desc = poi.desc_de && de ? poi.desc_de : (poi.desc_en || '');
+
+      // Create custom div icon with emoji
+      const icon = L.divIcon({
+        className: 'poi-marker',
+        html: `<div class="poi-marker-inner" style="--poi-color: ${cat.color}">${cat.icon}</div>`,
+        iconSize: [28, 28],
+        iconAnchor: [14, 14],
+        popupAnchor: [0, -16],
+      });
+
+      const marker = L.marker([poi.y, poi.x], { icon })
+        .bindPopup(`<div class="poi-popup">
+          <div class="poi-popup-icon" style="color: ${cat.color}">${cat.icon}</div>
+          <div class="poi-popup-content">
+            <strong>${name}</strong>
+            ${desc ? `<br><span class="poi-popup-desc">${desc}</span>` : ''}
+            <br><span class="poi-popup-cat">${de ? cat.name_de : cat.name_en}</span>
+          </div>
+        </div>`, { className: 'poi-popup-wrapper' });
+
+      this._mapPOILayers[poi.cat].addLayer(marker);
+    });
+
+    // Show visible layers
+    Object.entries(this._mapPOILayers).forEach(([catId, layer]) => {
+      if (this._mapPOIVisible[catId] !== false) {
+        layer.addTo(this._mapInstance);
+      }
+    });
+  },
+
+  _updatePOILayer(catId) {
+    const layer = this._mapPOILayers[catId];
+    if (!layer || !this._mapInstance) return;
+    if (this._mapPOIVisible[catId]) {
+      layer.addTo(this._mapInstance);
+    } else {
+      this._mapInstance.removeLayer(layer);
+    }
   },
 
   // --- SEARCH ---
