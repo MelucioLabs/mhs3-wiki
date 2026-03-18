@@ -874,7 +874,7 @@ const App = {
         habitatKeys: ['Azuria'],  // same in DE/EN
         subMaps: [
           { id: 'azuria_main', name_de: 'Hauptgebiet', name_en: 'Main Area', file: 'azuria_main.png', w: 1135, h: 1064 },
-          { id: 'azuria_ashen_pass', name_de: 'Aschenpfad', name_en: 'Ashen Pass', file: 'azuria_ashen_pass.png', w: 959, h: 1014 },
+          { id: 'azuria_ashen_pass', name_de: 'Aschenpfad', name_en: 'Ashen Pass', file: 'azuria_ashen_pass.png', w: 1438, h: 1381 },
           { id: 'azuria_castle', name_de: 'Schloss Azuria', name_en: 'Azuria Castle', file: 'azuria_azuria_castle.png', w: 944, h: 954 },
         ],
       },
@@ -886,6 +886,7 @@ const App = {
         habitatKeys: ['Canalta Timberland', 'Canalta-Waldland'],  // EN / DE
         subMaps: [
           { id: 'canalta_main', name_de: 'Hauptgebiet', name_en: 'Main Area', file: 'canalta_timperland_main.png', w: 923, h: 913 },
+          { id: 'canalta_sheparden', name_de: 'Sheparden', name_en: 'Sheparden', file: 'sheparden.png', w: 1319, h: 1505 },
         ],
       },
       {
@@ -1188,7 +1189,7 @@ const App = {
   async _loadPOIData() {
     if (this._mapPOIData) return this._mapPOIData;
     try {
-      const res = await fetch('/data/map_pois.json?v=3');
+      const res = await fetch('/data/map_pois.json?v=4');
       this._mapPOIData = await res.json();
       // Initialize visibility (all ON by default)
       if (Object.keys(this._mapPOIVisible).length === 0) {

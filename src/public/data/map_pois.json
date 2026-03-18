@@ -1,173 +1,1743 @@
 {
   "categories": [
-    { "id": "catavan",    "icon": "🐱", "name_de": "Katzavan-Stände",      "name_en": "Catavan Stands",     "color": "#f59e0b" },
-    { "id": "camp",       "icon": "⛺", "name_de": "Lager",                "name_en": "Camps",              "color": "#22c55e" },
-    { "id": "chest",      "icon": "📦", "name_de": "Truhen",               "name_en": "Chests",             "color": "#a855f7" },
-    { "id": "poogie",     "icon": "🐷", "name_de": "Poogies",              "name_en": "Poogies",            "color": "#ec4899" },
-    { "id": "lookout",    "icon": "🔭", "name_de": "Aussichtspunkte",      "name_en": "Lookout Points",     "color": "#06b6d4" },
-    { "id": "stable",     "icon": "🐴", "name_de": "Stallungen",           "name_en": "Stables",            "color": "#84cc16" },
-    { "id": "smithy",     "icon": "🔨", "name_de": "Schmiede",             "name_en": "Smithy",             "color": "#f97316" },
-    { "id": "melynx",     "icon": "🛒", "name_de": "Melynx-Handelsplatz",  "name_en": "Melynx Emporium",    "color": "#8b5cf6" },
-    { "id": "ranger_mess","icon": "🍖", "name_de": "Ranger-Kantine",       "name_en": "Ranger Mess",        "color": "#ef4444" },
-    { "id": "quest",      "icon": "❗", "name_de": "Nebenquests",           "name_en": "Side Quests",        "color": "#fbbf24" },
-    { "id": "track_item", "icon": "🔍", "name_de": "Spurengegenstände",    "name_en": "Track Items",        "color": "#14b8a6" },
-    { "id": "feral",      "icon": "💀", "name_de": "Unbändige Monster",    "name_en": "Feral Monsters",     "color": "#dc2626" },
-    { "id": "invasive",   "icon": "⚠️", "name_de": "Invasive Monster",     "name_en": "Invasive Monsters",  "color": "#b91c1c" },
-    { "id": "npc",        "icon": "👤", "name_de": "NPCs",                 "name_en": "NPCs",               "color": "#64748b" }
+    {
+      "id": "catavan",
+      "name_de": "Catavan-Stand",
+      "name_en": "Catavan Stand",
+      "icon": "🐱",
+      "color": "#4CAF50"
+    },
+    {
+      "id": "camp",
+      "name_de": "Lager",
+      "name_en": "Camp",
+      "icon": "⛺",
+      "color": "#8BC34A"
+    },
+    {
+      "id": "chest",
+      "name_de": "Truhe",
+      "name_en": "Chest",
+      "icon": "📦",
+      "color": "#FF9800"
+    },
+    {
+      "id": "poogie",
+      "name_de": "Poogie",
+      "name_en": "Poogie",
+      "icon": "🐷",
+      "color": "#E91E63"
+    },
+    {
+      "id": "lookout",
+      "name_de": "Aussichtspunkt",
+      "name_en": "Lookout Point",
+      "icon": "🔭",
+      "color": "#2196F3"
+    },
+    {
+      "id": "stable",
+      "name_de": "Stall",
+      "name_en": "Stable",
+      "icon": "🐴",
+      "color": "#795548"
+    },
+    {
+      "id": "smithy",
+      "name_de": "Schmiede",
+      "name_en": "Smithy",
+      "icon": "🔨",
+      "color": "#607D8B"
+    },
+    {
+      "id": "melynx",
+      "name_de": "Melynx-Laden",
+      "name_en": "Melynx Emporium",
+      "icon": "🛒",
+      "color": "#9C27B0"
+    },
+    {
+      "id": "ranger_mess",
+      "name_de": "Jägerkantine",
+      "name_en": "Ranger Mess",
+      "icon": "🍖",
+      "color": "#FF5722"
+    },
+    {
+      "id": "quest",
+      "name_de": "Quest",
+      "name_en": "Side Quest",
+      "icon": "❗",
+      "color": "#FFC107"
+    },
+    {
+      "id": "track_item",
+      "name_de": "Sammelobjekt",
+      "name_en": "Track Item",
+      "icon": "🔍",
+      "color": "#00BCD4"
+    },
+    {
+      "id": "feral",
+      "name_de": "Wildes Monster",
+      "name_en": "Feral Monster",
+      "icon": "💢",
+      "color": "#f44336"
+    },
+    {
+      "id": "invasive",
+      "name_de": "Invasives Monster",
+      "name_en": "Invasive Monster",
+      "icon": "⚠️",
+      "color": "#FF1744"
+    },
+    {
+      "id": "npc",
+      "name_de": "NPC",
+      "name_en": "NPC",
+      "icon": "👤",
+      "color": "#78909C"
+    }
   ],
   "maps": {
     "azuria_main": [
-      { "cat": "catavan", "x": 405, "y": 157, "name_de": "Katzavan-Stand (Sonnblüten-Ebene Nord)", "name_en": "Catavan Stand (Sunpetal Plains North)" },
-      { "cat": "catavan", "x": 255, "y": 339, "name_de": "Katzavan-Stand (Spiegelsee)", "name_en": "Catavan Stand (Mirror Lake)" },
-      { "cat": "catavan", "x": 310, "y": 484, "name_de": "Katzavan-Stand (Breitblattbecken)", "name_en": "Catavan Stand (Broadleaf Basin)" },
-      { "cat": "catavan", "x": 260, "y": 702, "name_de": "Katzavan-Stand (Verdorrte Insel West)", "name_en": "Catavan Stand (Withered Isle West)" },
-      { "cat": "catavan", "x": 415, "y": 702, "name_de": "Katzavan-Stand (Verdorrte Insel Mitte)", "name_en": "Catavan Stand (Withered Isle Center)" },
-      { "cat": "catavan", "x": 535, "y": 702, "name_de": "Katzavan-Stand (Verdorrte Insel Ost)", "name_en": "Catavan Stand (Withered Isle East)" },
-      { "cat": "catavan", "x": 415, "y": 799, "name_de": "Katzavan-Stand (Verdorrte Insel Süd)", "name_en": "Catavan Stand (Withered Isle South)" },
-      { "cat": "catavan", "x": 785, "y": 375, "name_de": "Katzavan-Stand (Seuchensteinwald Nord)", "name_en": "Catavan Stand (Blightstone Woods North)" },
-      { "cat": "catavan", "x": 875, "y": 448, "name_de": "Katzavan-Stand (Seuchensteinwald Mitte)", "name_en": "Catavan Stand (Blightstone Woods Center)" },
-      { "cat": "catavan", "x": 885, "y": 702, "name_de": "Katzavan-Stand (Seuchensteinwald Süd)", "name_en": "Catavan Stand (Blightstone Woods South)" },
-
-      { "cat": "camp", "x": 615, "y": 460, "name_de": "Lager (Sonnblüten-Ebene)", "name_en": "Camp (Sunpetal Plains)" },
-      { "cat": "camp", "x": 235, "y": 436, "name_de": "Lager (Breitblattbecken)", "name_en": "Camp (Broadleaf Basin)" },
-      { "cat": "camp", "x": 255, "y": 775, "name_de": "Lager (Verdorrte Insel)", "name_en": "Camp (Withered Isle)" },
-      { "cat": "camp", "x": 735, "y": 799, "name_de": "Lager (Seuchensteinwald Süd)", "name_en": "Camp (Blightstone Woods South)" },
-
-      { "cat": "stable",  "x": 625, "y": 450, "name_de": "Stallungen (Sonnblüten-Ebene)", "name_en": "Stables (Sunpetal Plains)" },
-      { "cat": "smithy",  "x": 630, "y": 445, "name_de": "Schmiede (Sonnblüten-Ebene)", "name_en": "Smithy (Sunpetal Plains)" },
-      { "cat": "melynx",  "x": 605, "y": 445, "name_de": "Melynx-Handelsplatz (Sonnblüten-Ebene)", "name_en": "Melynx Emporium (Sunpetal Plains)" },
-      { "cat": "ranger_mess", "x": 620, "y": 470, "name_de": "Ranger-Kantine (Sonnblüten-Ebene)", "name_en": "Ranger Mess (Sunpetal Plains)" },
-
-      { "cat": "lookout", "x": 725, "y": 145, "name_de": "Aussichtspunkt (Sonnblüten-Ebene Nord)", "name_en": "Lookout Point (Sunpetal Plains North)" },
-      { "cat": "lookout", "x": 295, "y": 484, "name_de": "Aussichtspunkt (Breitblattbecken)", "name_en": "Lookout Point (Broadleaf Basin)" },
-      { "cat": "lookout", "x": 905, "y": 387, "name_de": "Aussichtspunkt (Seuchensteinwald)", "name_en": "Lookout Point (Blightstone Woods)" },
-
-      { "cat": "feral", "x": 825, "y": 97, "name_de": "Unbändiges Monster (Sonnblüten-Ebene Nordost)", "name_en": "Feral Monster (Sunpetal Plains Northeast)" },
-      { "cat": "feral", "x": 325, "y": 430, "name_de": "Unbändiges Monster (Breitblattbecken)", "name_en": "Feral Monster (Broadleaf Basin)" },
-      { "cat": "feral", "x": 965, "y": 448, "name_de": "Unbändiges Monster (Seuchensteinwald Ost)", "name_en": "Feral Monster (Blightstone Woods East)" },
-      { "cat": "feral", "x": 525, "y": 847, "name_de": "Unbändiges Monster (Verdorrte Insel Süd)", "name_en": "Feral Monster (Withered Isle South)" },
-
-      { "cat": "invasive", "x": 485, "y": 206, "name_de": "Invasives Monster (Sonnblüten-Ebene)", "name_en": "Invasive Monster (Sunpetal Plains)" },
-      { "cat": "invasive", "x": 1095, "y": 617, "name_de": "Invasives Monster (Seuchensteinwald Ost)", "name_en": "Invasive Monster (Blightstone Woods East)" },
-      { "cat": "invasive", "x": 400, "y": 830, "name_de": "Invasives Monster (Verdorrte Insel)", "name_en": "Invasive Monster (Withered Isle)" },
-
-      { "cat": "quest", "x": 430, "y": 180, "name_de": "Nebenquest", "name_en": "Side Quest" },
-      { "cat": "quest", "x": 310, "y": 310, "name_de": "Nebenquest", "name_en": "Side Quest" },
-      { "cat": "quest", "x": 220, "y": 400, "name_de": "Nebenquest", "name_en": "Side Quest" },
-      { "cat": "quest", "x": 350, "y": 520, "name_de": "Nebenquest", "name_en": "Side Quest" },
-      { "cat": "quest", "x": 600, "y": 430, "name_de": "Nebenquest", "name_en": "Side Quest" },
-      { "cat": "quest", "x": 700, "y": 350, "name_de": "Nebenquest", "name_en": "Side Quest" },
-      { "cat": "quest", "x": 850, "y": 500, "name_de": "Nebenquest", "name_en": "Side Quest" },
-      { "cat": "quest", "x": 380, "y": 720, "name_de": "Nebenquest", "name_en": "Side Quest" },
-      { "cat": "quest", "x": 550, "y": 800, "name_de": "Nebenquest", "name_en": "Side Quest" },
-      { "cat": "quest", "x": 780, "y": 750, "name_de": "Nebenquest", "name_en": "Side Quest" },
-
-      { "cat": "chest", "x": 350, "y": 170, "name_de": "Truhe", "name_en": "Chest" },
-      { "cat": "chest", "x": 530, "y": 200, "name_de": "Truhe", "name_en": "Chest" },
-      { "cat": "chest", "x": 680, "y": 180, "name_de": "Truhe", "name_en": "Chest" },
-      { "cat": "chest", "x": 200, "y": 350, "name_de": "Truhe", "name_en": "Chest" },
-      { "cat": "chest", "x": 340, "y": 440, "name_de": "Truhe", "name_en": "Chest" },
-      { "cat": "chest", "x": 500, "y": 380, "name_de": "Truhe", "name_en": "Chest" },
-      { "cat": "chest", "x": 750, "y": 300, "name_de": "Truhe", "name_en": "Chest" },
-      { "cat": "chest", "x": 920, "y": 350, "name_de": "Truhe", "name_en": "Chest" },
-      { "cat": "chest", "x": 1000, "y": 500, "name_de": "Truhe", "name_en": "Chest" },
-      { "cat": "chest", "x": 300, "y": 650, "name_de": "Truhe", "name_en": "Chest" },
-      { "cat": "chest", "x": 480, "y": 750, "name_de": "Truhe", "name_en": "Chest" },
-      { "cat": "chest", "x": 650, "y": 850, "name_de": "Truhe", "name_en": "Chest" },
-      { "cat": "chest", "x": 850, "y": 680, "name_de": "Truhe", "name_en": "Chest" },
-
-      { "cat": "track_item", "x": 380, "y": 130, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 500, "y": 150, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 620, "y": 120, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 750, "y": 170, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 280, "y": 270, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 450, "y": 260, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 550, "y": 280, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 670, "y": 250, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 820, "y": 280, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 240, "y": 420, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 370, "y": 460, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 560, "y": 370, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 700, "y": 420, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 800, "y": 450, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 950, "y": 380, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 1050, "y": 520, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 220, "y": 580, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 330, "y": 620, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 450, "y": 650, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 680, "y": 700, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 350, "y": 780, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 500, "y": 830, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 780, "y": 830, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 920, "y": 620, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 630, "y": 780, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-
-      { "cat": "poogie", "x": 360, "y": 145, "name_de": "Poogie", "name_en": "Poogie" },
-      { "cat": "poogie", "x": 480, "y": 170, "name_de": "Poogie", "name_en": "Poogie" },
-      { "cat": "poogie", "x": 600, "y": 140, "name_de": "Poogie", "name_en": "Poogie" },
-      { "cat": "poogie", "x": 720, "y": 200, "name_de": "Poogie", "name_en": "Poogie" },
-      { "cat": "poogie", "x": 850, "y": 160, "name_de": "Poogie", "name_en": "Poogie" },
-      { "cat": "poogie", "x": 230, "y": 300, "name_de": "Poogie", "name_en": "Poogie" },
-      { "cat": "poogie", "x": 320, "y": 370, "name_de": "Poogie", "name_en": "Poogie" },
-      { "cat": "poogie", "x": 440, "y": 340, "name_de": "Poogie", "name_en": "Poogie" },
-      { "cat": "poogie", "x": 560, "y": 310, "name_de": "Poogie", "name_en": "Poogie" },
-      { "cat": "poogie", "x": 680, "y": 290, "name_de": "Poogie", "name_en": "Poogie" },
-      { "cat": "poogie", "x": 770, "y": 340, "name_de": "Poogie", "name_en": "Poogie" },
-      { "cat": "poogie", "x": 900, "y": 420, "name_de": "Poogie", "name_en": "Poogie" },
-      { "cat": "poogie", "x": 1020, "y": 480, "name_de": "Poogie", "name_en": "Poogie" },
-      { "cat": "poogie", "x": 260, "y": 530, "name_de": "Poogie", "name_en": "Poogie" },
-      { "cat": "poogie", "x": 390, "y": 580, "name_de": "Poogie", "name_en": "Poogie" },
-      { "cat": "poogie", "x": 510, "y": 560, "name_de": "Poogie", "name_en": "Poogie" },
-      { "cat": "poogie", "x": 640, "y": 620, "name_de": "Poogie", "name_en": "Poogie" },
-      { "cat": "poogie", "x": 300, "y": 740, "name_de": "Poogie", "name_en": "Poogie" },
-      { "cat": "poogie", "x": 430, "y": 770, "name_de": "Poogie", "name_en": "Poogie" },
-      { "cat": "poogie", "x": 560, "y": 850, "name_de": "Poogie", "name_en": "Poogie" },
-      { "cat": "poogie", "x": 700, "y": 780, "name_de": "Poogie", "name_en": "Poogie" },
-      { "cat": "poogie", "x": 830, "y": 730, "name_de": "Poogie", "name_en": "Poogie" }
-    ],
-    "azuria_ashen_pass": [
-      { "cat": "catavan", "x": 390, "y": 100, "name_de": "Katzavan-Stand (Eingang)", "name_en": "Catavan Stand (Entrance)" },
-      { "cat": "catavan", "x": 770, "y": 340, "name_de": "Katzavan-Stand (Ostseite)", "name_en": "Catavan Stand (East Side)" },
-
-      { "cat": "poogie", "x": 400, "y": 250, "name_de": "Poogie", "name_en": "Poogie" },
-      { "cat": "poogie", "x": 770, "y": 225, "name_de": "Poogie", "name_en": "Poogie" },
-      { "cat": "poogie", "x": 580, "y": 830, "name_de": "Poogie", "name_en": "Poogie" },
-
-      { "cat": "chest", "x": 410, "y": 85, "name_de": "Truhe", "name_en": "Chest" },
-      { "cat": "chest", "x": 650, "y": 310, "name_de": "Truhe", "name_en": "Chest" },
-      { "cat": "chest", "x": 730, "y": 195, "name_de": "Truhe", "name_en": "Chest" },
-      { "cat": "chest", "x": 450, "y": 540, "name_de": "Truhe", "name_en": "Chest" },
-      { "cat": "chest", "x": 700, "y": 570, "name_de": "Truhe", "name_en": "Chest" },
-      { "cat": "chest", "x": 850, "y": 640, "name_de": "Truhe", "name_en": "Chest" },
-
-      { "cat": "track_item", "x": 370, "y": 245, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 480, "y": 560, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 700, "y": 350, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 820, "y": 190, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 850, "y": 400, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 880, "y": 500, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 650, "y": 580, "name_de": "Spurengegenstand", "name_en": "Track Item" },
-      { "cat": "track_item", "x": 480, "y": 810, "name_de": "Spurengegenstand", "name_en": "Track Item" }
-    ],
-    "azuria_castle": [
-      { "cat": "stable",     "x": 470, "y": 620, "name_de": "Stallungen", "name_en": "Stables" },
-      { "cat": "smithy",     "x": 500, "y": 590, "name_de": "Schmiede", "name_en": "Smithy" },
-      { "cat": "melynx",     "x": 440, "y": 590, "name_de": "Melynx-Handelsplatz", "name_en": "Melynx Emporium" },
-      { "cat": "catavan",    "x": 350, "y": 520, "name_de": "Katzavan-Stand (Schlosseingang)", "name_en": "Catavan Stand (Castle Entrance)" },
-      { "cat": "catavan",    "x": 600, "y": 420, "name_de": "Katzavan-Stand (Schlosshof)", "name_en": "Catavan Stand (Castle Courtyard)" },
-      { "cat": "ranger_mess","x": 530, "y": 620, "name_de": "Ranger-Kantine", "name_en": "Ranger Mess" },
-      { "cat": "quest",      "x": 470, "y": 380, "name_de": "Nebenquest", "name_en": "Side Quest" },
-      { "cat": "chest",      "x": 550, "y": 350, "name_de": "Spielertruhe", "name_en": "Player Chest" },
-      { "cat": "track_item", "x": 420, "y": 450, "name_de": "Spurengegenstand", "name_en": "Track Item" }
+      {
+        "cat": "camp",
+        "x": 922.4,
+        "y": 439.9,
+        "name_de": "Sunpetal Plains",
+        "name_en": "Sunpetal Plains"
+      },
+      {
+        "cat": "camp",
+        "x": 502.7,
+        "y": 806.9,
+        "name_de": "Broadleaf Basin",
+        "name_en": "Broadleaf Basin"
+      },
+      {
+        "cat": "camp",
+        "x": 567.7,
+        "y": 41.9,
+        "name_de": "Blightstone Woods",
+        "name_en": "Blightstone Woods"
+      },
+      {
+        "cat": "camp",
+        "x": 82.1,
+        "y": 406.3,
+        "name_de": "Camp: Mirror Lake",
+        "name_en": "Camp: Mirror Lake"
+      },
+      {
+        "cat": "catavan",
+        "x": 783.6,
+        "y": 234.9,
+        "name_de": "Lookout Point: Blightstone Woods",
+        "name_en": "Lookout Point: Blightstone Woods"
+      },
+      {
+        "cat": "catavan",
+        "x": 507.0,
+        "y": 133.2,
+        "name_de": "Ashen Pass: Entrance",
+        "name_en": "Ashen Pass: Entrance"
+      },
+      {
+        "cat": "catavan",
+        "x": 693.6,
+        "y": 553.0,
+        "name_de": "Sunpetal Plains: Lakeside",
+        "name_en": "Sunpetal Plains: Lakeside"
+      },
+      {
+        "cat": "catavan",
+        "x": 964.3,
+        "y": 597.0,
+        "name_de": "Sunpetal Plains: Path",
+        "name_en": "Sunpetal Plains: Path"
+      },
+      {
+        "cat": "catavan",
+        "x": 290.5,
+        "y": 0
+      },
+      {
+        "cat": "catavan",
+        "x": 840.3,
+        "y": 806.4,
+        "name_de": "Behind Ancient Battlegrounds",
+        "name_en": "Behind Ancient Battlegrounds"
+      },
+      {
+        "cat": "catavan",
+        "x": 667.4,
+        "y": 786.2,
+        "name_de": "Ancient Battlegrounds",
+        "name_en": "Ancient Battlegrounds"
+      },
+      {
+        "cat": "catavan",
+        "x": 366.2,
+        "y": 780.0,
+        "name_de": "Lookout Point: Broadleaf Basin",
+        "name_en": "Lookout Point: Broadleaf Basin"
+      },
+      {
+        "cat": "catavan",
+        "x": 206.6,
+        "y": 627.0,
+        "name_de": "Broadleaf Basin",
+        "name_en": "Broadleaf Basin"
+      },
+      {
+        "cat": "catavan",
+        "x": 982.8,
+        "y": 637.2,
+        "name_de": "Lookout Point: Sunpetal Plains",
+        "name_en": "Lookout Point: Sunpetal Plains"
+      },
+      {
+        "cat": "catavan",
+        "x": 298.6,
+        "y": 453.6,
+        "name_de": "Mirror Lake",
+        "name_en": "Mirror Lake"
+      },
+      {
+        "cat": "catavan",
+        "x": 53.7,
+        "y": 0,
+        "name_de": "Wyverian Gate",
+        "name_en": "Wyverian Gate"
+      },
+      {
+        "cat": "chest",
+        "x": 736.5,
+        "y": 195.3,
+        "name_de": "Den Protector (S)",
+        "name_en": "Den Protector (S)"
+      },
+      {
+        "cat": "chest",
+        "x": 416.0,
+        "y": 14.3,
+        "name_de": "Magia Charm Recipe",
+        "name_en": "Magia Charm Recipe"
+      },
+      {
+        "cat": "chest",
+        "x": 268.5,
+        "y": 0,
+        "name_de": "Paracare x5",
+        "name_en": "Paracare x5"
+      },
+      {
+        "cat": "chest",
+        "x": 1001.2,
+        "y": 620.2,
+        "name_de": "Seahorse Harp Recipe",
+        "name_en": "Seahorse Harp Recipe"
+      },
+      {
+        "cat": "chest",
+        "x": 709.0,
+        "y": 814.8,
+        "name_de": "Cat's Soul Recipe",
+        "name_en": "Cat's Soul Recipe"
+      },
+      {
+        "cat": "chest",
+        "x": 1010.0,
+        "y": 710.4,
+        "name_de": "Divine Blessing (S)",
+        "name_en": "Divine Blessing (S)"
+      },
+      {
+        "cat": "chest",
+        "x": 928.4,
+        "y": 761.4,
+        "name_de": "Quick (S)",
+        "name_en": "Quick (S)"
+      },
+      {
+        "cat": "chest",
+        "x": 682.2,
+        "y": 761.2,
+        "name_de": "Elemental Assault (S)",
+        "name_en": "Elemental Assault (S)"
+      },
+      {
+        "cat": "chest",
+        "x": 503.3,
+        "y": 627.0,
+        "name_de": "Water Atk Boost (S)",
+        "name_en": "Water Atk Boost (S)"
+      },
+      {
+        "cat": "chest",
+        "x": 439.4,
+        "y": 644.7,
+        "name_de": "Frozen Speartuna Recipe",
+        "name_en": "Frozen Speartuna Recipe"
+      },
+      {
+        "cat": "chest",
+        "x": 681.2,
+        "y": 221.5,
+        "name_de": "Non Elem Atk. Boost (S)",
+        "name_en": "Non Elem Atk. Boost (S)"
+      },
+      {
+        "cat": "chest",
+        "x": 227.8,
+        "y": 0,
+        "name_de": "Item Saver (S)",
+        "name_en": "Item Saver (S)"
+      },
+      {
+        "cat": "chest",
+        "x": 450.6,
+        "y": 418.8,
+        "name_de": "Elemental Breaker (S)",
+        "name_en": "Elemental Breaker (S)"
+      },
+      {
+        "cat": "chest",
+        "x": 152.4,
+        "y": 766.6,
+        "name_de": "Felyne Bow Recipe",
+        "name_en": "Felyne Bow Recipe"
+      },
+      {
+        "cat": "chest",
+        "x": 110.5,
+        "y": 792.8,
+        "name_de": "All-Out (S)",
+        "name_en": "All-Out (S)"
+      },
+      {
+        "cat": "chest",
+        "x": 131.9,
+        "y": 0,
+        "name_de": "Alloy Armor Recipe",
+        "name_en": "Alloy Armor Recipe"
+      },
+      {
+        "cat": "chest",
+        "x": 37.1,
+        "y": 0,
+        "name_de": "Vital Essence",
+        "name_en": "Vital Essence"
+      },
+      {
+        "cat": "chest",
+        "x": 749.1,
+        "y": 863.1,
+        "name_de": "Fire Atk Boost (S)",
+        "name_en": "Fire Atk Boost (S)"
+      },
+      {
+        "cat": "feral",
+        "x": 549.2,
+        "y": 37.0,
+        "name_de": "Feral Brachydios",
+        "name_en": "Feral Brachydios"
+      },
+      {
+        "cat": "feral",
+        "x": 511.3,
+        "y": 776.3,
+        "name_de": "Feral Paolumu",
+        "name_en": "Feral Paolumu"
+      },
+      {
+        "cat": "feral",
+        "x": 103.0,
+        "y": 414.4,
+        "name_de": "Feral Nerscylla",
+        "name_en": "Feral Nerscylla"
+      },
+      {
+        "cat": "invasive",
+        "x": 1069.9,
+        "y": 557.6,
+        "name_de": "Invasive Yian Garuga (Night Only)",
+        "name_en": "Invasive Yian Garuga (Night Only)"
+      },
+      {
+        "cat": "invasive",
+        "x": 112.3,
+        "y": 209.7,
+        "name_de": "Invasive Seregios",
+        "name_en": "Invasive Seregios"
+      },
+      {
+        "cat": "lookout",
+        "x": 358.5,
+        "y": 750.4
+      },
+      {
+        "cat": "lookout",
+        "x": 991.2,
+        "y": 628.6
+      },
+      {
+        "cat": "lookout",
+        "x": 787.2,
+        "y": 238.2
+      },
+      {
+        "cat": "npc",
+        "x": 367.2,
+        "y": 753.4,
+        "name_de": "Requires Climbing",
+        "name_en": "Requires Climbing"
+      },
+      {
+        "cat": "npc",
+        "x": 983.7,
+        "y": 626.0
+      },
+      {
+        "cat": "poogie",
+        "x": 382.3,
+        "y": 0
+      },
+      {
+        "cat": "poogie",
+        "x": 687.8,
+        "y": 811.0
+      },
+      {
+        "cat": "poogie",
+        "x": 549.9,
+        "y": 696.1
+      },
+      {
+        "cat": "poogie",
+        "x": 574.4,
+        "y": 770.8
+      },
+      {
+        "cat": "poogie",
+        "x": 1002.6,
+        "y": 440.2
+      },
+      {
+        "cat": "poogie",
+        "x": 969.7,
+        "y": 550.7
+      },
+      {
+        "cat": "poogie",
+        "x": 1002.4,
+        "y": 720.5
+      },
+      {
+        "cat": "poogie",
+        "x": 875.5,
+        "y": 794.2
+      },
+      {
+        "cat": "poogie",
+        "x": 463.5,
+        "y": 671.4
+      },
+      {
+        "cat": "poogie",
+        "x": 160.6,
+        "y": 828.4
+      },
+      {
+        "cat": "poogie",
+        "x": 70.4,
+        "y": 395.7
+      },
+      {
+        "cat": "poogie",
+        "x": 395.3,
+        "y": 245.2
+      },
+      {
+        "cat": "poogie",
+        "x": 958.0,
+        "y": 316.0
+      },
+      {
+        "cat": "poogie",
+        "x": 565.9,
+        "y": 817.0
+      },
+      {
+        "cat": "poogie",
+        "x": 280.7,
+        "y": 0
+      },
+      {
+        "cat": "poogie",
+        "x": 875.6,
+        "y": 448.6
+      },
+      {
+        "cat": "poogie",
+        "x": 270.2,
+        "y": 627.3
+      },
+      {
+        "cat": "poogie",
+        "x": 173.5,
+        "y": 364.7
+      },
+      {
+        "cat": "poogie",
+        "x": 710.0,
+        "y": 497.0
+      },
+      {
+        "cat": "poogie",
+        "x": 158.6,
+        "y": 778.9
+      },
+      {
+        "cat": "poogie",
+        "x": 137.4,
+        "y": 0
+      },
+      {
+        "cat": "poogie",
+        "x": 274.7,
+        "y": 280.9
+      },
+      {
+        "cat": "poogie",
+        "x": 717.6,
+        "y": 920.2
+      },
+      {
+        "cat": "poogie",
+        "x": 309.3,
+        "y": 721.9
+      },
+      {
+        "cat": "quest",
+        "x": 684.3,
+        "y": 530.3,
+        "name_de": "Hate to Bug Mew, But... (1 Star)",
+        "name_en": "Hate to Bug Mew, But... (1 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 746.2,
+        "y": 592.9,
+        "name_de": "Kidnapping: Azuria (1 Star)",
+        "name_en": "Kidnapping: Azuria (1 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 867.8,
+        "y": 434.9,
+        "name_de": "How to Raise a Velocidrome 1 (1 Star)",
+        "name_en": "How to Raise a Velocidrome 1 (1 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 743.8,
+        "y": 355.2,
+        "name_de": "Poogie Hunt 1 (1 Star)",
+        "name_en": "Poogie Hunt 1 (1 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 187.2,
+        "y": 498.7,
+        "name_de": "Finding the Regalfin (1 Star)",
+        "name_en": "Finding the Regalfin (1 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 924.4,
+        "y": 419.5,
+        "name_de": "A Step Toward Conservation (1 Star)",
+        "name_en": "A Step Toward Conservation (1 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 381.4,
+        "y": 723.2,
+        "name_de": "An Adventuring State of Mind (1 Star)",
+        "name_en": "An Adventuring State of Mind (1 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 554.3,
+        "y": 62.2,
+        "name_de": "A Taste of Home (3 Star)",
+        "name_en": "A Taste of Home (3 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 793.6,
+        "y": 239.2,
+        "name_de": "Letter Over the Wall (2 Star)",
+        "name_en": "Letter Over the Wall (2 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 802.7,
+        "y": 408.2,
+        "name_de": "The Great Windmill Heist (2 Star)",
+        "name_en": "The Great Windmill Heist (2 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 510.9,
+        "y": 771.1,
+        "name_de": "Courage to Stand and Fight (3 Star)",
+        "name_en": "Courage to Stand and Fight (3 Star)"
+      },
+      {
+        "cat": "track_item",
+        "x": 371.4,
+        "y": 0,
+        "name_de": "Bnahabra",
+        "name_en": "Bnahabra"
+      },
+      {
+        "cat": "track_item",
+        "x": 265.5,
+        "y": 0,
+        "name_de": "Velociprey",
+        "name_en": "Velociprey"
+      },
+      {
+        "cat": "track_item",
+        "x": 693.9,
+        "y": 587.6,
+        "name_de": "Ludroth",
+        "name_en": "Ludroth"
+      },
+      {
+        "cat": "track_item",
+        "x": 760.1,
+        "y": 528.6,
+        "name_de": "Yian Kut-Ku",
+        "name_en": "Yian Kut-Ku"
+      },
+      {
+        "cat": "track_item",
+        "x": 764.6,
+        "y": 313.3,
+        "name_de": "Velociprey",
+        "name_en": "Velociprey"
+      },
+      {
+        "cat": "track_item",
+        "x": 870.1,
+        "y": 869.5,
+        "name_de": "Anjanath",
+        "name_en": "Anjanath"
+      },
+      {
+        "cat": "track_item",
+        "x": 745.9,
+        "y": 394.2
+      },
+      {
+        "cat": "track_item",
+        "x": 758.5,
+        "y": 415.6
+      },
+      {
+        "cat": "track_item",
+        "x": 891.1,
+        "y": 438.4,
+        "name_de": "Velocidrome",
+        "name_en": "Velocidrome"
+      },
+      {
+        "cat": "track_item",
+        "x": 869.1,
+        "y": 516.0
+      },
+      {
+        "cat": "track_item",
+        "x": 903.6,
+        "y": 547.7,
+        "name_de": "Paolumu",
+        "name_en": "Paolumu"
+      },
+      {
+        "cat": "track_item",
+        "x": 279.8,
+        "y": 254.0
+      },
+      {
+        "cat": "track_item",
+        "x": 610.4,
+        "y": 328.5
+      },
+      {
+        "cat": "track_item",
+        "x": 897.4,
+        "y": 287.4,
+        "name_de": "Velociprey",
+        "name_en": "Velociprey"
+      },
+      {
+        "cat": "track_item",
+        "x": 984.7,
+        "y": 393.3
+      },
+      {
+        "cat": "track_item",
+        "x": 969.6,
+        "y": 498.0,
+        "name_de": "Ludroth",
+        "name_en": "Ludroth"
+      },
+      {
+        "cat": "track_item",
+        "x": 911.9,
+        "y": 631.0,
+        "name_de": "Gypceros",
+        "name_en": "Gypceros"
+      },
+      {
+        "cat": "track_item",
+        "x": 992.7,
+        "y": 669.5,
+        "name_de": "Purple Gypceros",
+        "name_en": "Purple Gypceros"
+      },
+      {
+        "cat": "track_item",
+        "x": 883.7,
+        "y": 759.6
+      },
+      {
+        "cat": "track_item",
+        "x": 482.8,
+        "y": 635.2
+      },
+      {
+        "cat": "track_item",
+        "x": 171.9,
+        "y": 647.2
+      },
+      {
+        "cat": "track_item",
+        "x": 242.8,
+        "y": 0,
+        "name_de": "Paolumu",
+        "name_en": "Paolumu"
+      },
+      {
+        "cat": "track_item",
+        "x": 264.8,
+        "y": 0,
+        "name_de": "Yian Kut-Ku",
+        "name_en": "Yian Kut-Ku"
+      },
+      {
+        "cat": "track_item",
+        "x": 673.6,
+        "y": 777.4,
+        "name_de": "Chatacabra",
+        "name_en": "Chatacabra"
+      },
+      {
+        "cat": "track_item",
+        "x": 301.8,
+        "y": 106.1,
+        "name_de": "Chatacabra",
+        "name_en": "Chatacabra"
+      },
+      {
+        "cat": "track_item",
+        "x": 219.3,
+        "y": 22.6,
+        "name_de": "Gypceros",
+        "name_en": "Gypceros"
+      },
+      {
+        "cat": "track_item",
+        "x": 118.7,
+        "y": 0,
+        "name_de": "Ludroth",
+        "name_en": "Ludroth"
+      },
+      {
+        "cat": "track_item",
+        "x": 64.0,
+        "y": 0,
+        "name_de": "Nerscylla",
+        "name_en": "Nerscylla"
+      },
+      {
+        "cat": "track_item",
+        "x": 778.3,
+        "y": 915.2,
+        "name_de": "Green Slime Mold",
+        "name_en": "Green Slime Mold"
+      },
+      {
+        "cat": "track_item",
+        "x": 661.2,
+        "y": 877.1,
+        "name_de": "Purple Hide",
+        "name_en": "Purple Hide"
+      },
+      {
+        "cat": "track_item",
+        "x": 175.2,
+        "y": 766.2,
+        "name_de": "Large Back Membrane",
+        "name_en": "Large Back Membrane"
+      }
     ],
     "canalta_main": [
-      { "cat": "catavan", "x": 460, "y": 260, "name_de": "Katzavan-Stand (Berg Canalta)", "name_en": "Catavan Stand (Mt. Canalta)" },
-      { "cat": "catavan", "x": 280, "y": 550, "name_de": "Katzavan-Stand (Katarakte)", "name_en": "Catavan Stand (Cataracts)" },
-      { "cat": "catavan", "x": 700, "y": 450, "name_de": "Katzavan-Stand (Heuljaul-Wald)", "name_en": "Catavan Stand (Howlinyowl Forest)" },
-      { "cat": "camp",    "x": 450, "y": 450, "name_de": "Lager", "name_en": "Camp" },
-      { "cat": "stable",  "x": 460, "y": 440, "name_de": "Stallungen", "name_en": "Stables" },
-      { "cat": "smithy",  "x": 470, "y": 435, "name_de": "Schmiede", "name_en": "Smithy" },
-      { "cat": "melynx",  "x": 440, "y": 435, "name_de": "Melynx-Handelsplatz", "name_en": "Melynx Emporium" }
+      {
+        "cat": "camp",
+        "x": 528.2,
+        "y": 577.0,
+        "name_de": "Camp: Cataracts",
+        "name_en": "Camp: Cataracts"
+      },
+      {
+        "cat": "camp",
+        "x": 521.8,
+        "y": 734.6,
+        "name_de": "Camp: Blessing Hill",
+        "name_en": "Camp: Blessing Hill"
+      },
+      {
+        "cat": "camp",
+        "x": 608.6,
+        "y": 355.1,
+        "name_de": "Camp: Mt. Canalta",
+        "name_en": "Camp: Mt. Canalta"
+      },
+      {
+        "cat": "camp",
+        "x": 317.3,
+        "y": 380.0,
+        "name_de": "Camp: Howlinyowl Forest",
+        "name_en": "Camp: Howlinyowl Forest"
+      },
+      {
+        "cat": "catavan",
+        "x": 452.5,
+        "y": 781.8,
+        "name_de": "Backwoods",
+        "name_en": "Backwoods"
+      },
+      {
+        "cat": "catavan",
+        "x": 494.3,
+        "y": 591.5,
+        "name_de": "Cataracts",
+        "name_en": "Cataracts"
+      },
+      {
+        "cat": "catavan",
+        "x": 403.1,
+        "y": 577.7,
+        "name_de": "Lookout Point: Cataracts",
+        "name_en": "Lookout Point: Cataracts"
+      },
+      {
+        "cat": "catavan",
+        "x": 337.2,
+        "y": 510.5,
+        "name_de": "Cataracts Crossroads",
+        "name_en": "Cataracts Crossroads"
+      },
+      {
+        "cat": "catavan",
+        "x": 337.8,
+        "y": 308.2,
+        "name_de": "Dragonreach Mountains: Foothills",
+        "name_en": "Dragonreach Mountains: Foothills"
+      },
+      {
+        "cat": "catavan",
+        "x": 420.2,
+        "y": 289.8,
+        "name_de": "Lookout Point: Howlinyowl Forest",
+        "name_en": "Lookout Point: Howlinyowl Forest"
+      },
+      {
+        "cat": "catavan",
+        "x": 115.9,
+        "y": 384.0,
+        "name_de": "Sheparden",
+        "name_en": "Sheparden"
+      },
+      {
+        "cat": "catavan",
+        "x": 557.1,
+        "y": 848.2,
+        "name_de": "Blessing Hill",
+        "name_en": "Blessing Hill"
+      },
+      {
+        "cat": "catavan",
+        "x": 515.5,
+        "y": 287.3,
+        "name_de": "Mt. Canalta",
+        "name_en": "Mt. Canalta"
+      },
+      {
+        "cat": "catavan",
+        "x": 630.2,
+        "y": 347.0,
+        "name_de": "Lookout Point: Mt. Canalta",
+        "name_en": "Lookout Point: Mt. Canalta"
+      },
+      {
+        "cat": "catavan",
+        "x": 673.5,
+        "y": 563.3,
+        "name_de": "Narrow Passage: Opening",
+        "name_en": "Narrow Passage: Opening"
+      },
+      {
+        "cat": "catavan",
+        "x": 708.2,
+        "y": 447.7,
+        "name_de": "Narrow Passage: Depths",
+        "name_en": "Narrow Passage: Depths"
+      },
+      {
+        "cat": "catavan",
+        "x": 377.8,
+        "y": 95.0,
+        "name_de": "Dragonreach Mountains: Peak",
+        "name_en": "Dragonreach Mountains: Peak"
+      },
+      {
+        "cat": "chest",
+        "x": 525.0,
+        "y": 256.4,
+        "name_de": "Wailing Ghost Recipe",
+        "name_en": "Wailing Ghost Recipe"
+      },
+      {
+        "cat": "chest",
+        "x": 461.1,
+        "y": 300.3,
+        "name_de": "Slugger (S)",
+        "name_en": "Slugger (S)"
+      },
+      {
+        "cat": "chest",
+        "x": 478.4,
+        "y": 222.0,
+        "name_de": "Insomniac (S)",
+        "name_en": "Insomniac (S)"
+      },
+      {
+        "cat": "chest",
+        "x": 604.1,
+        "y": 409.5,
+        "name_de": "Critical (S)",
+        "name_en": "Critical (S)"
+      },
+      {
+        "cat": "chest",
+        "x": 505.8,
+        "y": 375.1,
+        "name_de": "Antivenom (S)",
+        "name_en": "Antivenom (S)"
+      },
+      {
+        "cat": "chest",
+        "x": 573.3,
+        "y": 209.7,
+        "name_de": "Fire Def Boost (S)",
+        "name_en": "Fire Def Boost (S)"
+      },
+      {
+        "cat": "chest",
+        "x": 495.9,
+        "y": 252.0,
+        "name_de": "Fortify (S)",
+        "name_en": "Fortify (S)"
+      },
+      {
+        "cat": "chest",
+        "x": 511.8,
+        "y": 249.6,
+        "name_de": "Evasion Ability (S)",
+        "name_en": "Evasion Ability (S)"
+      },
+      {
+        "cat": "chest",
+        "x": 494.6,
+        "y": 360.2,
+        "name_de": "Blightproof (S)",
+        "name_en": "Blightproof (S)"
+      },
+      {
+        "cat": "chest",
+        "x": 503.0,
+        "y": 443.1,
+        "name_de": "Antiparalysis (S)",
+        "name_en": "Antiparalysis (S)"
+      },
+      {
+        "cat": "chest",
+        "x": 841.6,
+        "y": 541.4,
+        "name_de": "Gunhammer Recipe",
+        "name_en": "Gunhammer Recipe"
+      },
+      {
+        "cat": "chest",
+        "x": 744.8,
+        "y": 459.7,
+        "name_de": "Zest Pill (x5)",
+        "name_en": "Zest Pill (x5)"
+      },
+      {
+        "cat": "chest",
+        "x": 698.7,
+        "y": 553.9,
+        "name_de": "Stamina Boost (S)",
+        "name_en": "Stamina Boost (S)"
+      },
+      {
+        "cat": "chest",
+        "x": 425.8,
+        "y": 329.2,
+        "name_de": "Darkness Resistance (S)",
+        "name_en": "Darkness Resistance (S)"
+      },
+      {
+        "cat": "chest",
+        "x": 403.2,
+        "y": 483.1,
+        "name_de": "Graceful Death Recipe",
+        "name_en": "Graceful Death Recipe"
+      },
+      {
+        "cat": "chest",
+        "x": 616.0,
+        "y": 814.7,
+        "name_de": "Salt in Wound (S)",
+        "name_en": "Salt in Wound (S)"
+      },
+      {
+        "cat": "chest",
+        "x": 591.4,
+        "y": 864.3,
+        "name_de": "Epitaph Blade Recipe",
+        "name_en": "Epitaph Blade Recipe"
+      },
+      {
+        "cat": "chest",
+        "x": 564.6,
+        "y": 834.4,
+        "name_de": "Kinship Skill+ (S)",
+        "name_en": "Kinship Skill+ (S)"
+      },
+      {
+        "cat": "chest",
+        "x": 518.6,
+        "y": 507.2,
+        "name_de": "Instigator (S)",
+        "name_en": "Instigator (S)"
+      },
+      {
+        "cat": "chest",
+        "x": 420.7,
+        "y": 314.2,
+        "name_de": "Partner (S)",
+        "name_en": "Partner (S)"
+      },
+      {
+        "cat": "chest",
+        "x": 457.0,
+        "y": 684.3,
+        "name_de": "Thunder Atk Boost (S)",
+        "name_en": "Thunder Atk Boost (S)"
+      },
+      {
+        "cat": "chest",
+        "x": 388.4,
+        "y": 841.8,
+        "name_de": "Cawscythe Recipe",
+        "name_en": "Cawscythe Recipe"
+      },
+      {
+        "cat": "chest",
+        "x": 400.2,
+        "y": 85.5,
+        "name_de": "Guardian Armor Recipe",
+        "name_en": "Guardian Armor Recipe"
+      },
+      {
+        "cat": "chest",
+        "x": 382.7,
+        "y": 96.8,
+        "name_de": "Vital Essence",
+        "name_en": "Vital Essence"
+      },
+      {
+        "cat": "feral",
+        "x": 536.0,
+        "y": 733.6,
+        "name_de": "Feral Tobi-Kadachi",
+        "name_en": "Feral Tobi-Kadachi"
+      },
+      {
+        "cat": "feral",
+        "x": 294.7,
+        "y": 376.6,
+        "name_de": "Feral Bishaten",
+        "name_en": "Feral Bishaten"
+      },
+      {
+        "cat": "feral",
+        "x": 606.0,
+        "y": 337.5,
+        "name_de": "Feral Espinas",
+        "name_en": "Feral Espinas"
+      },
+      {
+        "cat": "feral",
+        "x": 700.7,
+        "y": 472.2,
+        "name_de": "Feral Aknosom",
+        "name_en": "Feral Aknosom"
+      },
+      {
+        "cat": "invasive",
+        "x": 731.5,
+        "y": 700.5,
+        "name_de": "Invasive Nerscylla",
+        "name_en": "Invasive Nerscylla"
+      },
+      {
+        "cat": "invasive",
+        "x": 584.8,
+        "y": 871.5,
+        "name_de": "Invasive Arzuros",
+        "name_en": "Invasive Arzuros"
+      },
+      {
+        "cat": "lookout",
+        "x": 415.9,
+        "y": 568.3
+      },
+      {
+        "cat": "lookout",
+        "x": 409.0,
+        "y": 271.5
+      },
+      {
+        "cat": "lookout",
+        "x": 629.5,
+        "y": 360.0
+      },
+      {
+        "cat": "melynx",
+        "x": 97.8,
+        "y": 389.7
+      },
+      {
+        "cat": "npc",
+        "x": 413.7,
+        "y": 271.0
+      },
+      {
+        "cat": "poogie",
+        "x": 384.5,
+        "y": 678.3
+      },
+      {
+        "cat": "poogie",
+        "x": 523.2,
+        "y": 271.2
+      },
+      {
+        "cat": "poogie",
+        "x": 535.1,
+        "y": 194.2
+      },
+      {
+        "cat": "poogie",
+        "x": 592.0,
+        "y": 260.6
+      },
+      {
+        "cat": "poogie",
+        "x": 602.2,
+        "y": 394.1
+      },
+      {
+        "cat": "poogie",
+        "x": 445.3,
+        "y": 408.7
+      },
+      {
+        "cat": "poogie",
+        "x": 539.2,
+        "y": 488.4
+      },
+      {
+        "cat": "poogie",
+        "x": 769.6,
+        "y": 515.3
+      },
+      {
+        "cat": "poogie",
+        "x": 809.1,
+        "y": 527.3
+      },
+      {
+        "cat": "poogie",
+        "x": 316.5,
+        "y": 357.7
+      },
+      {
+        "cat": "poogie",
+        "x": 455.4,
+        "y": 481.1
+      },
+      {
+        "cat": "poogie",
+        "x": 359.9,
+        "y": 574.9
+      },
+      {
+        "cat": "poogie",
+        "x": 229.7,
+        "y": 485.3
+      },
+      {
+        "cat": "poogie",
+        "x": 185.8,
+        "y": 344.4
+      },
+      {
+        "cat": "poogie",
+        "x": 676.9,
+        "y": 530.1
+      },
+      {
+        "cat": "poogie",
+        "x": 497.0,
+        "y": 545.5
+      },
+      {
+        "cat": "poogie",
+        "x": 539.1,
+        "y": 330.4
+      },
+      {
+        "cat": "poogie",
+        "x": 533.8,
+        "y": 369.0
+      },
+      {
+        "cat": "poogie",
+        "x": 477.8,
+        "y": 398.2
+      },
+      {
+        "cat": "poogie",
+        "x": 440.7,
+        "y": 333.2
+      },
+      {
+        "cat": "poogie",
+        "x": 501.7,
+        "y": 229.8
+      },
+      {
+        "cat": "poogie",
+        "x": 402.1,
+        "y": 182.4
+      },
+      {
+        "cat": "poogie",
+        "x": 305.7,
+        "y": 126.0
+      },
+      {
+        "cat": "poogie",
+        "x": 513.2,
+        "y": 664.1
+      },
+      {
+        "cat": "poogie",
+        "x": 364.2,
+        "y": 433.9
+      },
+      {
+        "cat": "poogie",
+        "x": 653.9,
+        "y": 400.0
+      },
+      {
+        "cat": "poogie",
+        "x": 479.7,
+        "y": 416.1
+      },
+      {
+        "cat": "poogie",
+        "x": 569.3,
+        "y": 433.3
+      },
+      {
+        "cat": "poogie",
+        "x": 465.3,
+        "y": 317.6
+      },
+      {
+        "cat": "poogie",
+        "x": 397.1,
+        "y": 637.7
+      },
+      {
+        "cat": "poogie",
+        "x": 605.7,
+        "y": 264.7
+      },
+      {
+        "cat": "quest",
+        "x": 60.3,
+        "y": 365.6,
+        "name_de": "Shrine Whispers 1 (1 Star)",
+        "name_en": "Shrine Whispers 1 (1 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 112.6,
+        "y": 377.4,
+        "name_de": "Don't Try This at Home (2 Star)",
+        "name_en": "Don't Try This at Home (2 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 358.0,
+        "y": 482.7,
+        "name_de": "Sing Me a Song (2 Star)",
+        "name_en": "Sing Me a Song (2 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 493.4,
+        "y": 605.0,
+        "name_de": "Kidnapping: Canalta Timberland (1 Star)",
+        "name_en": "Kidnapping: Canalta Timberland (1 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 517.9,
+        "y": 574.2,
+        "name_de": "Leaves! More Leaves! (2 Star)",
+        "name_en": "Leaves! More Leaves! (2 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 594.9,
+        "y": 606.5,
+        "name_de": "Hunting Up Hunting Supplies (2 Star)",
+        "name_en": "Hunting Up Hunting Supplies (2 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 131.0,
+        "y": 349.1,
+        "name_de": "Purple River (2 Star)",
+        "name_en": "Purple River (2 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 118.8,
+        "y": 312.3,
+        "name_de": "I'll Pay You Back One Day! (2 Star)",
+        "name_en": "I'll Pay You Back One Day! (2 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 100.0,
+        "y": 312.3,
+        "name_de": "Bashful Blacksmith 1 (2 Star)",
+        "name_en": "Bashful Blacksmith 1 (2 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 100.9,
+        "y": 283.2,
+        "name_de": "Finding a Crystal Lizard (2 Star)",
+        "name_en": "Finding a Crystal Lizard (2 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 487.4,
+        "y": 439.4,
+        "name_de": "The Witchdoctor's Research 1 (3 Star)",
+        "name_en": "The Witchdoctor's Research 1 (3 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 112.5,
+        "y": 330.7,
+        "name_de": "Quiz Time! Name the Monster Call! (2 Star)",
+        "name_en": "Quiz Time! Name the Monster Call! (2 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 87.4,
+        "y": 360.1,
+        "name_de": "Canalta Timberland Survey (3 Star)",
+        "name_en": "Canalta Timberland Survey (3 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 117.7,
+        "y": 345.4,
+        "name_de": "Birthday Celebrations (4 Star)",
+        "name_en": "Birthday Celebrations (4 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 136.1,
+        "y": 345.3,
+        "name_de": "Quest Board Cleanup (4 Star)",
+        "name_en": "Quest Board Cleanup (4 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 511.1,
+        "y": 639.7,
+        "name_de": "Locating a Legend (2 Star)",
+        "name_en": "Locating a Legend (2 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 309.1,
+        "y": 352.1,
+        "name_de": "The Path to Culinary Meowstery 1 (2 Star)",
+        "name_en": "The Path to Culinary Meowstery 1 (2 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 626.6,
+        "y": 339.9,
+        "name_de": "Red Flash in the Dark (3 Star)",
+        "name_en": "Red Flash in the Dark (3 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 466.6,
+        "y": 514.3,
+        "name_de": "No Littering! (3 Star)",
+        "name_en": "No Littering! (3 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 271.6,
+        "y": 488.3,
+        "name_de": "Watch Where She Points (4 Star)",
+        "name_en": "Watch Where She Points (4 Star)"
+      },
+      {
+        "cat": "quest",
+        "x": 425.3,
+        "y": 379.6,
+        "name_de": "Burst Bubbles (4 Star)",
+        "name_en": "Burst Bubbles (4 Star)"
+      },
+      {
+        "cat": "ranger_mess",
+        "x": 68.9,
+        "y": 344.6
+      },
+      {
+        "cat": "smithy",
+        "x": 104.3,
+        "y": 366.8
+      },
+      {
+        "cat": "stable",
+        "x": 81.4,
+        "y": 335.8
+      },
+      {
+        "cat": "track_item",
+        "x": 534.5,
+        "y": 692.5,
+        "name_de": "Sizable Tail",
+        "name_en": "Sizable Tail"
+      },
+      {
+        "cat": "track_item",
+        "x": 246.0,
+        "y": 518.5,
+        "name_de": "Smooth Hide",
+        "name_en": "Smooth Hide"
+      },
+      {
+        "cat": "track_item",
+        "x": 475.7,
+        "y": 248.4,
+        "name_de": "Shiny Golden Egg",
+        "name_en": "Shiny Golden Egg"
+      },
+      {
+        "cat": "track_item",
+        "x": 503.4,
+        "y": 189.6,
+        "name_de": "A Yian Kut-Ku Scale?",
+        "name_en": "A Yian Kut-Ku Scale?"
+      },
+      {
+        "cat": "track_item",
+        "x": 495.9,
+        "y": 321.8,
+        "name_de": "Highly Acidic Saliva",
+        "name_en": "Highly Acidic Saliva"
+      },
+      {
+        "cat": "track_item",
+        "x": 464.1,
+        "y": 430.7,
+        "name_de": "Mossy Scale",
+        "name_en": "Mossy Scale"
+      },
+      {
+        "cat": "track_item",
+        "x": 803.3,
+        "y": 512.5,
+        "name_de": "Pale Orange Hide",
+        "name_en": "Pale Orange Hide"
+      },
+      {
+        "cat": "track_item",
+        "x": 784.8,
+        "y": 472.1,
+        "name_de": "Glossy Green Fur",
+        "name_en": "Glossy Green Fur"
+      },
+      {
+        "cat": "track_item",
+        "x": 814.8,
+        "y": 502.0,
+        "name_de": "Shimmering Blue Disc",
+        "name_en": "Shimmering Blue Disc"
+      },
+      {
+        "cat": "track_item",
+        "x": 830.5,
+        "y": 467.5,
+        "name_de": "Crescent Tail",
+        "name_en": "Crescent Tail"
+      },
+      {
+        "cat": "track_item",
+        "x": 706.2,
+        "y": 546.2,
+        "name_de": "Three Spikes",
+        "name_en": "Three Spikes"
+      },
+      {
+        "cat": "track_item",
+        "x": 429.8,
+        "y": 670.3,
+        "name_de": "Gravel Mound",
+        "name_en": "Gravel Mound"
+      },
+      {
+        "cat": "track_item",
+        "x": 369.2,
+        "y": 576.1,
+        "name_de": "Dusty Feather",
+        "name_en": "Dusty Feather"
+      },
+      {
+        "cat": "track_item",
+        "x": 409.6,
+        "y": 623.7,
+        "name_de": "Unusual Venom",
+        "name_en": "Unusual Venom"
+      },
+      {
+        "cat": "track_item",
+        "x": 515.1,
+        "y": 552.6,
+        "name_de": "Precious Medicinal Oil",
+        "name_en": "Precious Medicinal Oil"
+      },
+      {
+        "cat": "track_item",
+        "x": 516.0,
+        "y": 586.9,
+        "name_de": "Blue Powder",
+        "name_en": "Blue Powder"
+      },
+      {
+        "cat": "track_item",
+        "x": 407.6,
+        "y": 771.8,
+        "name_de": "Stolen Honey",
+        "name_en": "Stolen Honey"
+      },
+      {
+        "cat": "track_item",
+        "x": 354.4,
+        "y": 225.7,
+        "name_de": "Throwable Rock",
+        "name_en": "Throwable Rock"
+      },
+      {
+        "cat": "track_item",
+        "x": 334.3,
+        "y": 233.8,
+        "name_de": "Huge Droopy Hide",
+        "name_en": "Huge Droopy Hide"
+      },
+      {
+        "cat": "track_item",
+        "x": 380.6,
+        "y": 205.8,
+        "name_de": "Rolling Tracks",
+        "name_en": "Rolling Tracks"
+      },
+      {
+        "cat": "track_item",
+        "x": 335.1,
+        "y": 176.5,
+        "name_de": "Flammable Liquid",
+        "name_en": "Flammable Liquid"
+      },
+      {
+        "cat": "track_item",
+        "x": 323.8,
+        "y": 128.8,
+        "name_de": "Electrified Fluid",
+        "name_en": "Electrified Fluid"
+      },
+      {
+        "cat": "track_item",
+        "x": 322.7,
+        "y": 41.5,
+        "name_de": "Small Flower",
+        "name_en": "Small Flower"
+      },
+      {
+        "cat": "track_item",
+        "x": 378.2,
+        "y": 401.2,
+        "name_de": "Small Neopteron Wing",
+        "name_en": "Small Neopteron Wing"
+      },
+      {
+        "cat": "track_item",
+        "x": 607.7,
+        "y": 494.0,
+        "name_de": "Eyeball Crest",
+        "name_en": "Eyeball Crest"
+      },
+      {
+        "cat": "track_item",
+        "x": 579.7,
+        "y": 803.8,
+        "name_de": "Milk-White Scale",
+        "name_en": "Milk-White Scale"
+      },
+      {
+        "cat": "track_item",
+        "x": 430.8,
+        "y": 488.6,
+        "name_de": "Shedspike",
+        "name_en": "Shedspike"
+      },
+      {
+        "cat": "track_item",
+        "x": 199.6,
+        "y": 425.0,
+        "name_de": "Purple Fluid",
+        "name_en": "Purple Fluid"
+      },
+      {
+        "cat": "track_item",
+        "x": 244.8,
+        "y": 341.2,
+        "name_de": "Half-Eaten Fruit",
+        "name_en": "Half-Eaten Fruit"
+      }
+    ],
+    "azuria_castle": [
+      {
+        "cat": "catavan",
+        "x": 320,
+        "y": 650,
+        "name_de": "Schloss Azuria: Basis",
+        "name_en": "Azuria Castle: Base"
+      },
+      {
+        "cat": "catavan",
+        "x": 520,
+        "y": 350,
+        "name_de": "Schloss Azuria: Stadt",
+        "name_en": "Azuria Castle: Town"
+      },
+      {
+        "cat": "melynx",
+        "x": 600,
+        "y": 230,
+        "name_de": "Melynx-Laden",
+        "name_en": "Melynx Emporium"
+      },
+      {
+        "cat": "ranger_mess",
+        "x": 280,
+        "y": 580,
+        "name_de": "Jägerkantine",
+        "name_en": "Ranger Mess"
+      },
+      {
+        "cat": "smithy",
+        "x": 680,
+        "y": 280,
+        "name_de": "Schmiede",
+        "name_en": "Smithy"
+      },
+      {
+        "cat": "stable",
+        "x": 350,
+        "y": 550,
+        "name_de": "Stall",
+        "name_en": "Stable"
+      }
+    ],
+    "azuria_ashen_pass": [
+      {
+        "cat": "camp",
+        "x": 300,
+        "y": 500,
+        "name_de": "Lager",
+        "name_en": "Camp"
+      },
+      {
+        "cat": "catavan",
+        "x": 480,
+        "y": 200,
+        "name_de": "Aschenpfad: Eingang",
+        "name_en": "Ashen Pass: Entrance"
+      },
+      {
+        "cat": "catavan",
+        "x": 500,
+        "y": 800,
+        "name_de": "Aschenpfad: Süd",
+        "name_en": "Ashen Pass: South"
+      }
     ]
   }
 }
