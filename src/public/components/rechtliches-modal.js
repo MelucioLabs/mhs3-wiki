@@ -11,7 +11,7 @@
  * Attributes:
  *   app           - app identifier sent to contact API (default: 'meluciolabs')
  *   turnstile-key - Cloudflare Turnstile site key (optional)
- *   api-url       - Contact API endpoint (default: https://admin.meluciolabs.de/api/tickets)
+ *   api-url       - Contact API endpoint (default: https://portal.meluciolabs.de/api/tickets)
  *
  * Trigger:
  * window.location.hash = 'rechtliches'  → opens on last/default tab
@@ -471,7 +471,7 @@
     }
 
     get _app() { return this.getAttribute('app') || 'meluciolabs'; }
-    get _apiUrl() { return this.getAttribute('api-url') || 'https://admin.meluciolabs.de/api/tickets'; }
+    get _apiUrl() { return this.getAttribute('api-url') || 'https://portal.meluciolabs.de/api/tickets'; }
     get _turnstileKey() { return this.getAttribute('turnstile-key') || ''; }
 
     connectedCallback() {
