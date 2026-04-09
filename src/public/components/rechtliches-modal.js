@@ -362,11 +362,12 @@
         <p>Nur technisch notwendige Cookies für die Anmeldung (JWT-Token). Keine Tracking-Cookies.</p>
       </div>
       <div class="rm-section">
-        <h3>7. Drittanbieter</h3>
-        <ul class="rm-list">
-          <li>Cloudflare: CDN und DDoS-Schutz</li>
-          <li>Cloudflare Turnstile: Bot-Schutz (kein reCAPTCHA)</li>
-        </ul>
+        <h3>7. CDN und Sicherheit</h3>
+        <h4>Cloudflare</h4>
+        <p>Diese Website wird über Cloudflare, Inc. (101 Townsend St, San Francisco, CA 94107, USA) als CDN (Content Delivery Network) und zum DDoS-Schutz bereitgestellt. Dabei werden Anfragen über Server von Cloudflare geleitet. Dies dient der Sicherheit und Verfügbarkeit unserer Website. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einem sicheren und effizienten Betrieb). Ein Auftragsverarbeitungsvertrag (DPA) mit Cloudflare gemäß Art. 28 DSGVO einschließlich EU-Standardvertragsklauseln (SCCs) wurde abgeschlossen. Weitere Informationen: <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer">Cloudflare Datenschutzerklärung</a>.</p>
+        <h4>Cloudflare Turnstile</h4>
+        <p>Zum Schutz vor automatisierten Anfragen (Bots) nutzen wir Cloudflare Turnstile. Dabei werden technische Daten (z.B. Browser-Informationen) an Cloudflare übermittelt, um menschliche Nutzer von Bots zu unterscheiden. Es werden keine Cookies zu Werbezwecken gesetzt. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO.</p>
+        <p>Schriftarten werden lokal gehostet – es findet keine Verbindung zu Google Fonts statt.</p>
       </div>
     `;
   }
