@@ -28,7 +28,7 @@
   const STREET = 'Hamburger Chaussee 30';
   const CITY = '14641 Nauen';
   const COUNTRY = 'Deutschland';
-  const EMAIL = 'kontakt@meluciolabs.de';
+  const EMAIL = 'info@meluciolabs.de';
 
   const TABS = ['impressum', 'datenschutz', 'sicherheit', 'kontakt'];
   const TAB_LABELS = { impressum: 'Impressum', datenschutz: 'Datenschutz', sicherheit: 'Sicherheit', kontakt: 'Kontakt' };
