@@ -76,7 +76,7 @@
 ### SEO-Audit Ergebnis
 - **KRITISCH**: Hash-Routing (`#/monsties`) verhindert Google-Indexierung
 - **GUT**: robots.txt, meta robots, viewport, JSON-LD, OG-Tags, hreflang
-- **TODO**: Migration zu History API pushState Routing
+- **ERLEDIGT**: Migration zu History API pushState Routing (implementiert)
 
 ## Session 2026-03-15: Map-Textur-Analyse
 
