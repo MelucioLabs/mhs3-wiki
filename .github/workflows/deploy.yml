@@ -40,11 +40,50 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           timeout 30 ssh-keyscan -H 100.103.86.47 >> ~/.ssh/known_hosts 2>/dev/null || true
 
+      - name: Backup PostgreSQL database
+        run: |
+          ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 dave@100.103.86.47 << 'BACKUP_EOF'
+            ts=$(date +%Y%m%d-%H%M%S)
+            backup_dir=~/apps/mhs3-wiki/backups
+            mkdir -p "$backup_dir"
+            DOCKER_API_VERSION=1.41 docker exec mhs3-postgres pg_dump -U mhs3_user mhs3_wiki > "$backup_dir/mhs3.sql.backup-${ts}"
+            echo "PostgreSQL-Backup erstellt: mhs3.sql.backup-${ts}"
+            # Keep only 30 most recent backups
+            ls -1t "$backup_dir"/mhs3.sql.backup-* 2>/dev/null | tail -n +31 | xargs -r rm --
+            # Write metadata
+            cat > "$backup_dir/mhs3.sql.backup-${ts}.meta.json" << METAEOF
+          {"timestamp":"$(date -u +%Y-%m-%dT%H:%M:%SZ)","app":"mhs3-wiki","db_type":"postgresql","backup_file":"mhs3.sql.backup-${ts}"}
+          METAEOF
+            # Clean old metadata
+            for f in "$backup_dir"/*.meta.json; do
+              base="${f%.meta.json}"
+              [ ! -f "$base" ] && rm -f "$f"
+            done
+          BACKUP_EOF
+
       - name: Deploy to Pi
         run: |
+          COMMIT_MSG=$(git log -1 --format='%s' | head -c 200)
+          COMMIT_HASH=$(git log -1 --format='%h')
+          COMMIT_AUTHOR=$(git log -1 --format='%an')
           BUILD_VER=$(date +%Y%m%d%H%M)
           ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 dave@100.103.86.47 << EOF
             cd ~/apps/mhs3-wiki
+
+            # Update latest backup metadata with commit info
+            latest_meta=\$(ls -1t ~/apps/mhs3-wiki/backups/*.meta.json 2>/dev/null | head -1)
+            if [ -n "\$latest_meta" ]; then
+              tmp=\$(mktemp)
+              python3 -c "
+          import json, sys
+          with open('\$latest_meta') as f: d=json.load(f)
+          d['commit']='${COMMIT_HASH}'
+          d['message']='''${COMMIT_MSG}'''
+          d['author']='${COMMIT_AUTHOR}'
+          with open('\$latest_meta','w') as f: json.dump(d,f)
+          " 2>/dev/null || true
+            fi
+
             git checkout -- .
             git pull origin main
             DOCKER_API_VERSION=1.41 docker compose build --no-cache --build-arg BUILD_VERSION=${BUILD_VER} app
